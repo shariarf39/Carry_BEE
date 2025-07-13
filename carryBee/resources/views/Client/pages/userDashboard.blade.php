@@ -395,7 +395,7 @@
                                                     <option value="1001-1500">1001-1500 gm</option>
                                                     <option value="1501-2000">1501-2000 gm</option>
                                                     <option value="2001-2500">2001-2500 gm</option>
-                                                    <option value="2500+">2500+ per kg</option>
+                                                    <option value="2500+">2500+ per gm</option>
                                                 </select>
                                             </td>
                                             <td data-label="Discounted Rate">

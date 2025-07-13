@@ -110,4 +110,19 @@ class HomeController extends Controller
         return view('Client.pages.DiscountRuleShow', compact('discount', 'rules'));
     }
 
+       public function DeRuleShow($id)
+    {
+
+          $discount = Discount::findOrFail($id);
+
+        // Optional security check to ensure user can only access own discount
+        if ($discount->merchant_email !== Auth::user()->email) {
+            abort(403);
+        }
+        $rules = DiscountRule::where('discount_id', $discount->id)->get();
+
+
+        return view('Client.pages.defultsRate', compact('discount', 'rules'));
+    }
+
 }

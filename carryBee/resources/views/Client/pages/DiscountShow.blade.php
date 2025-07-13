@@ -148,6 +148,9 @@
                                     <a href="{{ route('DiscountRuleShow', $discount->id) }}" class="btn btn-info btn-sm">
                                         <i class="fas fa-eye"></i> View
                                     </a>
+                                    <a href="{{ route('DeRuleShow', $discount->id) }}" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i> View Rules
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach
