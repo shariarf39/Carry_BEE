@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/storeDiscount', 'storeDiscount')->name('storeDiscount');
     Route::get('/discounts', 'DiscountShow')->name('discounts');
     Route::get('/discounts/{id}',  'DiscountRuleShow')->name('DiscountRuleShow');
+    Route::get('/default-rate', 'DefaultRate')->name('DefaultRate');
 });
 
 });

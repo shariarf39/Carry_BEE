@@ -11,60 +11,48 @@
     <style>
         :root {
             --primary-color: #4e73df;
-            --light-primary: #e3ebf7;
-            --success-color: #1cc88a;
-            --light-success: #d4edda;
-            --info-color: #36b9cc;
-            --light-info: #d1ecf1;
+            --primary-hover: #3a5bc7;
+            --secondary-color: #6c757d;
+            --light-bg: #f8f9fc;
+            --border-color: #e3e6f0;
+            --card-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            --border-radius: 0.5rem;
         }
         
         body {
-            background-color: #f8f9fc;
+            background-color: var(--light-bg);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         .card {
-            border-radius: 0.5rem;
-            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
             border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
         }
         
         .card-header {
-            border-radius: 0.5rem 0.5rem 0 0 !important;
-            padding: 1rem 1.5rem;
-            font-weight: 600;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+            padding: 1.25rem 1.5rem;
         }
         
-        .bg-primary {
-            background-color: var(--primary-color) !important;
+        .form-control, .form-select {
+            border-radius: var(--border-radius);
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
         }
         
-        .bg-light-primary {
-            background-color: var(--light-primary) !important;
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
         }
         
-        .bg-light-success {
-            background-color: var(--light-success) !important;
-        }
-        
-        .bg-light-info {
-            background-color: var(--light-info) !important;
-        }
-        
-        .form-check.form-switch .form-check-input {
-            width: 2.5em;
-            height: 1.3em;
-        }
-        
-        .table th {
-            font-weight: 600;
-            color: #5a5c69;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-        }
-        
-        .input-group-text {
-            background-color: #f8f9fc;
+        .btn {
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
         }
         
         .btn-primary {
@@ -72,46 +60,110 @@
             border-color: var(--primary-color);
         }
         
-        .btn-success {
-            background-color: var(--success-color);
-            border-color: var(--success-color);
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
         }
         
-        .border-primary {
-            border-color: var(--primary-color) !important;
+        .btn-outline-secondary {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
         }
         
-        .border-success {
-            border-color: var(--success-color) !important;
+        .btn-outline-secondary:hover {
+            background-color: var(--secondary-color);
+            color: white;
         }
         
-        .border-info {
-            border-color: var(--info-color) !important;
+        .badge {
+            font-weight: 500;
+            padding: 0.5em 0.75em;
+            border-radius: 0.25rem;
+        }
+        
+        .table th {
+            font-weight: 600;
+            color: #5a5c69;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .input-group-text {
+            background-color: var(--light-bg);
+            border-color: var(--border-color);
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .form-check.form-switch .form-check-input {
+            width: 3em;
+            height: 1.5em;
+        }
+        
+        .user-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 1rem;
+        }
+        
+        .section-header {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
         }
     </style>
 </head>
 <body>
-    <div class="container py-5">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0"><i class="fas fa-tags me-2"></i> Discount Management</h4>
-
-                  <p>Welcome, {{ Auth::user()->name }}!</p>
-                  <p>Welcome, {{ Auth::user()->email }}!</p>
-                    
-                    <form method="POST" action="{{ route('logout') }}">
+    <div class="container py-4">
+        <!-- Header Card -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="mb-0">
+                        <i class="fas fa-tags me-2"></i>Discount Management
+                    </h4>
+                    <div class="d-flex align-items-center mt-2">
+                        <span class="user-badge me-2">
+                            <i class="fas fa-user-circle me-1"></i> {{ Auth::user()->name }}
+                        </span>
+                        <span class="user-badge">
+                            <i class="fas fa-envelope me-1"></i> {{ Auth::user()->email }}
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <a href="{{ route('discounts') }}" class="btn btn-sm btn-outline-light me-2">
+                        <i class="fas fa-chart-line me-1"></i> Reports
+                    </a>
+                    <a href="{{ route('defaultRate') }}" class="btn btn-sm btn-outline-light me-2">
+                        <i class="fas fa-cog me-1"></i> Defaults
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}" class="d-inline">
                         @csrf
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        <button type="submit" class="btn btn-sm btn-outline-light">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
                         </button>
                     </form>
+                </div>
             </div>
-            
+        </div>
+
+        <!-- Main Form Card -->
+        <div class="card">
             <div class="card-body">
                 <form method="POST" action="{{ route('storeDiscount') }}" class="needs-validation" novalidate>
                     @csrf
 
-                    <!-- Toggle Section -->
+                    <!-- Configuration Toggle -->
                     <div class="row mb-4">
                         <div class="col-12">
                             <div class="form-check form-switch">
@@ -127,8 +179,8 @@
                     <!-- Merchant Information Section -->
                     <div class="card mb-4 border-primary">
                         <div class="card-header bg-light-primary d-flex justify-content-between align-items-center">
-                            <span class="fw-bold"><i class="fas fa-store me-2"></i>Merchant Information</span>
-                            <span class="badge bg-primary">Required</span>
+                            <h5 class="mb-0"><i class="fas fa-store me-2"></i>Merchant Information</h5>
+                            <span class="badge bg-primary">Required Fields</span>
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
@@ -204,7 +256,7 @@
                     <!-- Special Requirements Section -->
                     <div class="card mb-4 border-info">
                         <div class="card-header bg-light-info">
-                            <span class="fw-bold"><i class="fas fa-clipboard-check me-2"></i>Special Requirements</span>
+                            <h5 class="mb-0"><i class="fas fa-clipboard-check me-2"></i>Special Requirements</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -242,10 +294,10 @@
                         </div>
                     </div>
 
-                    <!-- Discount Rules Section (Initially hidden) -->
+                    <!-- Discount Rules Section -->
                     <div class="card mb-4 border-success" id="discountRulesCard" style="display:none;">
                         <div class="card-header bg-light-success d-flex justify-content-between align-items-center">
-                            <span class="fw-bold"><i class="fas fa-percentage me-2"></i>Custom Discount Rules</span>
+                            <h5 class="mb-0"><i class="fas fa-percentage me-2"></i>Custom Discount Rules</h5>
                             <button type="button" class="btn btn-sm btn-success" onclick="addDiscountRow()">
                                 <i class="fas fa-plus me-1"></i>Add Rule
                             </button>
@@ -255,19 +307,18 @@
                                 <table class="table table-hover align-middle">
                                     <thead class="table-light">
                                         <tr>
-                                            <th width="20%">Region</th>
-                                            <th width="20%">Weight Range</th>
-                                            <th width="15%">Discounted Rate</th>
-                                            <th width="15%">Return Charge (%)</th>
-                                            <th width="15%">COD Charge (%)</th>
-                                            <th width="15%">Actions</th>
+                                            <th>Region</th>
+                                            <th>Weight Range</th>
+                                            <th>Discounted Rate</th>
+                                            <th>Return Charge</th>
+                                            <th>COD Charge</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody id="discountRows">
-                                        <!-- Discount row template -->
                                         <tr>
                                             <td>
-                                                <select class="form-select" name="region[]" >
+                                                <select class="form-select" name="region[]">
                                                     <option value="" selected disabled>Select region</option>
                                                     <option value="north">North Region</option>
                                                     <option value="south">South Region</option>
@@ -276,7 +327,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <select class="form-select" name="weight_range[]" >
+                                                <select class="form-select" name="weight_range[]">
                                                     <option value="" selected disabled>Select weight</option>
                                                     <option value="0-1kg">0-1 kg</option>
                                                     <option value="1-5kg">1-5 kg</option>
@@ -287,18 +338,18 @@
                                             <td>
                                                 <div class="input-group">
                                                     <span class="input-group-text">$</span>
-                                                    <input type="number" class="form-control" name="discounted_rate[]" step="0.01" min="0" placeholder="0.00" >
+                                                    <input type="number" class="form-control" name="discounted_rate[]" step="0.01" min="0" placeholder="0.00">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="input-group">
-                                                    <input type="number" class="form-control" name="return_charge[]" min="0" max="100" placeholder="0" >
+                                                    <input type="number" class="form-control" name="return_charge[]" min="0" max="100" placeholder="0">
                                                     <span class="input-group-text">%</span>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="input-group">
-                                                    <input type="number" class="form-control" name="cod[]" min="0" max="100" placeholder="0" >
+                                                    <input type="number" class="form-control" name="cod[]" min="0" max="100" placeholder="0">
                                                     <span class="input-group-text">%</span>
                                                 </div>
                                             </td>
@@ -320,7 +371,7 @@
                             <i class="fas fa-undo me-2"></i>Reset Form
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-2"></i>Save Configuration
+                            <i class="fas fa-save me-2"></i>Submit
                         </button>
                     </div>
                 </form>

@@ -13,10 +13,15 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
     }
-
+   
     public function dashboard()
     {
         return view('Client.pages.userDashboard');
+    }
+
+      public function DefaultRate()
+    {
+        return view('Client.pages.defultsRate');
     }
 
 
