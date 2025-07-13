@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Discount;
 use App\Models\DiscountRule;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Hub;
 
 class HomeController extends Controller
 {
@@ -16,7 +17,10 @@ class HomeController extends Controller
    
     public function dashboard()
     {
-        return view('Client.pages.userDashboard');
+
+       $locations = Hub::all(); // fetch all locations from DB
+
+    return view('Client.pages.userDashboard', compact('locations'));
     }
 
       public function DefaultRate()

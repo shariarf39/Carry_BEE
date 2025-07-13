@@ -109,6 +109,7 @@
             color: white;
             padding: 0.35rem 0.75rem;
             border-radius: 1rem;
+            white-space: nowrap;
         }
         
         .section-header {
@@ -120,19 +121,69 @@
         .nav-pills .nav-link.active {
             background-color: var(--primary-color);
         }
+
+        /* --- Responsive Design Adjustments --- */
+        
+        /* Responsive table: On small screens, transform table to a list-like view */
+        @media (max-width: 767.98px) {
+            .responsive-table thead {
+                display: none; /* Hide table headers */
+            }
+
+            .responsive-table tr {
+                display: block; /* Each row becomes a block */
+                margin-bottom: 1rem;
+                border: 1px solid var(--border-color);
+                border-radius: var(--border-radius);
+                padding: 1rem;
+            }
+
+            .responsive-table td {
+                display: flex; /* Use flexbox for alignment */
+                justify-content: space-between; /* Align label and value */
+                align-items: center;
+                padding: 0.5rem 0;
+                border: none;
+            }
+
+            .responsive-table td::before {
+                content: attr(data-label); /* Use data-label for the header text */
+                font-weight: 600;
+                padding-right: 1rem;
+                text-align: left;
+                flex-basis: 50%; /* Give the label a consistent width */
+            }
+            
+            .responsive-table td:last-child {
+                 justify-content: flex-end; /* Center the delete button */
+            }
+            
+            .responsive-table td:last-child::before {
+                display: none; /* Don't show a label for the actions column */
+            }
+
+            /* Adjust the main header for better stacking on mobile */
+            .main-header-flex {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container py-4">
         <!-- Header Card -->
         <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <!-- Added .main-header-flex for responsive stacking -->
+            <div class="card-header d-flex justify-content-between align-items-center main-header-flex">
                 <div>
                     <h4 class="mb-0">
                         <i class="fas fa-tags me-2"></i>Discount Management
                     </h4>
-                    <div class="d-flex align-items-center mt-2">
-                        <span class="user-badge me-2">
+                    <!-- Added flex-wrap for user badges -->
+                    <div class="d-flex align-items-center mt-2 flex-wrap gap-2">
+                        <span class="user-badge">
                             <i class="fas fa-user-circle me-1"></i> {{ Auth::user()->name }}
                         </span>
                         <span class="user-badge">
@@ -140,11 +191,12 @@
                         </span>
                     </div>
                 </div>
-                <div>
-                    <a href="{{ route('discounts') }}" class="btn btn-sm btn-outline-light me-2">
+                <!-- Added flex-wrap for header buttons -->
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ route('discounts') }}" class="btn btn-sm btn-outline-light">
                         <i class="fas fa-chart-line me-1"></i> Reports
                     </a>
-                    <a href="{{ route('defaultRate') }}" class="btn btn-sm btn-outline-light me-2">
+                    <a href="{{ route('DefaultRate') }}" class="btn btn-sm btn-outline-light">
                         <i class="fas fa-cog me-1"></i> Defaults
                     </a>
                     <form method="POST" action="{{ route('logout') }}" class="d-inline">
@@ -159,7 +211,7 @@
 
         <!-- Main Form Card -->
         <div class="card">
-            <div class="card-body">
+            <div class="card-body p-md-4">
                 <form method="POST" action="{{ route('storeDiscount') }}" class="needs-validation" novalidate>
                     @csrf
 
@@ -229,24 +281,26 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
-                                    <label for="pickup_hub" class="form-label">Pick Up Hub</label>
-                                    <select class="form-select" id="pickup_hub" name="pickup_hub" required>
-                                        <option value="" selected disabled>Select pick up hub</option>
-                                        <option value="hub1">Hub 1 - Downtown</option>
-                                        <option value="hub2">Hub 2 - Industrial Area</option>
-                                        <option value="hub3">Hub 3 - East District</option>
-                                    </select>
+                              <div class="col-md-6">
+                                   <label for="pickup_hub" class="form-label">Pick Up Hub</label>
+                                   <select class="form-select" id="pickup_hub" name="pickup_hub" required>
+                                     <option value="" selected disabled>Select pick up hub</option>
+                                     @foreach($locations as $location)
+                                     <option value="{{ $location->location }}">{{ $location->location }}</option>
+                                         @endforeach
+                                 </select>
                                 </div>
+
 
                                 <div class="col-md-6">
                                     <label for="product_category" class="form-label">Product Category</label>
                                     <select class="form-select" id="product_category" name="product_category" required>
                                         <option value="" selected disabled>Select product category</option>
                                         <option value="electronics">Electronics</option>
-                                        <option value="clothing">Clothing & Apparel</option>
-                                        <option value="groceries">Groceries</option>
-                                        <option value="pharmacy">Pharmacy</option>
+                                        <option value="fashion">Fashion & Apparel</option>
+                                        <option value="food">Food & Beverage</option>
+                                        <option value="beauty">Beauty & Personal Care</option>
+                                        <option value="home">Home & Living</option>
                                     </select>
                                 </div>
                             </div>
@@ -259,33 +313,34 @@
                             <h5 class="mb-0"><i class="fas fa-clipboard-check me-2"></i>Special Requirements</h5>
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-check form-switch mb-3">
+                            <!-- Using Bootstrap's grid for automatic wrapping and spacing -->
+                            <div class="row g-3">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" name="requirements[]" value="pickup_time" id="pickupTime">
                                         <label class="form-check-label" for="pickupTime">Specific Pickup Time</label>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-check form-switch mb-3">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" name="requirements[]" value="pickup_van" id="pickupVan">
                                         <label class="form-check-label" for="pickupVan">Dedicated Pickup Van</label>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-check form-switch mb-3">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" name="requirements[]" value="entry_manual" id="entryManual" checked>
                                         <label class="form-check-label" for="entryManual">Manual Entry Facility</label>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-check form-switch mb-3">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" name="requirements[]" value="entry_csv" id="entryCSV">
                                         <label class="form-check-label" for="entryCSV">CSV Entry Facility</label>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-check form-switch mb-3">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" name="requirements[]" value="close_box" id="closeBox">
                                         <label class="form-check-label" for="closeBox">Close Box Requirement</label>
                                     </div>
@@ -303,8 +358,11 @@
                             </button>
                         </div>
                         <div class="card-body">
+                            <!-- table-responsive will add horizontal scroll on larger screens if needed,
+                                 but our custom CSS will handle small screens. -->
                             <div class="table-responsive">
-                                <table class="table table-hover align-middle">
+                                <!-- Added .responsive-table class -->
+                                <table class="table table-hover align-middle responsive-table">
                                     <thead class="table-light">
                                         <tr>
                                             <th>Region</th>
@@ -317,43 +375,48 @@
                                     </thead>
                                     <tbody id="discountRows">
                                         <tr>
-                                            <td>
+                                            <!-- Added data-label attributes for responsive view -->
+                                            <td data-label="Region">
                                                 <select class="form-select" name="region[]">
                                                     <option value="" selected disabled>Select region</option>
-                                                    <option value="north">North Region</option>
-                                                    <option value="south">South Region</option>
-                                                    <option value="east">East Region</option>
-                                                    <option value="west">West Region</option>
+                                                    <option value="same_city">Same City</option>
+                                                    <option value="dhk_sub">DHK > Sub City</option>
+                                                    <option value="dhk_outside">DHK > Outside City</option>
+                                                    <option value="outside_dhk">Outside DHK > DHK</option>
+                                                    <option value="outside_outside">Outside DHK > Outside DHK</option>
                                                 </select>
                                             </td>
-                                            <td>
+                                            <td data-label="Weight Range">
                                                 <select class="form-select" name="weight_range[]">
                                                     <option value="" selected disabled>Select weight</option>
-                                                    <option value="0-1kg">0-1 kg</option>
-                                                    <option value="1-5kg">1-5 kg</option>
-                                                    <option value="5-10kg">5-10 kg</option>
-                                                    <option value="10+kg">10+ kg</option>
+                                                    <option value="0-200">0-200 gm</option>
+                                                    <option value="201-500">201-500 gm</option>
+                                                    <option value="501-1000">501-1000 gm</option>
+                                                    <option value="1001-1500">1001-1500 gm</option>
+                                                    <option value="1501-2000">1501-2000 gm</option>
+                                                    <option value="2001-2500">2001-2500 gm</option>
+                                                    <option value="2500+">2500+ per kg</option>
                                                 </select>
                                             </td>
-                                            <td>
+                                            <td data-label="Discounted Rate">
                                                 <div class="input-group">
                                                     <span class="input-group-text">$</span>
                                                     <input type="number" class="form-control" name="discounted_rate[]" step="0.01" min="0" placeholder="0.00">
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td data-label="Return Charge">
                                                 <div class="input-group">
                                                     <input type="number" class="form-control" name="return_charge[]" min="0" max="100" placeholder="0">
                                                     <span class="input-group-text">%</span>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td data-label="COD Charge">
                                                 <div class="input-group">
                                                     <input type="number" class="form-control" name="cod[]" min="0" max="100" placeholder="0">
                                                     <span class="input-group-text">%</span>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td data-label="Actions" class="text-center">
                                                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('tr').remove()">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
@@ -366,11 +429,12 @@
                     </div>
 
                     <!-- Form Actions -->
-                    <div class="d-flex justify-content-between mt-4">
-                        <button type="reset" class="btn btn-outline-secondary">
+                    <!-- Using responsive flex classes to stack buttons on small screens -->
+                    <div class="d-flex flex-column flex-sm-row justify-content-between mt-4 gap-3">
+                        <button type="reset" class="btn btn-outline-secondary order-sm-1">
                             <i class="fas fa-undo me-2"></i>Reset Form
                         </button>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary order-sm-2">
                             <i class="fas fa-save me-2"></i>Submit
                         </button>
                     </div>
