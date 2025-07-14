@@ -154,7 +154,7 @@
     </div>
     
     <div class="table-container">
-      <table class="table table-bordered">
+      <table class="table table-borde#ecb90d">
         <thead>
           <tr>
             <th>Merchant ID</th>
@@ -466,7 +466,7 @@
     
     <div class="table-container">
        @foreach($rules as $rule)
-      <table class="table table-bordered">
+      <table class="table table-borde#ecb90d">
         <thead>
           <tr>
             <th>Merchant ID</th>
@@ -498,47 +498,47 @@
             <td data-label="Pickup">Any Location</td>
             <td data-label="Delivery">Same City</td>
              @if($rule->region == 'same_city' && $rule->weight_range == '0-200')
-             <td data-label="0-200g" class="highlight" style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>        
+             <td data-label="0-200g" class="highlight" style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>        
              @else
             <td data-label="0-200g" class="highlight">49</td>
             @endif
             @if($rule->region == 'same_city' && $rule->weight_range == '201-500')
-            <td data-label="200-500g" class="highlight" style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="200-500g" class="highlight" style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="200-500g" class="highlight">60</td>
             @endif
             @if($rule->region == 'same_city' && $rule->weight_range == '501-1000')
-             <td data-label="500-1000g" class="highlight" style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+             <td data-label="500-1000g" class="highlight" style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
            <td data-label="500-1000g" class="highlight">70</td>
             @endif
             @if($rule->region == 'same_city' && $rule->weight_range == '1001-1500')
            
-            <td data-label="1000-1500g" class="highlight" style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="1000-1500g" class="highlight" style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="1000-1500g" class="highlight">80</td>
             @endif
             @if($rule->region == 'same_city' && $rule->weight_range == '1501-2000')
             
-            <td data-label="1500-2000g" class="highlight" style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="1500-2000g" class="highlight" style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="1500-2000g" class="highlight">90</td>
             @endif
             @if($rule->region == 'same_city' && $rule->weight_range == '2001-2500')
            
-           <td data-label="2000-2500g" class="highlight" style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+           <td data-label="2000-2500g" class="highlight" style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="2000-2500g" class="highlight">100</td>
             @endif
             @if($rule->region == 'same_city' && $rule->weight_range == '2500+')
             
-             <td data-label="2500+ per kg" style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+             <td data-label="2500+ per kg" style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
            <td data-label="2500+ per kg">20 TK per kg</td>
             @endif
          @if($rule->region == 'same_city')
-            <td data-label="RC" style="background-color: red; color: white;">{{ $rule->return_charge  }}</td>
-            <td data-label="COD" style="background-color: red; color: white;">{{ $rule->cod }}</td>
+            <td data-label="RC" style="background-color: #ecb90d; color: white;">{{ $rule->return_charge  }}</td>
+            <td data-label="COD" style="background-color: #ecb90d; color: white;">{{ $rule->cod }}</td>
             @else
             <td data-label="RC">0%</td>
             <td data-label="COD">1%</td>
@@ -551,47 +551,47 @@
             <td data-label="Pickup">DHK</td>
             <td data-label="Delivery">Sub City</td>
                    @if($rule->region == 'dhk_sub' && $rule->weight_range == '0-200')
-             <td data-label="0-200g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>        
+             <td data-label="0-200g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>        
              @else
             <td data-label="0-200g" class="highlight">80</td>
             @endif
             @if($rule->region == 'dhk_sub' && $rule->weight_range == '201-500')
-            <td data-label="200-500g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="200-500g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="200-500g" class="highlight">85</td>
             @endif
             @if($rule->region == 'dhk_sub' && $rule->weight_range == '501-1000')
-             <td data-label="500-1000g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+             <td data-label="500-1000g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
            <td data-label="500-1000g" class="highlight">100</td>
             @endif
             @if($rule->region == 'dhk_sub' && $rule->weight_range == '1001-1500')
            
-            <td data-label="1000-1500g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="1000-1500g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="1000-1500g" class="highlight">120</td>
             @endif
             @if($rule->region == 'dhk_sub' && $rule->weight_range == '1501-2000')
             
-            <td data-label="1500-2000g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="1500-2000g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="1500-2000g" class="highlight">125</td>
             @endif
             @if($rule->region == 'dhk_sub' && $rule->weight_range == '2001-2500')
            
-           <td data-label="2000-2500g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+           <td data-label="2000-2500g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="2000-2500g" class="highlight">135</td>
             @endif
             @if($rule->region == 'dhk_sub' && $rule->weight_range == '2500+')
             
-             <td data-label="2500+ per kg"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+             <td data-label="2500+ per kg"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
            <td data-label="2500+ per kg">20 TK per kg</td>
             @endif
          @if($rule->region == 'dhk_sub')
-            <td data-label="RC"style="background-color: red; color: white;">{{ $rule->return_charge  }}</td>
-            <td data-label="COD"style="background-color: red; color: white;">{{ $rule->cod }}</td>
+            <td data-label="RC"style="background-color: #ecb90d; color: white;">{{ $rule->return_charge  }}</td>
+            <td data-label="COD"style="background-color: #ecb90d; color: white;">{{ $rule->cod }}</td>
             @else
             <td data-label="RC">30%</td>
             <td data-label="COD">1%</td>
@@ -604,47 +604,47 @@
             <td data-label="Pickup">DHK</td>
             <td data-label="Delivery">Outside City</td>
                 @if($rule->region == 'dhk_outside' && $rule->weight_range == '0-200')
-             <td data-label="0-200g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>        
+             <td data-label="0-200g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>        
              @else
             <td data-label="0-200g" class="highlight">99</td>
             @endif
             @if($rule->region == 'dhk_outside' && $rule->weight_range == '201-500')
-            <td data-label="200-500g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="200-500g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="200-500g" class="highlight">105</td>
             @endif
             @if($rule->region == 'dhk_outside' && $rule->weight_range == '501-1000')
-             <td data-label="500-1000g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+             <td data-label="500-1000g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
            <td data-label="500-1000g" class="highlight">125</td>
             @endif
             @if($rule->region == 'dhk_outside' && $rule->weight_range == '1001-1500')
            
-            <td data-label="1000-1500g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="1000-1500g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="1000-1500g" class="highlight">140</td>
             @endif
             @if($rule->region == 'dhk_outside' && $rule->weight_range == '1501-2000')
             
-            <td data-label="1500-2000g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="1500-2000g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="1500-2000g" class="highlight">150</td>
             @endif
             @if($rule->region == 'dhk_outside' && $rule->weight_range == '2001-2500')
            
-           <td data-label="2000-2500g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+           <td data-label="2000-2500g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="2000-2500g" class="highlight">160</td>
             @endif
             @if($rule->region == 'dhk_outside' && $rule->weight_range == '2500+')
             
-             <td data-label="2500+ per kg"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+             <td data-label="2500+ per kg"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
            <td data-label="2500+ per kg">25 TK per kg</td>
             @endif
          @if($rule->region == 'dhk_outside')
-            <td data-label="RC"style="background-color: red; color: white;">{{ $rule->return_charge  }}</td>
-            <td data-label="COD"style="background-color: red; color: white;">{{ $rule->cod }}</td>
+            <td data-label="RC"style="background-color: #ecb90d; color: white;">{{ $rule->return_charge  }}</td>
+            <td data-label="COD"style="background-color: #ecb90d; color: white;">{{ $rule->cod }}</td>
             @else
             <td data-label="RC">30%</td>
             <td data-label="COD">1%</td>
@@ -657,47 +657,47 @@
             <td data-label="Pickup">Outside DHK</td>
             <td data-label="Delivery">DHK</td>
                   @if($rule->region == 'outside_dhk' && $rule->weight_range == '0-200')
-             <td data-label="0-200g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>        
+             <td data-label="0-200g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>        
              @else
             <td data-label="0-200g" class="highlight">99</td>
             @endif
             @if($rule->region == 'outside_dhk' && $rule->weight_range == '201-500')
-            <td data-label="200-500g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="200-500g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="200-500g" class="highlight">105</td>
             @endif
             @if($rule->region == 'outside_dhk' && $rule->weight_range == '501-1000')
-             <td data-label="500-1000g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+             <td data-label="500-1000g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
            <td data-label="500-1000g" class="highlight">110</td>
             @endif
             @if($rule->region == 'outside_dhk' && $rule->weight_range == '1001-1500')
            
-            <td data-label="1000-1500g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="1000-1500g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="1000-1500g" class="highlight">125</td>
             @endif
             @if($rule->region == 'outside_dhk' && $rule->weight_range == '1501-2000')
             
-            <td data-label="1500-2000g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="1500-2000g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="1500-2000g" class="highlight">125</td>
             @endif
             @if($rule->region == 'outside_dhk' && $rule->weight_range == '2001-2500')
            
-           <td data-label="2000-2500g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+           <td data-label="2000-2500g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="2000-2500g" class="highlight">150</td>
             @endif
             @if($rule->region == 'outside_dhk' && $rule->weight_range == '2500+')
             
-             <td data-label="2500+ per kg"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+             <td data-label="2500+ per kg"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
            <td data-label="2500+ per kg">25 TK per kg</td>
             @endif
          @if($rule->region == 'outside_dhk')
-            <td data-label="RC"style="background-color: red; color: white;">{{ $rule->return_charge  }}</td>
-            <td data-label="COD"style="background-color: red; color: white;">{{ $rule->cod }}</td>
+            <td data-label="RC"style="background-color: #ecb90d; color: white;">{{ $rule->return_charge  }}</td>
+            <td data-label="COD"style="background-color: #ecb90d; color: white;">{{ $rule->cod }}</td>
              @else
             <td data-label="RC">30%</td>
             <td data-label="COD">1%</td>
@@ -710,47 +710,47 @@
             <td data-label="Pickup">Outside DHK</td>
             <td data-label="Delivery">Outside DHK</td>
                   @if($rule->region == 'outside_outside' && $rule->weight_range == '0-200')
-             <td data-label="0-200g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>        
+             <td data-label="0-200g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>        
              @else
             <td data-label="0-200g" class="highlight">125</td>
             @endif
             @if($rule->region == 'outside_outside' && $rule->weight_range == '201-500')
-            <td data-label="200-500g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="200-500g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="200-500g" class="highlight">125</td>
             @endif
             @if($rule->region == 'outside_outside' && $rule->weight_range == '501-1000')
-             <td data-label="500-1000g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+             <td data-label="500-1000g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
            <td data-label="500-1000g" class="highlight">135</td>
             @endif
             @if($rule->region == 'outside_outside' && $rule->weight_range == '1001-1500')
            
-            <td data-label="1000-1500g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="1000-1500g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="1000-1500g" class="highlight">145</td>
             @endif
             @if($rule->region == 'outside_outside' && $rule->weight_range == '1501-2000')
             
-            <td data-label="1500-2000g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+            <td data-label="1500-2000g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="1500-2000g" class="highlight">155</td>
             @endif
             @if($rule->region == 'outside_outside' && $rule->weight_range == '2001-2500')
            
-           <td data-label="2000-2500g" class="highlight"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+           <td data-label="2000-2500g" class="highlight"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
             <td data-label="2000-2500g" class="highlight">165</td>
             @endif
             @if($rule->region == 'outside_outside' && $rule->weight_range == '2500+')
             
-             <td data-label="2500+ per kg"style="background-color: red; color: white;">{{ $rule->discounted_rate }}</td>
+             <td data-label="2500+ per kg"style="background-color: #ecb90d; color: white;">{{ $rule->discounted_rate }}</td>
             @else
            <td data-label="2500+ per kg">25 TK per kg</td>
             @endif
          @if($rule->region == 'outside_outside')
-            <td data-label="RC"style="background-color: red; color: white;">{{ $rule->return_charge  }}</td>
-            <td data-label="COD"style="background-color: red; color: white;">{{ $rule->cod }}</td>
+            <td data-label="RC"style="background-color: #ecb90d; color: white;">{{ $rule->return_charge  }}</td>
+            <td data-label="COD"style="background-color: #ecb90d; color: white;">{{ $rule->cod }}</td>
             @else
             <td data-label="RC">30%</td>
             <td data-label="COD">1%</td>

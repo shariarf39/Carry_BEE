@@ -10,7 +10,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4e73df;
+            --primary-color: #ecb90d;
             --primary-hover: #3a5bc7;
             --secondary-color: #6c757d;
             --light-bg: #f8f9fc;
@@ -296,11 +296,10 @@
                                     <label for="product_category" class="form-label">Product Category</label>
                                     <select class="form-select" id="product_category" name="product_category" required>
                                         <option value="" selected disabled>Select product category</option>
-                                        <option value="electronics">Electronics</option>
-                                        <option value="fashion">Fashion & Apparel</option>
-                                        <option value="food">Food & Beverage</option>
-                                        <option value="beauty">Beauty & Personal Care</option>
-                                        <option value="home">Home & Living</option>
+                                           @foreach($categories as $categories)
+                                             <option value="{{ $categories->name }}">{{ $categories->name }}</option>
+                                     
+                                         @endforeach
                                     </select>
                                 </div>
                             </div>

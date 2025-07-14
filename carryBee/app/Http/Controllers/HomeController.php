@@ -7,6 +7,7 @@ use App\Models\Discount;
 use App\Models\DiscountRule;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Hub;
+use App\Models\Catagories;
 
 class HomeController extends Controller
 {
@@ -19,13 +20,20 @@ class HomeController extends Controller
     {
 
        $locations = Hub::all(); // fetch all locations from DB
+        $categories = Catagories::all(); // fetch all categories from DB
 
-    return view('Client.pages.userDashboard', compact('locations'));
+        // You can pass the categories to the view if needed
+        return view('Client.pages.userDashboard', compact('locations', 'categories'));
+        // If you want to use the categories in the view, you can do so like this
     }
 
       public function DefaultRate()
     {
         return view('Client.pages.defultsRate');
+    }
+       public function Home()
+    {
+        return view('welcome');
     }
 
 

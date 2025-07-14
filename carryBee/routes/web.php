@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
 
 Route::controller(HomeController::class)->group(function(){
 
-
+Route::get('/', 'Home')->name('Home');
 // Protected Routes
 Route::middleware('auth')->group(function () {
   
