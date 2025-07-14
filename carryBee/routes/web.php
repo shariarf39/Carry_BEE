@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\Auth\LoginController;
+
 
 Route::controller(AuthController::class)->group(function(){
 
@@ -44,10 +46,18 @@ Route::middleware('auth')->group(function () {
 
 
 
-// Route::controller(DownloadController::class)->group(function(){
-//   Route::get('/download-apk', 'downloadApk');
-//   Route::get('/download-count', 'getDownloadCount');
-//   Route::get('/NUBCC-Magazine-pdf', 'showPdf')->name('pdf.viewer');
-//   Route::get('/excurtion_apk', 'excurtion_apk');
+Route::prefix('admin')->controller(LoginController::class)->group(function () {
 
-// });
+    // Admin login routes
+    Route::get('/Adminlogin', 'AdminshowLoginForm')->name('admin.login');
+    Route::post('/Adminlogin', 'Adminlogin')->name('admin.login.submit');
+    Route::post('/Adminlogout', 'Adminlogout')->name('admin.logout');
+
+    // Protected admin routes
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('admin.dashboard');
+    });
+
+});
