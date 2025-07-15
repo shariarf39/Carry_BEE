@@ -51,13 +51,12 @@ Route::prefix('admin')->controller(LoginController::class)->group(function () {
     // Admin login routes
     Route::get('/Adminlogin', 'AdminshowLoginForm')->name('admin.login');
     Route::post('/Adminlogin', 'Adminlogin')->name('admin.login.submit');
-    Route::post('/Adminlogout', 'Adminlogout')->name('admin.logout');
+    Route::get('/Adminlogout', 'Adminlogout')->name('admin.logout');
 
     // Protected admin routes
     Route::middleware('auth:admin')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
+        Route::get('/AdminDashboard', 'AdminDashboard')->name('AdminDashboard');
+        Route::get('/DiscountData',  'DiscountData')->name('DiscountData');
     });
 
 });
