@@ -4,17 +4,17 @@
 <div class="container py-4">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
         <h4 class="mb-2 mb-md-0">Pending Approvals</h4>
-        <div class="d-flex">
-            <button class="btn btn-outline-secondary me-2"><i class="fa fa-refresh"></i> Refresh</button>
-            <button class="btn btn-primary"><i class="fa fa-check-circle"></i> Batch Approve</button>
+        <div class="d-flex align-items-center gap-2">
+            <!-- Search input -->
+            <input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Search merchants...">
+            <button class="btn btn-success" id="exportTableBtn"><i class="fa fa-download"></i> Export CSV</button>
         </div>
     </div>
 
     <div class="table-responsive">
-        <table class="table table-hover table-bordered text-center align-middle">
+        <table id="approvalTable" class="table table-hover table-bordered text-center align-middle">
             <thead class="table-dark">
                 <tr>
-                  
                     <th>Merchant</th>
                     <th>Category & Burn Details</th>
                     <th>Location & Revenue</th>
@@ -28,62 +28,94 @@
                 @foreach($merchants as $merchant)
                 @php
                     $discount = $groupedDiscounts[$merchant->id] ?? [];
-                    $isd = $discount['same_city']['0-200']->discounted_rate ?? $defaultRates['same_city']['0-200'];
-                    $osd = $discount['dhk_outside']['0-200']->discounted_rate ?? $defaultRates['dhk_outside']['0-200'];
-                    $baseDiscount = $merchant->base_discount ?? 10;
-                    $cod = $discount['same_city']['0-200']->cod ?? 20;
-                    $rc = $discount['same_city']['0-200']->return_charge ?? 50;
-                    $dailyParcels = $merchant->promised_parcels;
-                    $monthlyParcels = $dailyParcels * 30;
-                    $dailyRevenue = $dailyParcels * 300;
-                    $monthlyRevenue = $dailyRevenue * 30;
-                    $dailyMaxBurn = $dailyParcels * 100;
-                    $monthlyMaxBurn = $dailyMaxBurn * 30;
-                    $minBurn = $dailyParcels * 60;
+                    $parcelCount = $merchant->promised_parcels;
+                    $monthlyParcels = $parcelCount * 30;
+                    $minBurn = $parcelCount * 60;
+
+                    $regionWiseDetails = [];
+                    $totalBurn = 0;
+                    $totalRevenue = 0;
+                    $burnRecords = [];
+
+                    foreach (($discount ?? []) as $region => $weights) {
+                        foreach ($weights as $weightRange => $rule) {
+                            $defaultRate = $defaultRates[$region][$weightRange] ?? 0;
+                            $discountedRate = $rule->discounted_rate ?? $defaultRate;
+
+                            $burnPerParcel = $discountedRate - $defaultRate;
+                            $revenuePerParcel = $discountedRate;
+
+                            $burn = $burnPerParcel * $parcelCount;
+                            $revenue = $revenuePerParcel * $parcelCount;
+
+                            $totalBurn += $burn;
+                            $totalRevenue += $revenue;
+
+                            $regionWiseDetails[] = [
+                                'region' => $region,
+                                'weightRange' => $weightRange,
+                                'defaultRate' => $defaultRate,
+                                'discountedRate' => $discountedRate,
+                                'dailyRevenue' => $revenue,
+                                'dailyBurn' => $burn,
+                                'monthlyRevenue' => $revenue * 30,
+                                'monthlyBurn' => $burn * 30,
+                            ];
+
+                            $burnRecords[] = [
+                                'burnPerParcel' => $burnPerParcel,
+                                'revenuePerParcel' => $revenuePerParcel,
+                            ];
+                        }
+                    }
+
+                    $aggMonthlyRevenue = $totalRevenue * 30;
+                    $aggMonthlyBurn = $totalBurn * 30;
+
+                    $maxBurnValue = collect($burnRecords)->sortBy('burnPerParcel')->first()['burnPerParcel'] ?? 0;
+                    $maxBurnMatches = collect($burnRecords)->where('burnPerParcel', $maxBurnValue);
+                    $maxBurn = $maxBurnValue * $parcelCount;
+
+                    if ($maxBurnMatches->count() > 1) {
+                        $revenues = $maxBurnMatches->pluck('revenuePerParcel');
+                        $maxRevenue = $revenues->max() * $parcelCount;
+                        $minRevenue = $revenues->min() * $parcelCount;
+                    } else {
+                        $revenuePerParcel = $maxBurnMatches->first()['revenuePerParcel'] ?? 0;
+                        $maxRevenue = $revenuePerParcel * $parcelCount;
+                        $minRevenue = $maxRevenue;
+                    }
                 @endphp
                 <tr>
-                  
                     <td class="text-start">
-                        <div class="d-flex align-items-center">
-                            <div class="rounded-circle bg-light text-primary fw-bold text-uppercase d-flex justify-content-center align-items-center me-2" style="width: 40px; height: 40px;">
-                                {{ substr($merchant->merchant_name, 0, 2) }}
-                            </div>
-                            <div>
-                                <strong>{{ $merchant->merchant_name }}</strong><br>
-                                <small class="text-muted">#{{ $merchant->merchant_id }}</small>
-                            </div>
-                        </div>
+                        <strong>{{ $merchant->merchant_name }}</strong><br>
+                        <small class="text-muted">#{{ $merchant->merchant_id }}</small>
                     </td>
                     <td class="text-start">
                         <strong>{{ ucfirst($merchant->product_category) }}</strong><br>
                         <small>
-                            Daily Max Burn: ৳{{ number_format($dailyMaxBurn) }}<br>
-                            Monthly Max Burn: ৳{{ number_format($monthlyMaxBurn) }}<br>
-                            Min Burn: ৳{{ number_format($minBurn) }}<br><br>
-                            Daily Revenue: ৳{{ number_format($dailyRevenue) }}<br>
-                            Monthly Revenue: ৳{{ number_format($monthlyRevenue) }}
+                        
+                            <u><strong>Max Burn & Revenue</strong></u><br>
+                            Daily Burn: ৳{{ number_format($maxBurn) }}<br>
+                            Max Revenue: ৳{{ number_format($maxRevenue) }}<br>
+                            Min Revenue: ৳{{ number_format($minRevenue) }}<br>
+                            <button class="btn btn-sm btn-link text-primary" onclick='showBreakdown(@json($regionWiseDetails))'>Show Breakdown</button>
                         </small>
                     </td>
                     <td class="text-start">
                         <strong>{{ $merchant->pickup_hub }}</strong><br>
-                        <small>Revenue: ৳{{ number_format($dailyRevenue) }}</small>
+                        <small>Total Revenue: ৳{{ number_format($totalRevenue) }}</small>
                     </td>
                     <td>
-                        <strong>{{ $dailyParcels }}/day</strong><br>
+                        <strong>{{ $parcelCount }}/day</strong><br>
                         <small>{{ number_format($monthlyParcels) }}/month</small>
                     </td>
-                    <td class="text-start">
-                        <small>
-                            ISD to OSD: {{ $isd }}৳<br>
-                            OSD to OSD: {{ $osd }}৳<br>
-                            Base Discount: {{ $baseDiscount }}%<br>
-                            COD Charge: {{ $cod }}৳<br>
-                            Return Charge: {{ $rc }}৳
-                        </small>
-                    </td>
-                    <td>
-                        <span class="badge bg-warning text-dark">Pending</span>
-                    </td>
+                   <td>
+                    <a href="{{ route('DiscountSlot', $merchant->id) }}" class="btn btn-secondary btn-sm">
+                      <i class="fas fa-list-check me-1"></i> <span class="d-none d-sm-inline">Rules</span>
+                    </a>
+                   </td>
+                    <td><span class="badge bg-warning text-dark">Pending</span></td>
                     <td>
                         <a href="#" class="btn btn-sm btn-outline-success me-1"><i class="fa fa-check"></i></a>
                         <a href="#" class="btn btn-sm btn-outline-danger"><i class="fa fa-times"></i></a>
@@ -94,4 +126,172 @@
         </table>
     </div>
 </div>
+
+<!-- Breakdown Modal -->
+<div class="modal fade" id="breakdownModal" tabindex="-1" aria-labelledby="breakdownModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Breakdown Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search region or weight...">
+        <button class="btn btn-success mb-2" onclick="exportBreakdownToCSV()">Export CSV</button>
+        <div class="table-responsive">
+          <table class="table table-bordered" id="breakdownTable">
+            <thead class="table-light">
+              <tr>
+                <th>Region</th>
+                <th>Weight Range</th>
+                <th>Default Rate</th>
+                <th>Discounted Rate</th>
+                <th>Daily Revenue</th>
+                <th>Daily Burn</th>
+                <th>Monthly Revenue</th>
+                <th>Monthly Burn</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+
+  document.getElementById('tableSearch').addEventListener('input', function () {
+        const searchValue = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#approvalTable tbody tr');
+
+        rows.forEach(row => {
+            const rowText = row.innerText.toLowerCase();
+            row.style.display = rowText.includes(searchValue) ? '' : 'none';
+        });
+    });
+
+    function formatCurrency(value) {
+        return value.toString().replace(/[৳à§³]/g, '').trim();
+    }
+
+    function showBreakdown(data) {
+        const tbody = document.querySelector('#breakdownTable tbody');
+        tbody.innerHTML = '';
+
+        data.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${row.region}</td>
+                <td>${row.weightRange}</td>
+                <td>৳${row.defaultRate}</td>
+                <td>৳${row.discountedRate}</td>
+                <td>৳${row.dailyRevenue}</td>
+                <td>৳${row.dailyBurn}</td>
+                <td>৳${row.monthlyRevenue}</td>
+                <td>৳${row.monthlyBurn}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        const modal = new bootstrap.Modal(document.getElementById('breakdownModal'));
+        modal.show();
+    }
+
+    document.getElementById('exportTableBtn').addEventListener('click', () => {
+        const table = document.getElementById('approvalTable');
+        const headers = [
+            'Merchant Name', 'Merchant ID', 'Category', 
+            'Min Burn Daily (BDT)', 'Max Burn Daily (BDT)',
+            'Max Revenue Daily (BDT)', 'Min Revenue Daily (BDT)',
+            'Location', 'Total Revenue Daily (BDT)',
+            'Parcels Daily', 'Parcels Monthly', 'Status'
+        ];
+
+        const rows = [];
+
+        table.querySelectorAll('tbody tr').forEach(tr => {
+            if (tr.style.display === 'none') return;
+            const cols = Array.from(tr.querySelectorAll('td'));
+            const rowData = [];
+
+            const merchantCol = cols[0].innerText.split('\n');
+            rowData.push(
+                merchantCol[0].trim(),
+                merchantCol[1] ? merchantCol[1].replace('#', '').trim() : ''
+            );
+
+            const categoryCol = cols[1].innerText.split('\n');
+            rowData.push(
+                categoryCol[0].trim(),
+                formatCurrency(categoryCol.find(t => t.includes('Daily:')) || '0'),
+                formatCurrency(categoryCol.find(t => t.includes('Daily Burn:')) || '0'),
+                formatCurrency(categoryCol.find(t => t.includes('Max Revenue:')) || '0'),
+                formatCurrency(categoryCol.find(t => t.includes('Min Revenue:')) || '0')
+            );
+
+            const locationCol = cols[2].innerText.split('\n');
+            rowData.push(
+                locationCol[0].trim(),
+                formatCurrency(locationCol.find(t => t.includes('Total Revenue:')) || '0')
+            );
+
+            const volumeCol = cols[3].innerText.split('\n');
+            rowData.push(
+                volumeCol[0].replace('/day', '').trim(),
+                volumeCol[1] ? volumeCol[1].replace('/month', '').trim() : ''
+            );
+
+            rowData.push(cols[4].innerText.trim());
+            rows.push(rowData);
+        });
+
+        let csvContent = "\uFEFF" + headers.join(',') + '\n';
+        rows.forEach(row => {
+            csvContent += row.map(item => `"${item}"`).join(',') + '\n';
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'merchant_approvals.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+
+    function exportBreakdownToCSV() {
+        const table = document.getElementById('breakdownTable');
+        const headers = Array.from(table.querySelectorAll('thead th')).map(th => 
+            th.innerText.trim().includes('Rate') || th.innerText.trim().includes('Revenue') || th.innerText.trim().includes('Burn') ? 
+            `${th.innerText.trim()} (BDT)` : 
+            th.innerText.trim()
+        );
+
+        const rows = [];
+        table.querySelectorAll('tbody tr').forEach(tr => {
+            rows.push(Array.from(tr.querySelectorAll('td')).map(td => 
+                formatCurrency(td.innerText.trim())
+            ));
+        });
+
+        let csvContent = "\uFEFF" + headers.join(',') + '\n';
+        rows.forEach(row => {
+            csvContent += row.join(',') + '\n';
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'breakdown_details.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+@endpush

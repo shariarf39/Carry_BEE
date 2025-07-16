@@ -153,7 +153,7 @@
                             <tr>
                                 <td>{{ $rule->region }}</td>
                                 <td>{{ $rule->weight_range }}</td>
-                                <td class="currency">${{ number_format($rule->discounted_rate, 2) }}</td>
+                                <td class="currency">৳{{ number_format($rule->discounted_rate, 2) }}</td>
                                 <td>{{ $rule->return_charge }}%</td>
                                 <td>{{ $rule->cod }}%</td>
                             </tr>

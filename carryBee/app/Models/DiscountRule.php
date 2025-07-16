@@ -14,4 +14,6 @@ class DiscountRule extends Model
     {
         return $this->belongsTo(Discount::class);
     }
+
+   
 }

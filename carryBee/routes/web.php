@@ -57,6 +57,9 @@ Route::prefix('admin')->controller(LoginController::class)->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::get('/AdminDashboard', 'AdminDashboard')->name('AdminDashboard');
         Route::get('/DiscountData',  'DiscountData')->name('DiscountData');
+
+        Route::get('/rules/{id}',  'DiscountSlot')->name('DiscountSlot');
+      //  Route::get('/DiscountSlot', 'DefaultRate')->name('DefaultRate');
     });
 
 });

@@ -17,6 +17,7 @@
 
 <!-- Optional: Google Fonts (Roboto for clean UI) -->
 <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <style>
     body {
@@ -96,6 +97,7 @@
   </div>
 
   <script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
    <!-- The reason your navigation doesn't redirect is because you're using anchor <a> with "href" as route names in Blade, but also using JavaScript to intercept clicks. To fix this: -->
 
 <!-- Option 1 (Recommended): Remove the JS interception for Laravel route links -->

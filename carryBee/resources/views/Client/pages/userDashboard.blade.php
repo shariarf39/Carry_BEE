@@ -405,13 +405,13 @@
                                             </td>
                                             <td data-label="Return Charge">
                                                 <div class="input-group">
-                                                    <input type="number" class="form-control" name="return_charge[]" min="0" max="100" placeholder="0">
+                                                    <input type="number" class="form-control" name="return_charge[]" step="0.01" min="0" max="100" placeholder="0">
                                                     <span class="input-group-text">%</span>
                                                 </div>
                                             </td>
                                             <td data-label="COD Charge">
                                                 <div class="input-group">
-                                                    <input type="number" class="form-control" name="cod[]" min="0" max="100" placeholder="0">
+                                                    <input type="number" class="form-control" name="cod[]" min="0" step="0.01" max="100" placeholder="0">
                                                     <span class="input-group-text">%</span>
                                                 </div>
                                             </td>
