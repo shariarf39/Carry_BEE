@@ -89,7 +89,8 @@
                 <tr>
                     <td class="text-start">
                         <strong>{{ $merchant->merchant_name }}</strong><br>
-                        <small class="text-muted">#{{ $merchant->merchant_id }}</small>
+                        <small class="text-muted">#{{ $merchant->merchant_id }}</small><br>
+                        <small class="text-muted">-{{ $merchant->kma }}</small>
                     </td>
                     <td class="text-start">
                         <strong>{{ ucfirst($merchant->product_category) }}</strong><br>
@@ -115,11 +116,43 @@
                       <i class="fas fa-list-check me-1"></i> <span class="d-none d-sm-inline">Rules</span>
                     </a>
                    </td>
-                    <td><span class="badge bg-warning text-dark">Pending</span></td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-outline-success me-1"><i class="fa fa-check"></i></a>
-                        <a href="#" class="btn btn-sm btn-outline-danger"><i class="fa fa-times"></i></a>
-                    </td>
+                   @if($merchant->is_active == 0)
+                   <td><span class="badge bg-warning text-dark">Pending</span></td>
+                   @elseif($merchant->is_active == 1)
+                    <td><span class="badge bg-success">Approved</span></td> 
+                     @else
+                    <td><span class="badge bg-danger">Rejected</span></td>
+                   @endif
+                    
+               
+  <td>
+    <!-- Approve -->
+    <form action="{{ route('merchant.approve', $merchant->id) }}" method="POST" class="d-inline">
+        @csrf
+        <button type="submit" class="btn btn-sm btn-outline-success me-1" onclick="return confirm('Are you sure you want to APPROVE this merchant?')">
+            <i class="fa fa-check"></i>
+        </button>
+    </form>
+
+    <!-- Reject -->
+    <form action="{{ route('merchant.reject', $merchant->id) }}" method="POST" class="d-inline">
+        @csrf
+        <button type="submit" class="btn btn-sm btn-outline-danger me-1" onclick="return confirm('Are you sure you want to REJECT this merchant?')">
+            <i class="fa fa-times"></i>
+        </button>
+    </form>
+
+    <!-- Ban -->
+    <form action="{{ route('merchant.ban', $merchant->id) }}" method="POST" class="d-inline">
+        @csrf
+        <button type="submit" class="btn btn-sm btn-outline-warning" onclick="return confirm('Are you sure you want to BAN this merchant?')">
+            <i class="fa fa-ban"></i>
+        </button>
+    </form>
+</td>
+
+
+
                 </tr>
                 @endforeach
             </tbody>
@@ -163,6 +196,45 @@
 
 @push('scripts')
 <script>
+
+
+document.querySelectorAll('.action-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const merchantId = this.dataset.id;
+        const action = this.dataset.action;
+
+        let confirmMsg = '';
+        if(action === 'approve') confirmMsg = 'Are you sure you want to APPROVE this merchant?';
+        else if(action === 'reject') confirmMsg = 'Are you sure you want to REJECT this merchant?';
+        else if(action === 'ban') confirmMsg = 'Are you sure you want to BAN this merchant?';
+
+        if(!confirm(confirmMsg)) return;
+
+        fetch(`/merchant/${merchantId}/${action}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            if(response.ok) return response.json();
+            throw new Error('Network response was not ok.');
+        })
+        .then(data => {
+            alert(data.message || 'Action completed successfully!');
+            // Optionally, remove or update the merchant row
+            // For example, reload page:
+            location.reload();
+        })
+        .catch(error => {
+            alert('There was an error: ' + error.message);
+        });
+    });
+});
+
 
   document.getElementById('tableSearch').addEventListener('input', function () {
         const searchValue = this.value.toLowerCase();

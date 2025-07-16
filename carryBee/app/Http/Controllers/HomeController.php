@@ -8,6 +8,7 @@ use App\Models\DiscountRule;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Hub;
 use App\Models\Catagories;
+use App\Models\KmaList;
 
 class HomeController extends Controller
 {
@@ -19,11 +20,12 @@ class HomeController extends Controller
     public function dashboard()
     {
 
-       $locations = Hub::all(); // fetch all locations from DB
+        $locations = Hub::all(); // fetch all locations from DB
         $categories = Catagories::all(); // fetch all categories from DB
+        $kmaList = KmaList::all(); // fetch all KMA list from DB
 
         // You can pass the categories to the view if needed
-        return view('Client.pages.userDashboard', compact('locations', 'categories'));
+        return view('Client.pages.userDashboard', compact('locations', 'categories', 'kmaList'));
         // If you want to use the categories in the view, you can do so like this
     }
 
@@ -47,6 +49,7 @@ class HomeController extends Controller
         'phone' => 'required|string',
         'pickup_hub' => 'required|string',
         'product_category' => 'required|string',
+        'kma' => 'required|string',
         'promised_parcels' => 'required|integer',
     ]);
 
@@ -56,6 +59,7 @@ class HomeController extends Controller
         'merchant_email' => $validated['merchant_email'],
         'onboarding_date' => $validated['onboarding_date'],
         'phone' => $validated['phone'],
+        'kma' => $validated['kma'],
         'pickup_hub' => $validated['pickup_hub'],
         'product_category' => $validated['product_category'],
         'promised_parcels' => $validated['promised_parcels'],

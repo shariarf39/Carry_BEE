@@ -58,7 +58,20 @@ Route::prefix('admin')->controller(LoginController::class)->group(function () {
         Route::get('/AdminDashboard', 'AdminDashboard')->name('AdminDashboard');
         Route::get('/DiscountData',  'DiscountData')->name('DiscountData');
 
+        Route::get('/AdminServices', 'AdminServices')->name('AdminServices');
+        Route::post('/storeAdmin',  'storeAdmin')->name('storeAdmin');
+        Route::delete('/admin/{id}', 'destroyAdmin')->name('destroyAdmin');
+        
+        Route::get('/User', 'User')->name('User');
+        Route::delete('admin/users/{user}','destroyUsers')->name('admin.users.destroy');
+
         Route::get('/rules/{id}',  'DiscountSlot')->name('DiscountSlot');
+
+        // web.php
+        Route::post('/merchant/{id}/approve', 'approve')->name('merchant.approve');
+        Route::post('/merchant/{id}/reject', 'reject')->name('merchant.reject');
+        Route::post('/merchant/{id}/ban', 'ban')->name('merchant.ban');
+     
       //  Route::get('/DiscountSlot', 'DefaultRate')->name('DefaultRate');
     });
 

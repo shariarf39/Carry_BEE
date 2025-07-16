@@ -7,6 +7,14 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
+    
+    
+    <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -40,7 +48,7 @@
         
         .form-control, .form-select {
             border-radius: var(--border-radius);
-            padding: 0.75rem;
+            padding: .75rem;
             border: 1px solid var(--border-color);
         }
         
@@ -88,6 +96,63 @@
             font-size: 0.75rem;
             letter-spacing: 0.5px;
         }
+
+/* Alternative Color Options - Uncomment to use */
+/* Green Version */
+/*
+.form-check-input:checked {
+    background-color: #198754 !important;
+    border-color: #157347 !important;
+}
+*/
+
+/* Purple Version */
+/*
+.form-check-input:checked {
+    background-color: #6f42c1 !important;
+    border-color: #5a32a3 !important;
+}
+*/
+
+/* Teal Version */
+/*
+.form-check-input:checked {
+    background-color: #20c997 !important;
+    border-color: #1aa179 !important;
+}
+*/
+
+/* Orange Version */
+
+.form-check-input:checked {
+    background-color: #fd7e14 !important;
+    border-color: #dc6505 !important;
+}
+.form-check-input {
+    background-color: #dc3545 !important; /* Red for not checked */
+    border-color: #dc3545 !important;
+}
+
+
+/* With ON/OFF Labels */
+
+.form-check-input:after {
+    content: "OFF";
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: bold;
+}
+.form-check-input:checked:after {
+    content: "ON";
+    left: 8px;
+    right: auto;
+}
+
+
         
         .input-group-text {
             background-color: var(--light-bg);
@@ -175,6 +240,15 @@
     <div class="container py-4">
         <!-- Header Card -->
         <div class="card mb-4">
+
+        @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fa fa-check-circle me-2"></i>
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
             <!-- Added .main-header-flex for responsive stacking -->
             <div class="card-header d-flex justify-content-between align-items-center main-header-flex">
                 <div>
@@ -216,17 +290,37 @@
                     @csrf
 
                     <!-- Configuration Toggle -->
-                    <div class="row mb-4">
-                        <div class="col-12">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="autoApplyToggle" onchange="toggleDiscountType()">
-                                <label class="form-check-label fw-bold" for="autoApplyToggle">
-                                    <i class="fas fa-cog me-2"></i>Custom Discount Configuration
-                                </label>
-                                <small class="text-muted d-block mt-1">Toggle to switch between default and custom discount rules</small>
-                            </div>
+                 <div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-percentage text-primary fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1 fw-semibold">Discount Configuration</h6>
+                            <p class="text-muted small mb-0">Switch between default and custom discount rules</p>
                         </div>
                     </div>
+                 <div class="form-check form-switch mb-0 position-relative">
+    <!-- Primary Color Version (Blue) -->
+    <input class="form-check-input" type="checkbox" id="autoApplyToggle" onchange="toggleDiscountType()" 
+           style="width: 3.5rem; height: 1.75rem;">
+    <label class="form-check-label" for="autoApplyToggle"></label>
+</div>
+                </div>
+                <div class="mt-3 pt-3 border-top" id="toggleStatusText">
+                    <span class="badge bg-light text-dark">
+                        <i class="fas fa-circle text-danger me-1 small"></i> Currently using default rates
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
                     <!-- Merchant Information Section -->
                     <div class="card mb-4 border-primary">
@@ -282,6 +376,16 @@
                                 </div>
 
                               <div class="col-md-6">
+                                   <label for="pickup_hub" class="form-label">KMA LIST</label>
+                                   <select class="form-select" id="pickup_hub" name="kma" required>
+                                     <option value="" selected disabled>Select KMA</option>
+                                     @foreach($kmaList as $kmaList)
+                                     <option value="{{ $kmaList->name }}">{{ $kmaList->name }}</option>
+                                         @endforeach
+                                 </select>
+                                </div>
+
+                                  <div class="col-md-6">
                                    <label for="pickup_hub" class="form-label">Pick Up Hub</label>
                                    <select class="form-select" id="pickup_hub" name="pickup_hub" required>
                                      <option value="" selected disabled>Select pick up hub</option>
@@ -302,6 +406,8 @@
                                          @endforeach
                                     </select>
                                 </div>
+
+                                
                             </div>
                         </div>
                     </div>
@@ -387,7 +493,7 @@
                                             </td>
                                             <td data-label="Weight Range">
                                                 <select class="form-select" name="weight_range[]">
-                                                    <option value="" selected disabled>Select weight</option>
+                                                    <option value="" selected disabled>Select weight &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </option>
                                                     <option value="0-200">0-200 gm</option>
                                                     <option value="201-500">201-500 gm</option>
                                                     <option value="501-1000">501-1000 gm</option>
@@ -478,6 +584,30 @@
                 }, false)
             })
         })()
+
+        function toggleDiscountType() {
+    const toggle = document.getElementById('autoApplyToggle');
+    const statusText = document.getElementById('toggleStatusText');
+    
+    if (toggle.checked) {
+        statusText.innerHTML = `
+            <span class="badge bg-light text-dark">
+                <i class="fas fa-circle text-success me-1 small"></i> Custom discount rules active
+            </span>
+            <p class="small text-muted mt-1 mb-0">You're now applying merchant-specific discount rules</p>
+        `;
+    } else {
+        statusText.innerHTML = `
+            <span class="badge bg-light text-dark">
+                <i class="fas fa-circle text-danger me-1 small"></i> Currently using default rates
+            </span>
+            <p class="small text-muted mt-1 mb-0">System will apply standard pricing rules</p>
+        `;
+    }
+}
+</script>
+
+
     </script>
 </body>
 </html>

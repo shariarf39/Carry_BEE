@@ -9,7 +9,7 @@ class Discount extends Model
     protected $fillable = [
         'merchant_id', 'merchant_name','merchant_email', 'onboarding_date', 'phone',
         'pickup_hub', 'product_category', 'promised_parcels',
-        'requirements', 'discount_rules', 'is_active'
+        'requirements', 'discount_rules','kma', 'is_active'
     ];
 
     protected $casts = [

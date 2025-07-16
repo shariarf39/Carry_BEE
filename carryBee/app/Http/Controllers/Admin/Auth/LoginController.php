@@ -32,7 +32,8 @@ class LoginController extends Controller
             'outside_outside' => [ '0-200' => 125, '201-500' => 125, '501-1000' => 135, '1001-1500' => 145, '1501-2000' => 155, '2001-2500' => 165, '2500+' => 25 ],
         ];
 
-        $merchants = Discount::all();
+      $merchants = Discount::orderBy('id', 'desc')->get();
+
 
         $groupedDiscounts = DiscountRule::get()
             ->groupBy('discount_id')
@@ -106,5 +107,77 @@ public function AdminDashboard()
         return view('admin.DiscountSlot', compact('discount', 'rules'));
     }
 
+    public function approve($id) {
+    $merchant = Discount::findOrFail($id);
+    // Your logic to approve merchant here
+    $merchant->is_active = 1;
+    $merchant->save();
+
+    return redirect()->route('DiscountData')->with('success', 'Merchant approved successfully');
+
+   
+}
+
+public function reject($id) {
+    $merchant = Discount::findOrFail($id);
+    // Your logic to reject merchant here
+    $merchant->is_active = 0;
+    $merchant->save();
+
+   return redirect()->route('DiscountData')->with('success', 'Merchant approved successfully');
+}
+
+public function ban($id) {
+    $merchant = Discount::findOrFail($id);
+    // Your logic to ban merchant here
+    $merchant->is_active = 3;
+    $merchant->save();
+
+   return redirect()->route('DiscountData')->with('success', 'Merchant approved successfully');
+}
+
+
+    public function AdminServices()
+    {
+          $admins = Admin::orderBy('created_at', 'desc')->get();
+        return view('admin.AdminList', compact('admins'));
+    }
+
+      public function storeAdmin(Request $request) {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:admins,email',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        Admin::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+
+        return redirect()->route('AdminServices')->with('success', 'Admin added successfully!');
+    }
+
+     public function destroyAdmin($id) {
+        $admin = Admin::findOrFail($id);
+        $admin->delete();
+
+        return redirect()->route('AdminServices')->with('success', 'Admin deleted successfully!');
+    }
+
+
+    public function User()
+    {
+        $users = User::all();  // or paginate() for large data
+        return view('admin.users', compact('users'));
+    }
+
+    // Delete a user
+    public function destroyUsers(User $user)
+    {
+        $user->delete();
+        return redirect()->route('User')->with('success', 'User deleted successfully.');
+    }
 
 }

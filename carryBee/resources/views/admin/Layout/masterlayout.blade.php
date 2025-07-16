@@ -69,10 +69,10 @@
         <ul class="mt-10 space-y-2">
           <li><a href="{{ route('AdminDashboard') }}" class="nav-link flex items-center gap-3 p-3 rounded-lg font-semibold text-gray-800 transition-all duration-200"><i class="fas fa-home w-6 text-center"></i>Home</a></li>
             <li><a href="{{ route('DiscountData') }}" class="nav-link flex items-center gap-3 p-3 rounded-lg font-semibold text-gray-800 transition-all duration-200"><i class="fas fa-users w-6 text-center"></i>Client Data</a></li>
-          <li><a href="#services" class="nav-link flex items-center gap-3 p-3 rounded-lg font-semibold text-gray-800 transition-all duration-200"><i class="fas fa-concierge-bell w-6 text-center"></i>Services</a></li>
-          <li><a href="#contact" class="nav-link flex items-center gap-3 p-3 rounded-lg font-semibold text-gray-800 transition-all duration-200">
-            <i class="fas fa-address-book w-6 text-center"></i>Contact</a>
-          </li>
+            <li><a href="{{ route('AdminServices') }}" class="nav-link flex items-center gap-3 p-3 rounded-lg font-semibold text-gray-800 transition-all duration-200"><i class="fas fa-concierge-bell w-6 text-center"></i>Admin</a></li>
+            <li><a href="{{ route('User') }}" class="nav-link flex items-center gap-3 p-3 rounded-lg font-semibold text-gray-800 transition-all duration-200">
+            <i class="fas fa-user w-6 text-center"></i>User</a>
+            </li>
           <li>
             <a href="{{ route('admin.logout') }}" class="nav-link flex items-center gap-3 p-3 rounded-lg font-semibold text-gray-800 transition-all duration-200">
               <i class="fas fa-sign-out-alt w-6 text-center"></i>Logout

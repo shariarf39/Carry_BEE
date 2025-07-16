@@ -1,254 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Discount Management</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Discount Management Dashboard</title>
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <style>
-    :root {
-      --primary-color: #ecb90d;
-      --light-bg: #f8f9fc;
-      --border-color: #e3e6f0;
-    }
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 
-    body {
-      background-color: var(--light-bg);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    .page-header {
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 1rem;
-      margin-bottom: 1.5rem;
-    }
+    <style>
+        /* Custom styles to complement Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
 
-    .card {
-      border: none;
-      border-radius: 0.5rem;
-      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
-    }
-
-    .table-responsive {
-      border-radius: 0.5rem;
-      overflow-x: auto;
-    }
-
-    .table {
-      margin-bottom: 0;
-    }
-
-    .table thead th {
-      background-color: #f8f9fc;
-      color: #5a5c69;
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
-      border-bottom-width: 1px;
-      padding: 1rem 1.25rem;
-      white-space: nowrap;
-    }
-
-    .table tbody td {
-      padding: 1rem 1.25rem;
-      vertical-align: middle;
-      border-top: 1px solid var(--border-color);
-      word-break: break-word;
-    }
-
-    .badge {
-      font-weight: 500;
-      padding: 0.35em 0.65em;
-      margin-right: 0.25rem;
-      margin-bottom: 0.25rem;
-      display: inline-block;
-      border-radius: 0.25rem;
-      word-break: break-word;
-      white-space: normal;
-    }
-
-    .btn-sm {
-      padding: 0.35rem 0.75rem;
-      font-size: 0.875rem;
-      border-radius: 0.25rem;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 992px) {
-      .table thead th, 
-      .table tbody td {
-        padding: 0.75rem;
+        /* Custom styling for responsive table headers */
+        @media (max-width: 768px) {
+            .responsive-table-cell:before {
+                content: attr(data-label);
+                font-weight: 600;
+                margin-right: 1rem;
+                color: #475569; /* slate-600 */
+                text-transform: uppercase;
+                font-size: 0.75rem;
+                line-height: 1rem;
+                flex-shrink: 0;
+            }
+        }
+    </style>
+    <script>
+      // Configuration for Tailwind CSS
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                DEFAULT: '#3b82f6', // blue-500
+                hover: '#2563eb', // blue-600
+              },
+              secondary: '#64748b', // slate-500
+            }
+          }
+        }
       }
-      
-      .btn-sm {
-        padding: 0.25rem 0.5rem;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .card-body {
-        padding: 1rem;
-      }
-      
-      .table-responsive {
-        border: 1px solid var(--border-color);
-      }
-      
-      .table thead {
-        display: none;
-      }
-      
-      .table tbody tr {
-        display: block;
-        margin-bottom: 1rem;
-        border: 1px solid var(--border-color);
-        border-radius: 0.5rem;
-        background: white;
-      }
-      
-      .table tbody td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem;
-        border-top: none;
-        border-bottom: 1px solid var(--border-color);
-      }
-      
-      .table tbody td:before {
-        content: attr(data-label);
-        font-weight: 600;
-        margin-right: 1rem;
-        color: #5a5c69;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-      }
-      
-      .table tbody td:last-child {
-        border-bottom: none;
-      }
-      
-      .table tbody td .d-flex {
-        justify-content: flex-end;
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 576px) {
-      .input-group .btn span {
-        display: none;
-      }
-
-      .input-group .btn i {
-        margin: 0;
-      }
-      
-      .page-header h3 {
-        font-size: 1.25rem;
-      }
-      
-      .badge {
-        font-size: 0.75rem;
-      }
-    }
-  </style>
+    </script>
 </head>
-<body>
-  <div class="container py-4">
-    <div class="page-header">
-      <h3 class="mb-0">
-        <i class="fas fa-tags me-2 text-primary"></i>All Discounts
-      </h3>
-    </div>
+<body class="antialiased text-slate-700">
 
-    <div class="card mb-4">
-      <div class="card-body">
-        <!-- Search Form -->
-        <form action="{{ route('discounts') }}" method="GET" class="row g-2 align-items-center">
-          <div class="col-12 col-lg-8 col-xl-6">
-            <div class="d-flex flex-wrap flex-sm-nowrap gap-2">
-              <div class="input-group flex-grow-1">
-                <input
-                  type="text"
-                  name="search"
-                  value="{{ request('search') }}"
-                  class="form-control"
-                  placeholder="Search by name, email, ID or phone"
-                />
-                <button type="submit" class="btn btn-primary">
-                  <i class="fas fa-search"></i>
-                  <span class="d-none d-sm-inline ms-1">Search</span>
-                </button>
-              </div>
-              <a href="{{ route('discounts') }}" class="btn btn-outline-secondary">
-                Reset
-              </a>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <!-- Page Header -->
+        <header class="mb-8">
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 flex items-center">
+                <i class="fas fa-tags mr-3 text-primary-DEFAULT"></i>
+                Discount Management
+            </h1>
+            <p class="mt-1 text-slate-500">Manage and track all merchant discounts.</p>
+        </header>
 
-    <div class="card">
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Merchant Name</th>
-                <th>Email</th>
-                <th>Merchant ID</th>
-                <th>Phone</th>
-                <th>Pickup Hub</th>
-                <th>Category</th>
-                <th>Parcels/Day</th>
-                <th>Requirements</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach($discounts as $discount)
-              <tr>
-                <td data-label="Merchant Name">{{ $discount->merchant_name }}</td>
-                <td data-label="Email">{{ $discount->merchant_email }}</td>
-                <td data-label="Merchant ID">{{ $discount->merchant_id }}</td>
-                <td data-label="Phone">{{ $discount->phone }}</td>
-                <td data-label="Pickup Hub">{{ $discount->pickup_hub }}</td>
-                <td data-label="Category">{{ $discount->product_category }}</td>
-                <td data-label="Parcels/Day">{{ $discount->promised_parcels }}</td>
-                <td data-label="Requirements">
-                  @foreach($discount->requirements ?? [] as $requirement)
-                  <span class="badge bg-primary">
-                    {{ ucwords(str_replace('_', ' ', $requirement)) }}
-                  </span>
-                  @endforeach
-                </td>
-                <td data-label="Actions">
-                  <div class="d-flex flex-column flex-sm-row gap-2">
-                    <a href="{{ route('DiscountRuleShow', $discount->id) }}" class="btn btn-info btn-sm">
-                      <i class="fas fa-eye me-1"></i> <span class="d-none d-sm-inline">View</span>
+        <!-- Search and Filter Section -->
+        <div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm mb-6">
+            <form action="{{ route('discounts') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-4">
+                <div class="relative w-full sm:w-auto sm:flex-grow">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ request('search') }}"
+                        class="w-full pl-12 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-DEFAULT/50 focus:border-primary-DEFAULT outline-none transition duration-200"
+                        placeholder="Search by name, email, ID or phone"
+                    />
+                </div>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <button type="submit" class="w-full sm:w-auto bg-primary-DEFAULT hover:bg-primary-hover text-white font-semibold px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-200 flex items-center justify-center">
+                        <i class="fas fa-search sm:hidden mr-2"></i>
+                        <span>Search</span>
+                    </button>
+                    <a href="{{ route('discounts') }}" class="w-full sm:w-auto text-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2.5 rounded-lg transition-colors duration-200">
+                        Reset
                     </a>
-                    <a href="{{ route('DeRuleShow', $discount->id) }}" class="btn btn-secondary btn-sm">
-                      <i class="fas fa-list-check me-1"></i> <span class="d-none d-sm-inline">Rules</span>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
+                </div>
+            </form>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Discounts Table Card -->
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <!-- Table Header -->
+                    <thead class="hidden md:table-header-group bg-slate-50 border-b border-slate-200 text-xs text-slate-500 uppercase tracking-wider">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 font-medium">Merchant</th>
+                            <th scope="col" class="px-6 py-4 font-medium">Contact</th>
+                            <th scope="col" class="px-6 py-4 font-medium">Details</th>
+                            <th scope="col" class="px-6 py-4 font-medium">Requirements</th>
+                            <th scope="col" class="px-6 py-4 font-medium">Status</th>
+                            <th scope="col" class="px-6 py-4 font-medium text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    
+                    <!-- Table Body -->
+                    <tbody>
+                        @forelse($discounts as $discount)
+                        <tr class="block md:table-row bg-white hover:bg-slate-50 transition-colors duration-150 border-b border-slate-200 last:border-b-0 md:border-b">
+                            
+                            <!-- Merchant Info Cell -->
+                            <td data-label="Merchant" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
+                                <div class="font-semibold text-slate-800">{{ $discount->merchant_name }}</div>
+                                <div class="text-slate-500 md:hidden">{{ $discount->merchant_id }}</div>
+                            </td>
+
+                            <!-- Contact Info Cell -->
+                            <td data-label="Contact" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
+                                <div>
+                                    <div class="text-slate-800">{{ $discount->merchant_email }}</div>
+                                    <div class="text-slate-500">{{ $discount->phone }}</div>
+                                </div>
+                            </td>
+
+                            <!-- Details Cell -->
+                            <td data-label="Details" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
+                                <div>
+                                    <div class="text-slate-800">{{ $discount->pickup_hub }}</div>
+                                    <div class="text-slate-500">{{ $discount->product_category }} ({{ $discount->promised_parcels }}/day)</div>
+                                </div>
+                            </td>
+
+                            <!-- Requirements Cell -->
+                            <td data-label="Requirements" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
+                                <div class="flex flex-wrap gap-1.5">
+                                    @foreach($discount->requirements ?? [] as $requirement)
+                                    <span class="px-2.5 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-full">
+                                        {{ ucwords(str_replace('_', ' ', $requirement)) }}
+                                    </span>
+                                    @endforeach
+                                </div>
+                            </td>
+
+                            <!-- Status Cell -->
+                            <td data-label="Status" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
+                                @if($discount->is_active == 0)
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
+                                        <i class="fas fa-clock mr-1.5"></i> Pending
+                                    </span>
+                                @elseif($discount->is_active == 1)
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                                        <i class="fas fa-check-circle mr-1.5"></i> Approved
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                                        <i class="fas fa-times-circle mr-1.5"></i> Rejected
+                                    </span>
+                                @endif
+                            </td>
+
+                            <!-- Actions Cell -->
+                            <td data-label="Actions" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-end md:justify-center">
+                                <div class="flex items-center gap-2">
+                                    <a href="{{ route('DiscountRuleShow', $discount->id) }}" title="View Details" class="h-9 w-9 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-primary-DEFAULT rounded-full transition-colors duration-200">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('DeRuleShow', $discount->id) }}" title="Manage Rules" class="h-9 w-9 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-primary-DEFAULT rounded-full transition-colors duration-200">
+                                        <i class="fas fa-list-check"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <!-- Empty State -->
+                        <tr>
+                            <td colspan="6" class="text-center py-12 px-6">
+                                <i class="fas fa-inbox fa-3x text-slate-300 mb-4"></i>
+                                <h3 class="text-xl font-semibold text-slate-700">No Discounts Found</h3>
+                                <p class="text-slate-500 mt-1">There are no discounts matching your search criteria.</p>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Pagination (Example) -->
+        <div class="mt-6">
+            {{-- $discounts->links() --}}
+        </div>
+
+    </div>
+
 </body>
 </html>
