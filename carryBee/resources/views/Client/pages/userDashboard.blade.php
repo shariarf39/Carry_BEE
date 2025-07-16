@@ -548,29 +548,53 @@
         </div>
     </div>
 
+    
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Toggle discount rules section
+        // --- MERGED AND FIXED FUNCTION ---
+        // Toggles the visibility of the discount rules section and updates the status text.
         function toggleDiscountType() {
             const toggle = document.getElementById("autoApplyToggle");
-            const discountRules = document.getElementById("discountRulesCard");
-            discountRules.style.display = toggle.checked ? "block" : "none";
+            const discountRulesCard = document.getElementById("discountRulesCard");
+            const statusText = document.getElementById('toggleStatusText');
+
+            if (toggle.checked) {
+                // If toggled ON, show the custom rules card and update text to "active".
+                discountRulesCard.style.display = "block";
+                statusText.innerHTML = `
+                    <span class="badge bg-light text-dark">
+                        <i class="fas fa-circle text-success me-1 small"></i> Custom discount rules active
+                    </span>
+                    <p class="small text-muted mt-1 mb-0">You're now applying merchant-specific discount rules</p>
+                `;
+            } else {
+                // If toggled OFF, hide the card and update text to "default".
+                discountRulesCard.style.display = "none";
+                statusText.innerHTML = `
+                    <span class="badge bg-light text-dark">
+                        <i class="fas fa-circle text-danger me-1 small"></i> Currently using default rates
+                    </span>
+                    <p class="small text-muted mt-1 mb-0">System will apply standard pricing rules</p>
+                `;
+            }
         }
 
-        // Add new discount row
+        // Add a new row to the discount rules table.
         function addDiscountRow() {
             const container = document.getElementById('discountRows');
+            // Clone the first row to use as a template.
             const row = container.firstElementChild.cloneNode(true);
-            // Clear inputs
+            // Reset the values of all inputs and selects in the new row.
             row.querySelectorAll('input, select').forEach(el => {
                 el.value = '';
                 el.classList.remove('is-valid', 'is-invalid');
             });
+            // Append the new, cleared row to the table body.
             container.appendChild(row);
         }
 
-        // Form validation
+        // Standard Bootstrap form validation script.
         (function () {
             'use strict'
             const forms = document.querySelectorAll('.needs-validation')
@@ -584,30 +608,8 @@
                 }, false)
             })
         })()
-
-        function toggleDiscountType() {
-    const toggle = document.getElementById('autoApplyToggle');
-    const statusText = document.getElementById('toggleStatusText');
-    
-    if (toggle.checked) {
-        statusText.innerHTML = `
-            <span class="badge bg-light text-dark">
-                <i class="fas fa-circle text-success me-1 small"></i> Custom discount rules active
-            </span>
-            <p class="small text-muted mt-1 mb-0">You're now applying merchant-specific discount rules</p>
-        `;
-    } else {
-        statusText.innerHTML = `
-            <span class="badge bg-light text-dark">
-                <i class="fas fa-circle text-danger me-1 small"></i> Currently using default rates
-            </span>
-            <p class="small text-muted mt-1 mb-0">System will apply standard pricing rules</p>
-        `;
-    }
-}
-</script>
-
-
     </script>
+
+ 
 </body>
 </html>

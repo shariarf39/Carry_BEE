@@ -87,6 +87,7 @@
       @hasSection('content')
         <div class="scrollable-main p-4 sm:p-6 md:p-10">
           @yield('content')
+          
         </div>
       @else
         <div class="scrollable-main p-4 sm:p-6 md:p-10 flex items-center justify-center h-full">
