@@ -97,40 +97,15 @@
             letter-spacing: 0.5px;
         }
 
-/* Alternative Color Options - Uncomment to use */
-/* Green Version */
-/*
-.form-check-input:checked {
-    background-color: #198754 !important;
-    border-color: #157347 !important;
-}
-*/
 
-/* Purple Version */
-/*
-.form-check-input:checked {
-    background-color: #6f42c1 !important;
-    border-color: #5a32a3 !important;
-}
-*/
-
-/* Teal Version */
-/*
-.form-check-input:checked {
-    background-color: #20c997 !important;
-    border-color: #1aa179 !important;
-}
-*/
-
-/* Orange Version */
 
 .form-check-input:checked {
     background-color: #fd7e14 !important;
     border-color: #dc6505 !important;
 }
 .form-check-input {
-    background-color: #dc3545 !important; /* Red for not checked */
-    border-color: #dc3545 !important;
+    background-color: #adb5bd !important; /* Ash color for not checked */
+    border-color: #adb5bd !important;
 }
 
 
@@ -253,7 +228,8 @@
             <div class="card-header d-flex justify-content-between align-items-center main-header-flex">
                 <div>
                     <h4 class="mb-0">
-                        <i class="fas fa-tags me-2"></i>Discount Management
+                        <img src="logo/logo.png" alt="" height="40" width="100">
+                        <i class="fas me-2"></i>Onboarding 
                     </h4>
                     <!-- Added flex-wrap for user badges -->
                     <div class="d-flex align-items-center mt-2 flex-wrap gap-2">
@@ -301,7 +277,7 @@
                         </div>
                         <div>
                             <h6 class="mb-1 fw-semibold">Discount Configuration</h6>
-                            <p class="text-muted small mb-0">Switch between default and custom discount rules</p>
+                            <p class="text-muted small mb-0">Auto-apply defaults</p>
                         </div>
                     </div>
                  <div class="form-check form-switch mb-0 position-relative">
@@ -311,11 +287,7 @@
     <label class="form-check-label" for="autoApplyToggle"></label>
 </div>
                 </div>
-                <div class="mt-3 pt-3 border-top" id="toggleStatusText">
-                    <span class="badge bg-light text-dark">
-                        <i class="fas fa-circle text-danger me-1 small"></i> Currently using default rates
-                    </span>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -505,7 +477,7 @@
                                             </td>
                                             <td data-label="Discounted Rate">
                                                 <div class="input-group">
-                                                    <span class="input-group-text">$</span>
+                                                    <span class="input-group-text">৳</span>
                                                     <input type="number" class="form-control" name="discounted_rate[]" step="0.01" min="0" placeholder="0.00">
                                                 </div>
                                             </td>
@@ -563,19 +535,13 @@
                 // If toggled ON, show the custom rules card and update text to "active".
                 discountRulesCard.style.display = "block";
                 statusText.innerHTML = `
-                    <span class="badge bg-light text-dark">
-                        <i class="fas fa-circle text-success me-1 small"></i> Custom discount rules active
-                    </span>
-                    <p class="small text-muted mt-1 mb-0">You're now applying merchant-specific discount rules</p>
+                  
                 `;
             } else {
                 // If toggled OFF, hide the card and update text to "default".
                 discountRulesCard.style.display = "none";
                 statusText.innerHTML = `
-                    <span class="badge bg-light text-dark">
-                        <i class="fas fa-circle text-danger me-1 small"></i> Currently using default rates
-                    </span>
-                    <p class="small text-muted mt-1 mb-0">System will apply standard pricing rules</p>
+                   
                 `;
             }
         }

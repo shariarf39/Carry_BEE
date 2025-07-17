@@ -21,6 +21,10 @@ class Discount extends Model
     {
         return $this->hasMany(DiscountRule::class);
     }
+    public function rules()
+{
+    return $this->hasMany(DiscountRule::class);
+}
     
     // Default rates as defined in your array
     public static function getDefaultRates()

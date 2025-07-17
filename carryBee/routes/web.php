@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/discounts', 'DiscountShow')->name('discounts');
     Route::get('/discounts/{id}',  'DiscountRuleShow')->name('DiscountRuleShow');
     Route::get('/rules/{id}',  'DeRuleShow')->name('DeRuleShow');
+   
     Route::get('/default-rate', 'DefaultRate')->name('DefaultRate');
 });
 
@@ -66,6 +67,7 @@ Route::prefix('admin')->controller(LoginController::class)->group(function () {
         Route::delete('admin/users/{user}','destroyUsers')->name('admin.users.destroy');
 
         Route::get('/rules/{id}',  'DiscountSlot')->name('DiscountSlot');
+         Route::get('AllRules',  'AllRules')->name('AllRules');
 
         // web.php
         Route::post('/merchant/{id}/approve', 'approve')->name('merchant.approve');

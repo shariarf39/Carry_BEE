@@ -6,7 +6,11 @@
         <h4 class="mb-2 mb-md-0">Pending Approvals</h4>
         <div class="d-flex align-items-center gap-2">
             <!-- Search input -->
+             
             <input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Search merchants...">
+            <a href="{{ route('AllRules') }}" class="btn btn-secondary btn-sm">
+                      <i class="fas fa-list-check me-1"></i> <span class="d-none d-sm-inline">View All Rules</span>
+                    </a>
             <button class="btn btn-success" id="exportTableBtn"><i class="fa fa-download"></i> Export CSV</button>
         </div>
     </div>
@@ -113,7 +117,7 @@
                     </td>
                    <td>
                     <a href="{{ route('DiscountSlot', $merchant->id) }}" class="btn btn-secondary btn-sm">
-                      <i class="fas fa-list-check me-1"></i> <span class="d-none d-sm-inline">Rules</span>
+                      <i class="fas fa-list-check me-1"></i> <span class="d-none d-sm-inline">View Rules</span>
                     </a>
                    </td>
                    @if($merchant->is_active == 0)

@@ -493,8 +493,8 @@
           </tr>
           <tr>
           
-            <td data-label="Merchant ID" rowspan="5">-</td>
-            <td data-label="Merchant Name" rowspan="5">-</td>
+            <td data-label="Merchant ID" rowspan="5">{{ $discount->merchant_id }}</td>
+            <td data-label="Merchant Name" rowspan="5">{{ $discount->merchant_name }}</td>
             <td data-label="Pickup">Any Location</td>
             <td data-label="Delivery">Same City</td>
              @php

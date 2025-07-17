@@ -155,6 +155,18 @@
     </div>
   <div class="card">
             <div class="card-body">
+              <!-- Add inside your container, before the table -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="page-header mb-0">
+    <h2 class="mb-0">
+      <i class="fas fa-truck me-2" style="color: var(--primary-color);"></i>CarryBee Default Rate
+    </h2>
+  </div>
+  <button id="exportCSV" class="btn btn-success">
+    <i class="fas fa-download me-1"></i> Export CSV
+  </button>
+</div>
+
                 <h5 class="card-title mb-4">
                     <i class="fas fa-store me-2 text-primary"></i>Merchant Information
                 </h5>
@@ -219,8 +231,8 @@
           </tr>
           <tr>
           
-            <td data-label="Merchant ID" rowspan="5">-</td>
-            <td data-label="Merchant Name" rowspan="5">-</td>
+            <td data-label="Merchant ID" rowspan="5">{{ $discount->merchant_id }}</td>
+            <td data-label="Merchant Name" rowspan="5">{{ $discount->merchant_name }}</td>
             <td data-label="Pickup">Any Location</td>
             <td data-label="Delivery">Same City</td>
              @php
@@ -459,5 +471,35 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Add before </body> -->
+<script>
+  document.getElementById("exportCSV").addEventListener("click", function () {
+    let table = document.querySelector("table");
+    let rows = table.querySelectorAll("tr");
+    let csv = [];
+
+    for (let row of rows) {
+      let cols = row.querySelectorAll("th, td");
+      let rowData = [];
+      for (let col of cols) {
+        rowData.push('"' + col.innerText.replace(/\n/g, ' ').trim() + '"');
+      }
+      csv.push(rowData.join(","));
+    }
+
+    let csvContent = csv.join("\n");
+    let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    let url = URL.createObjectURL(blob);
+    let a = document.createElement("a");
+    a.setAttribute("href", url);
+    a.setAttribute("download", "carrybee_rates.csv");
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+</script>
+
 </body>
 </html>

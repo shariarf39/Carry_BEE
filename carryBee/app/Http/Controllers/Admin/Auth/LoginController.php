@@ -107,6 +107,19 @@ public function AdminDashboard()
         return view('admin.DiscountSlot', compact('discount', 'rules'));
     }
 
+
+
+ // app/Http/Controllers/DiscountController.php
+
+public function AllRules()
+{
+    // Get all discounts with their rules (eager loading)
+    $discounts = Discount::with('rules')->get();
+    
+    return view('admin.AllRules', compact('discounts'));
+}
+
+
     public function approve($id) {
     $merchant = Discount::findOrFail($id);
     // Your logic to approve merchant here
