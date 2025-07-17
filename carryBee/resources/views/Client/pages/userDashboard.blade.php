@@ -348,9 +348,9 @@
                                 </div>
 
                               <div class="col-md-6">
-                                   <label for="pickup_hub" class="form-label">KMA LIST</label>
+                                   <label for="pickup_hub" class="form-label">KAM LIST</label>
                                    <select class="form-select" id="pickup_hub" name="kma" required>
-                                     <option value="" selected disabled>Select KMA</option>
+                                     <option value="" selected disabled>Select KAM</option>
                                      @foreach($kmaList as $kmaList)
                                      <option value="{{ $kmaList->name }}">{{ $kmaList->name }}</option>
                                          @endforeach

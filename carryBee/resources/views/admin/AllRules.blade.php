@@ -169,7 +169,7 @@
   <div class="container py-4">
     <div class="page-header">
       <h2 class="mb-0">
-        <i class="fas fa-truck me-2" style="color: var(--primary-color);"></i>CarryBee Default Rates
+        <i class="fas fa-truck me-2" style="color: var(--primary-color);"></i>CarryBee 
       </h2>
     </div>
 
@@ -239,7 +239,7 @@
             </thead>
             <tbody>
               <tr class="title-row">
-                <td colspan="15">CarryBee Default Rate</td>
+                <td colspan="15"></td>
               </tr>
               
               @php
@@ -290,18 +290,28 @@
                 @endif
                 
                 <td data-label="Regular order/day"></td>
-                <td data-label="ACQ By"></td>
+                <td data-label="ACQ By">{{ $discount->kma }}</td>
               </tr>
               
               <!-- DHK Sub City -->
               @php
+
+              $weight_ranges_sub = [
+                  '0-200' => '80',
+                  '201-500' => '85',
+                  '501-1000' => '100',
+                  '1001-1500' => '120',
+                  '1501-2000' => '125',
+                  '2001-2500' => '135',
+                  '2500+' => '20 TK per kg'
+                ];
                 $dhk_sub_rules = $rules->where('region', 'dhk_sub')->keyBy('weight_range');
                 $dhk_sub_extra = $rules->firstWhere('region', 'dhk_sub');
               @endphp
               <tr>
                 <td data-label="Pickup">DHK</td>
                 <td data-label="Delivery">Sub City</td>
-                @foreach ($weight_ranges as $range => $default)
+                @foreach ($weight_ranges_sub as $range => $default)
                   @if ($dhk_sub_rules->has($range))
                     <td data-label="{{ $range }}g" class="highlight" style="background-color: #ecb90d; color: white;">
                       {{ $dhk_sub_rules[$range]->discounted_rate }}
@@ -324,7 +334,7 @@
                   <td data-label="COD">1%</td>
                 @endif
                 <td data-label="Regular order/day"></td>
-                <td data-label="ACQ By"></td>
+                <td data-label="ACQ By">{{ $discount->kma }}</td>
               </tr>
               
               <!-- DHK Outside City -->
@@ -368,7 +378,7 @@
                   <td data-label="COD">1%</td>
                 @endif
                 <td data-label="Regular order/day"></td>
-                <td data-label="ACQ By"></td>
+                <td data-label="ACQ By">{{ $discount->kma }}</td>
               </tr>
 
               <!-- Outside DHK to DHK -->
@@ -412,7 +422,7 @@
                   <td data-label="COD">1%</td>
                 @endif
                 <td data-label="Regular order/day"></td>
-                <td data-label="ACQ By"></td>
+                <td data-label="ACQ By">{{ $discount->kma }}</td>
               </tr>
 
               <!-- Outside DHK to Outside DHK -->
@@ -456,7 +466,7 @@
                   <td data-label="COD">1%</td>
                 @endif
                 <td data-label="Regular order/day"></td>
-                <td data-label="ACQ By"></td>
+                <td data-label="ACQ By">{{ $discount->kma }}</td>
               </tr>
             </tbody>
           </table>
@@ -471,32 +481,78 @@
   <!-- Font Awesome JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   
-  <script>
+   <script>
+    // This script handles exporting the visible table data to a single CSV file.
     document.querySelector('.export-all-btn').addEventListener('click', () => {
       let csv = [];
       let merchants = document.querySelectorAll('.merchant-section');
       
       merchants.forEach((merchant, index) => {
-        let merchantName = merchant.querySelector('h3').innerText.trim();
+        let merchantNameHeader = merchant.querySelector('h3').innerText.trim();
         let table = merchant.querySelector('table');
         if (!table) return;
 
-        // Add Merchant name as a header row before table data
-        csv.push(`"${merchantName} Rates"`);
+        // Add Merchant name as a header row for its section in the CSV
+        csv.push(`"${merchantNameHeader} Rates"`);
         
-        // Get table rows
-        const rows = table.querySelectorAll('tr');
-        rows.forEach(row => {
-          let cols = row.querySelectorAll('th, td');
+        // Get table headers
+        const head_rows = table.querySelectorAll('thead tr');
+        head_rows.forEach(row => {
+            let cols = row.querySelectorAll('th');
+            let rowData = [];
+            cols.forEach(col => {
+                let text = col.innerText.replace(/\n/g, ' ').trim().replace(/"/g, '""');
+                rowData.push(`"${text}"`);
+            });
+            csv.push(rowData.join(','));
+        });
+
+        // Get table body rows and process them to handle rowspans correctly
+        const body_rows = table.querySelectorAll('tbody tr');
+        let merchantId = '';
+        let merchantName = '';
+
+        body_rows.forEach((row) => {
           let rowData = [];
-          cols.forEach(col => {
-            let text = col.innerText.replace(/\n/g, ' ').trim().replace(/"/g, '""');
+          let cols = row.querySelectorAll('td');
+
+          if (row.classList.contains('title-row')) {
+            let text = cols[0].innerText.replace(/\n/g, ' ').trim().replace(/"/g, '""');
+            // Create a full row for the title, respecting colspan by adding empty cells
             rowData.push(`"${text}"`);
-          });
+            const colspan = parseInt(cols[0].getAttribute('colspan'), 10) || 1;
+            for (let i = 1; i < colspan; i++) {
+              rowData.push('""');
+            }
+            csv.push(rowData.join(','));
+            return; // Skips to the next iteration of the forEach loop
+          }
+
+          // This logic handles the data rows, including those affected by rowspan
+          if (cols[0].hasAttribute('rowspan')) {
+            // If it's the first data row, capture the rowspan values
+            merchantId = cols[0].innerText.trim().replace(/"/g, '""');
+            merchantName = cols[1].innerText.trim().replace(/"/g, '""');
+          } 
+          
+          // For rows that are missing cells due to a rowspan in a previous row
+          if (!cols[0].hasAttribute('rowspan')) {
+            // Prepend the captured merchant ID and Name
+            rowData.push(`"${merchantId}"`);
+            rowData.push(`"${merchantName}"`);
+          }
+
+          // Process all cells in the current row and add them to the rowData array
+          for (let i = 0; i < cols.length; i++) {
+              let col = cols[i];
+              let text = col.innerText.replace(/\n/g, ' ').trim().replace(/"/g, '""');
+              rowData.push(`"${text}"`);
+          }
+          
           csv.push(rowData.join(','));
         });
 
-        // Add 2 blank lines between merchants except after last one
+        // Add 2 blank lines between merchants for better readability in the CSV
         if (index !== merchants.length - 1) {
           csv.push('');
           csv.push('');
@@ -507,6 +563,7 @@
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
 
+      // Create a temporary link to trigger the download
       const a = document.createElement('a');
       a.setAttribute('href', url);
       a.setAttribute('download', 'carrybee_all_merchants_rates.csv');
