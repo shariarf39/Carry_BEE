@@ -84,7 +84,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Projected Burn</p>
-                        <h3 class="text-2xl font-bold mt-1 text-gray-800">৳{{ number_format($totalDiscounts, 2) }}</h3>
+                        <h3 class="text-2xl font-bold mt-1 text-gray-800">৳{{ formatCompactNumber($totalDiscounts, 2) }}</h3>
                     </div>
                     <div class="bg-red-50 p-3 rounded-full">
                         <i class="fas fa-fire text-red-500 text-lg"></i>
@@ -94,7 +94,7 @@
                     <div class="flex items-center justify-between text-sm">
                         <span class="text-gray-500">% of revenue</span>
                         <span class="font-medium text-red-600">
-                            {{ $totalRevenueAll > 0 ? number_format(($totalDiscounts / $totalRevenueAll) * 100, 2) : 0 }}%
+                            {{ $totalRevenueAll > 0 ? formatCompactNumber(($totalDiscounts / $totalRevenueAll) * 100, 2) : 0 }}%
                         </span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
@@ -111,7 +111,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Merchants</p>
-                        <h3 class="text-2xl font-bold mt-1 text-gray-800">{{ number_format($totalUsers) }}</h3>
+                        <h3 class="text-2xl font-bold mt-1 text-gray-800">{{ formatCompactNumber($totalUsers) }}</h3>
                     </div>
                     <div class="bg-blue-50 p-3 rounded-full">
                         <i class="fas fa-users text-blue-500 text-lg"></i>
@@ -122,7 +122,7 @@
                         <span class="text-gray-500">Monthly change</span>
                         <span class="font-medium {{ $userChangePercentage >= 0 ? 'text-green-600' : 'text-red-600' }}">
                             <i class="fas {{ $userChangePercentage >= 0 ? 'fa-arrow-up' : 'fa-arrow-down' }} mr-1"></i>
-                            {{ number_format($userChangePercentage, 1) }}%
+                            {{ formatCompactNumber($userChangePercentage, 1) }}%
                         </span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
@@ -138,7 +138,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Projected Revenue</p>
-                        <h3 class="text-2xl font-bold mt-1 text-gray-800">৳{{ number_format($totalRevenueAll, 2) }}</h3>
+                        <h3 class="text-2xl font-bold mt-1 text-gray-800">৳{{ formatCompactNumber($totalRevenueAll, 2) }}</h3>
                     </div>
                     <div class="bg-green-50 p-3 rounded-full">
                         <i class="fas fa-chart-line text-green-500 text-lg"></i>
@@ -164,7 +164,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">System Admins</p>
-                        <h3 class="text-2xl font-bold mt-1 text-gray-800">{{ number_format($totalAdmin) }}</h3>
+                        <h3 class="text-2xl font-bold mt-1 text-gray-800">{{ formatCompactNumber($totalAdmin) }}</h3>
                     </div>
                     <div class="bg-purple-50 p-3 rounded-full">
                         <i class="fas fa-user-shield text-purple-500 text-lg"></i>
@@ -235,7 +235,7 @@
                         </div>
                         <span class="text-sm font-medium text-gray-700 truncate" style="max-width: 120px;">{{ $merchant }}</span>
                     </div>
-                    <span class="text-sm font-semibold text-red-600">৳{{ number_format($loss, 2) }}</span>
+                    <span class="text-sm font-semibold text-red-600">৳{{ formatCompactNumber($loss, 2) }}</span>
                 </div>
                 @endforeach
             </div>

@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     :root {
-      --primary-color: #003d4d;
+      --primary-color: #ecb90d;
       --secondary-color: #006680;
       --light-bg: #f8f9fa;
       --border-color: #dee2e6;
@@ -28,11 +28,10 @@
       margin-bottom: 2rem;
     }
     
-    .table-container {
+.table-container {
       border-radius: 0.5rem;
       overflow: hidden;
       box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-      margin-bottom: 3rem;
     }
     
     .table {
@@ -90,8 +89,7 @@
     
     .merchant-section {
       background-color: rgba(0, 61, 77, 0.05);
-      border-radius: 0.5rem;
-      padding: 1rem;
+      border-radius: 0rem;
       margin-bottom: 2rem;
       border-left: 4px solid var(--primary-color);
     }
@@ -174,7 +172,7 @@
     </div>
 
     <!-- Global Export Button -->
-    <button class="btn btn-success export-all-btn">
+    <button class="btn btn-success export-all-btn" style="background-color: #ecb90d; border-color: #ecb90d; color: #fff;">
       <i class="fas fa-download me-1"></i> Export All Merchants CSV
     </button>
 
@@ -184,12 +182,12 @@
       @foreach($discounts as $discount)
       <div class="merchant-section" id="merchant-{{ $discount->id }}">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <h3 class="mb-0">
+          <h3 class="mb-0" style="padding: 1rem;">
             <i class="fas fa-store me-2"></i>{{ $discount->merchant_name }}
           </h3>
         </div>
         
-        <div class="row mb-4">
+        <div class="row mb-4" style="padding: 1rem;">
           <div class="col-md-6">
             <div class="mb-2">
               <span class="info-label">Merchant Email:</span>
@@ -198,6 +196,10 @@
             <div class="mb-2">
               <span class="info-label">Phone:</span>
               <span class="info-value">{{ $discount->phone }}</span>
+            </div>
+            <div class="mb-2">
+              <span class="info-label">Onboarding Date:</span>
+              <span class="info-value">{{ $discount->onboarding_date }}</span>
             </div>
             <div class="mb-2">
               <span class="info-label">Pickup Hub:</span>
@@ -233,7 +235,7 @@
                 <th class="weight-range">2500+ per kg</th>
                 <th>RC</th>
                 <th>COD</th>
-                <th>Regular order/day</th>
+               
                 <th>ACQ By</th>
               </tr>
             </thead>
@@ -289,7 +291,7 @@
                   <td data-label="COD">1%</td>
                 @endif
                 
-                <td data-label="Regular order/day"></td>
+            
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
               </tr>
               
@@ -333,7 +335,7 @@
                   <td data-label="RC">30%</td>
                   <td data-label="COD">1%</td>
                 @endif
-                <td data-label="Regular order/day"></td>
+          
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
               </tr>
               
@@ -377,7 +379,7 @@
                   <td data-label="RC">30%</td>
                   <td data-label="COD">1%</td>
                 @endif
-                <td data-label="Regular order/day"></td>
+                
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
               </tr>
 
@@ -421,7 +423,7 @@
                   <td data-label="RC">30%</td>
                   <td data-label="COD">1%</td>
                 @endif
-                <td data-label="Regular order/day"></td>
+                
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
               </tr>
 
@@ -465,7 +467,7 @@
                   <td data-label="RC">30%</td>
                   <td data-label="COD">1%</td>
                 @endif
-                <td data-label="Regular order/day"></td>
+               
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
               </tr>
             </tbody>
@@ -481,98 +483,125 @@
   <!-- Font Awesome JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   
-   <script>
-    // This script handles exporting the visible table data to a single CSV file.
+  <script>
+    // This script handles exporting all merchant table data to a single CSV file,
+    // with each merchant's data consolidated into a single row.
     document.querySelector('.export-all-btn').addEventListener('click', () => {
-      let csv = [];
-      let merchants = document.querySelectorAll('.merchant-section');
-      
-      merchants.forEach((merchant, index) => {
-        let merchantNameHeader = merchant.querySelector('h3').innerText.trim();
-        let table = merchant.querySelector('table');
-        if (!table) return;
-
-        // Add Merchant name as a header row for its section in the CSV
-        csv.push(`"${merchantNameHeader} Rates"`);
+        let csvRows = [];
+        const merchants = document.querySelectorAll('.merchant-section');
         
-        // Get table headers
-        const head_rows = table.querySelectorAll('thead tr');
-        head_rows.forEach(row => {
-            let cols = row.querySelectorAll('th');
-            let rowData = [];
-            cols.forEach(col => {
-                let text = col.innerText.replace(/\n/g, ' ').trim().replace(/"/g, '""');
-                rowData.push(`"${text}"`);
-            });
-            csv.push(rowData.join(','));
-        });
-
-        // Get table body rows and process them to handle rowspans correctly
-        const body_rows = table.querySelectorAll('tbody tr');
-        let merchantId = '';
-        let merchantName = '';
-
-        body_rows.forEach((row) => {
-          let rowData = [];
-          let cols = row.querySelectorAll('td');
-
-          if (row.classList.contains('title-row')) {
-            let text = cols[0].innerText.replace(/\n/g, ' ').trim().replace(/"/g, '""');
-            // Create a full row for the title, respecting colspan by adding empty cells
-            rowData.push(`"${text}"`);
-            const colspan = parseInt(cols[0].getAttribute('colspan'), 10) || 1;
-            for (let i = 1; i < colspan; i++) {
-              rowData.push('""');
-            }
-            csv.push(rowData.join(','));
-            return; // Skips to the next iteration of the forEach loop
-          }
-
-          // This logic handles the data rows, including those affected by rowspan
-          if (cols[0].hasAttribute('rowspan')) {
-            // If it's the first data row, capture the rowspan values
-            merchantId = cols[0].innerText.trim().replace(/"/g, '""');
-            merchantName = cols[1].innerText.trim().replace(/"/g, '""');
-          } 
-          
-          // For rows that are missing cells due to a rowspan in a previous row
-          if (!cols[0].hasAttribute('rowspan')) {
-            // Prepend the captured merchant ID and Name
-            rowData.push(`"${merchantId}"`);
-            rowData.push(`"${merchantName}"`);
-          }
-
-          // Process all cells in the current row and add them to the rowData array
-          for (let i = 0; i < cols.length; i++) {
-              let col = cols[i];
-              let text = col.innerText.replace(/\n/g, ' ').trim().replace(/"/g, '""');
-              rowData.push(`"${text}"`);
-          }
-          
-          csv.push(rowData.join(','));
-        });
-
-        // Add 2 blank lines between merchants for better readability in the CSV
-        if (index !== merchants.length - 1) {
-          csv.push('');
-          csv.push('');
+        if (merchants.length === 0) {
+            alert('No merchant data to export.');
+            return;
         }
-      });
 
-      const csvContent = csv.join('\n');
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
+        // 1. Build the dynamic header row.
+        const firstTable = merchants[0].querySelector('table');
+        if (!firstTable) return;
 
-      // Create a temporary link to trigger the download
-      const a = document.createElement('a');
-      a.setAttribute('href', url);
-      a.setAttribute('download', 'carrybee_all_merchants_rates.csv');
-      a.style.display = 'none';
+        const headerCells = firstTable.querySelectorAll('thead th');
+        const dataRowsForHeader = firstTable.querySelectorAll('tbody tr:not(.title-row)');
+        const numDataRows = dataRowsForHeader.length;
 
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+        // Start with the new headers for merchant info.
+        let header = [
+            "Merchant Email", "Phone", "Onboarding Date", "Timestamp", "Pickup Hub", 
+            "Product Category", "Promised Parcels/Day"
+        ];
+        
+        // Add "Merchant ID" and "Merchant Name" headers.
+        header.push(headerCells[0].innerText.trim());
+        header.push(headerCells[1].innerText.trim());
+
+        // Define the block of headers that repeats for each region.
+        const repeatingHeaderBlock = [];
+        for (let i = 2; i < headerCells.length - 2; i++) { 
+            repeatingHeaderBlock.push(headerCells[i].innerText.trim().replace(/\n/g, ' '));
+        }
+
+        // Repeat the block of headers for each region.
+        for (let i = 0; i < numDataRows; i++) {
+            header.push(...repeatingHeaderBlock);
+        }
+
+        // Add the final two headers.
+        header.push(headerCells[headerCells.length - 2].innerText.trim());
+        header.push(headerCells[headerCells.length - 1].innerText.trim());
+
+        csvRows.push(header.map(h => `"${h.replace(/"/g, '""')}"`).join(','));
+
+        // 2. Build the data rows, one consolidated row per merchant.
+        merchants.forEach(merchant => {
+            const table = merchant.querySelector('table');
+            if (!table) return;
+
+            const rows = table.querySelectorAll('tbody tr:not(.title-row)');
+            if (rows.length === 0) return;
+
+            // --- Extract Merchant Info ---
+            const merchantInfo = {};
+            merchant.querySelectorAll('.info-label').forEach(span => {
+                const label = span.innerText.trim().replace(':', '');
+                const value = span.nextElementSibling ? span.nextElementSibling.innerText.trim() : '';
+                merchantInfo[label] = value;
+            });
+            const timestamp = new Date().toLocaleString('en-CA', { timeZone: 'Asia/Dhaka' }).replace(',', '');
+
+
+            // --- Start building the single line of data ---
+            let singleLineData = [
+                merchantInfo["Merchant Email"],
+                merchantInfo["Phone"],
+                merchantInfo["Onboarding Date"],
+                timestamp,
+                merchantInfo["Pickup Hub"],
+                merchantInfo["Product Category"],
+                merchantInfo["Promised Parcels/Day"]
+            ];
+            
+            let lastTwoCellsData = [];
+
+            // Get Merchant ID and Name from the first data row.
+            const firstRowCells = rows[0].querySelectorAll('td');
+            singleLineData.push(firstRowCells[0].innerText.trim()); // Merchant ID
+            singleLineData.push(firstRowCells[1].innerText.trim()); // Merchant Name
+
+            // Process each data row to collect the rate information.
+            rows.forEach((row, index) => {
+                const cells = row.querySelectorAll('td');
+                const startIndex = (index === 0) ? 2 : 0;
+                const endIndex = cells.length - 2;
+
+                for (let i = startIndex; i < endIndex; i++) {
+                    singleLineData.push(cells[i].innerText.trim().replace(/\n/g, ' '));
+                }
+
+                if (index === 0) {
+                    lastTwoCellsData.push(cells[cells.length - 2].innerText.trim());
+                    lastTwoCellsData.push(cells[cells.length - 1].innerText.trim());
+                }
+            });
+
+            // Append the final two data points.
+            singleLineData.push(...lastTwoCellsData);
+
+            csvRows.push(singleLineData.map(d => `"${String(d).replace(/"/g, '""')}"`).join(','));
+        });
+
+        // 3. Create the CSV file content and trigger the download.
+        const csvContent = csvRows.join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.setAttribute('href', url);
+        a.setAttribute('download', 'carrybee_all_merchants_rates_oneline.csv');
+        a.style.display = 'none';
+
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     });
   </script>
 </body>

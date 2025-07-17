@@ -44,8 +44,8 @@
           extend: {
             colors: {
               primary: {
-                DEFAULT: '#3b82f6', // blue-500
-                hover: '#2563eb', // blue-600
+                DEFAULT: '#ecb90d', // blue-500
+                hover: '#ecb90d', // blue-600
               },
               secondary: '#64748b', // slate-500
             }
@@ -62,7 +62,7 @@
         <header class="mb-8">
             <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 flex items-center">
                 <i class="fas fa-tags mr-3 text-primary-DEFAULT"></i>
-                Discount Management
+                Onboarding Dashboard
             </h1>
             <p class="mt-1 text-slate-500">Manage and track all merchant discounts.</p>
         </header>

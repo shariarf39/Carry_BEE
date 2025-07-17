@@ -29,66 +29,96 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($merchants as $merchant)
-                @php
-                    $discount = $groupedDiscounts[$merchant->id] ?? [];
-                    $parcelCount = $merchant->promised_parcels;
-                    $monthlyParcels = $parcelCount * 30;
-                    $minBurn = $parcelCount * 60;
+             @foreach($merchants as $merchant)
+    @php
+        $discount = $groupedDiscounts[$merchant->id] ?? [];
+        $parcelCount = $merchant->promised_parcels;
+        $monthlyParcels = $parcelCount * 30;
+        $minBurn = $parcelCount * 60;
 
-                    $regionWiseDetails = [];
-                    $totalBurn = 0;
-                    $totalRevenue = 0;
-                    $burnRecords = [];
+        $regionWiseDetails = [];
+        $totalBurn = 0;
+        $totalRevenue = 0;
+        $burnRecords = [];
 
-                    foreach (($discount ?? []) as $region => $weights) {
-                        foreach ($weights as $weightRange => $rule) {
-                            $defaultRate = $defaultRates[$region][$weightRange] ?? 0;
-                            $discountedRate = $rule->discounted_rate ?? $defaultRate;
+        foreach (($discount ?? []) as $region => $weights) {
+            foreach ($weights as $weightRange => $rule) {
+                $defaultRate = $defaultRates[$region][$weightRange] ?? 0;
+                $discountedRate = $rule->discounted_rate ?? $defaultRate;
 
-                            $burnPerParcel = $discountedRate - $defaultRate;
-                            $revenuePerParcel = $discountedRate;
+                $burnPerParcel = $discountedRate - $defaultRate;
+                $revenuePerParcel = $discountedRate;
 
-                            $burn = $burnPerParcel * $parcelCount;
-                            $revenue = $revenuePerParcel * $parcelCount;
+                $burn = $burnPerParcel * $parcelCount;
+                $revenue = $revenuePerParcel * $parcelCount;
 
-                            $totalBurn += $burn;
-                            $totalRevenue += $revenue;
+                $totalBurn += $burn;
+                $totalRevenue += $revenue;
 
-                            $regionWiseDetails[] = [
-                                'region' => $region,
-                                'weightRange' => $weightRange,
-                                'defaultRate' => $defaultRate,
-                                'discountedRate' => $discountedRate,
-                                'dailyRevenue' => $revenue,
-                                'dailyBurn' => $burn,
-                                'monthlyRevenue' => $revenue * 30,
-                                'monthlyBurn' => $burn * 30,
-                            ];
+                $regionWiseDetails[] = [
+                    'region' => $region,
+                    'weightRange' => $weightRange,
+                    'defaultRate' => $defaultRate,
+                    'discountedRate' => $discountedRate,
+                    'dailyRevenue' => $revenue,
+                    'dailyBurn' => $burn,
+                    'monthlyRevenue' => $revenue * 30,
+                    'monthlyBurn' => $burn * 30,
+                    'avgRevenue' => '-',
+                    'avgBurn' => '-',
+                  
+                ];
 
-                            $burnRecords[] = [
-                                'burnPerParcel' => $burnPerParcel,
-                                'revenuePerParcel' => $revenuePerParcel,
-                            ];
-                        }
-                    }
+                $burnRecords[] = [
+                    'burnPerParcel' => $burnPerParcel,
+                    'revenuePerParcel' => $revenuePerParcel,
+                ];
+            }
+        }
 
-                    $aggMonthlyRevenue = $totalRevenue * 30;
-                    $aggMonthlyBurn = $totalBurn * 30;
+        $aggMonthlyRevenue = $totalRevenue * 30;
+        $aggMonthlyBurn = $totalBurn * 30;
 
-                    $maxBurnValue = collect($burnRecords)->sortBy('burnPerParcel')->first()['burnPerParcel'] ?? 0;
-                    $maxBurnMatches = collect($burnRecords)->where('burnPerParcel', $maxBurnValue);
-                    $maxBurn = $maxBurnValue * $parcelCount;
+        $maxBurnValue = collect($burnRecords)->sortBy('burnPerParcel')->first()['burnPerParcel'] ?? 0;
+        $maxBurnMatches = collect($burnRecords)->where('burnPerParcel', $maxBurnValue);
+        $maxBurn = $maxBurnValue * $parcelCount;
 
-                    if ($maxBurnMatches->count() > 1) {
-                        $revenues = $maxBurnMatches->pluck('revenuePerParcel');
-                        $maxRevenue = $revenues->max() * $parcelCount;
-                        $minRevenue = $revenues->min() * $parcelCount;
-                    } else {
-                        $revenuePerParcel = $maxBurnMatches->first()['revenuePerParcel'] ?? 0;
-                        $maxRevenue = $revenuePerParcel * $parcelCount;
-                        $minRevenue = $maxRevenue;
-                    }
+        if ($maxBurnMatches->count() > 1) {
+            $revenues = $maxBurnMatches->pluck('revenuePerParcel');
+            $maxRevenue = $revenues->max() * $parcelCount;
+            $minRevenue = $revenues->min() * $parcelCount;
+        } else {
+            $revenuePerParcel = $maxBurnMatches->first()['revenuePerParcel'] ?? 0;
+            $maxRevenue = $revenuePerParcel * $parcelCount;
+            $minRevenue = $maxRevenue;
+        }
+
+        $burnValues = collect($burnRecords)->pluck('burnPerParcel')->unique()->sortDesc()->values();
+        $topBurn1 = $burnValues[0] ?? 0;
+        $topBurn2 = $burnValues->filter(fn($v) => $v < $topBurn1)->first() ?? 0;
+
+        $topRevenue1 = collect($burnRecords)->where('burnPerParcel', $topBurn1)->pluck('revenuePerParcel')->max() ?? 0;
+        $topRevenue2 = collect($burnRecords)->where('burnPerParcel', $topBurn2)->pluck('revenuePerParcel')->max() ?? 0;
+
+        $parcel60 = ($parcelCount * 60) / 100;
+        $parcel40 = ($parcelCount * 40) / 100;
+
+        $avgRevenue = (($topRevenue1 * $parcel60) + ($topRevenue2 * $parcel40)) / 2;
+        $avgBurn = (($topBurn1 * $parcel60) + ($topBurn2 * $parcel40)) / 2;
+
+        $regionWiseDetails[] = [
+             'region' => 'Average',
+                        'weightRange' => '-',
+                        'defaultRate' => '-',
+                        'discountedRate' => '-',
+                        'dailyRevenue' => '-',
+                        'dailyBurn' => '-',
+                        'monthlyRevenue' => '-',
+                        'monthlyBurn' => '-',
+                        'avgRevenue' => number_format($avgRevenue, 2),
+                        'avgBurn' => number_format($avgBurn, 2),
+        ];
+
                 @endphp
                 <tr>
                     <td class="text-start">
@@ -187,6 +217,8 @@
                 <th>Daily Burn</th>
                 <th>Monthly Revenue</th>
                 <th>Monthly Burn</th>
+                <th>AVG Revenue</th>
+                <th>AVG Burn</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -269,6 +301,8 @@ document.querySelectorAll('.action-btn').forEach(button => {
                 <td>৳${row.dailyBurn}</td>
                 <td>৳${row.monthlyRevenue}</td>
                 <td>৳${row.monthlyBurn}</td>
+                <td>৳${row.avgRevenue}</td>
+                <td>৳${row.avgBurn}</td>
             `;
             tbody.appendChild(tr);
         });

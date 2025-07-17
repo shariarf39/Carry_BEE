@@ -228,7 +228,7 @@
             <div class="card-header d-flex justify-content-between align-items-center main-header-flex">
                 <div>
                     <h4 class="mb-0">
-                        <img src="logo/logo.png" alt="" height="40" width="100">
+                        <img src="logo/logo.png" alt="" height="70" width="120">
                         <i class="fas me-2"></i>Onboarding 
                     </h4>
                     <!-- Added flex-wrap for user badges -->
@@ -273,7 +273,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
                         <div class="bg-primary bg-opacity-10 p-3 rounded me-3">
-                            <i class="fas fa-percentage text-primary fs-4"></i>
+                            <i class="fas fa-percentage" style="color: #ecb90d; font-size: 1.5rem;"></i>
                         </div>
                         <div>
                             <h6 class="mb-1 fw-semibold">Discount Configuration</h6>
@@ -406,7 +406,7 @@
                                 </div>
                                 <div class="col-md-4 col-sm-6">
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" name="requirements[]" value="entry_manual" id="entryManual" checked>
+                                        <input class="form-check-input" type="checkbox" name="requirements[]" value="entry_manual" id="entryManual">
                                         <label class="form-check-label" for="entryManual">Manual Entry Facility</label>
                                     </div>
                                 </div>

@@ -92,20 +92,20 @@
     <div class="container py-4">
         <div class="page-header">
             <h3 class="mb-0">
-                <i class="fas fa-tags me-2 text-primary"></i>Discount Details for {{ $discount->merchant_name }}
+                <i class="fas fa-tags me-2" style="color: #ecb90d;"></i>Discount Details for {{ $discount->merchant_name }}
             </h3>
         </div>
 
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="fas fa-store me-2 text-primary"></i>Merchant Information
+                    <i class="fas fa-store me-2" style="color: #ecb90d;"></i>Information
                 </h5>
                 
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <span class="info-label">Merchant Email:</span>
+                            <span class="info-label">KAM Email:</span>
                             <span class="info-value">{{ $discount->merchant_email }}</span>
                         </div>
                         <div class="mb-3">
@@ -134,7 +134,7 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <i class="fas fa-percentage me-2 text-primary"></i>Discount Rules
+                    <i class="fas fa-percentage me-2" style="color: #ecb90d;"></i>Discount Rules
                 </h5>
                 
                 <div class="table-responsive">

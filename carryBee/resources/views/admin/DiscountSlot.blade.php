@@ -10,8 +10,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #003d4d;
-      --secondary-color: #006680;
+      --primary-color: #ecb90d;
+      --secondary-color: #ecb90d;
       --light-bg: #f8f9fa;
       --border-color: #dee2e6;
     }
@@ -150,7 +150,7 @@
   <div class="container py-4">
     <div class="page-header">
       <h2 class="mb-0">
-        <i class="fas fa-truck me-2" style="color: var(--primary-color);"></i>CarryBee Default Rate
+        <i class="fas fa-truck me-2" style="color: var(--primary-color);"></i>CarryBee 
       </h2>
     </div>
   <div class="card">
@@ -158,11 +158,9 @@
               <!-- Add inside your container, before the table -->
 <div class="d-flex justify-content-between align-items-center mb-3">
   <div class="page-header mb-0">
-    <h2 class="mb-0">
-      <i class="fas fa-truck me-2" style="color: var(--primary-color);"></i>CarryBee Default Rate
-    </h2>
+   
   </div>
-  <button id="exportCSV" class="btn btn-success">
+  <button id="exportCSV" class="btn btn-success" style="background-color: #ecb90d; border-color: #ecb90d; color: #fff;">
     <i class="fas fa-download me-1"></i> Export CSV
   </button>
 </div>
@@ -174,7 +172,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <span class="info-label">Merchant Email:</span>
+                            <span class="info-label">KAM Email:</span>
                             <span class="info-value">{{ $discount->merchant_email }}</span>
                         </div>
                         <div class="mb-3">
@@ -220,7 +218,6 @@
             <th class="weight-range">2500+ per kg</th>
             <th>RC</th>
             <th>COD</th>
-            <th>Regular order/day</th>
             <th>ACQ By</th>
           </tr>
         </thead>
@@ -275,8 +272,7 @@
 @endif
 
            
-            <td data-label="Regular order/day"></td>
-            <td data-label="ACQ By"></td>
+           <td data-label="Merchant Name" rowspan="5">{{ $discount->kma }}</td>
            
           </tr>
           <tr>
@@ -320,8 +316,7 @@
   <td data-label="RC">30%</td>
   <td data-label="COD">1%</td>
 @endif
-            <td data-label="Regular order/day"></td>
-            <td data-label="ACQ By"></td>
+         
            
           </tr>
           <tr>
@@ -366,13 +361,10 @@
   <td data-label="COD">1%</td>
 @endif
 
-            <td data-label="Regular order/day"></td>
-            <td data-label="ACQ By"></td>
            
           </tr>
           <tr>
-            <td data-label="Pickup">Outside DHK</td>
-            <td data-label="Delivery">DHK</td>
+          
                 @php
   $weight_ranges = [
     '0-200' => '99',
@@ -411,8 +403,7 @@
   <td data-label="RC">30%</td>
   <td data-label="COD">1%</td>
 @endif
-            <td data-label="Regular order/day"></td>
-            <td data-label="ACQ By"></td>
+       
            
           </tr>
           <tr>
@@ -456,8 +447,7 @@
   <td data-label="RC">30%</td>
   <td data-label="COD">1%</td>
 @endif
-            <td data-label="Regular order/day"></td>
-            <td data-label="ACQ By"></td>
+          
            
           </tr>
           
