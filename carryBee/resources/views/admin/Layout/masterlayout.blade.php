@@ -62,10 +62,11 @@
     <!-- Sidebar -->
     <nav id="sidebar" class="scrollable-sidebar bg-yellow-400 w-64 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-50">
       <div class="p-5">
-        <div class="flex items-center space-x-2">
-          <img src="https://placehold.co/40x40/1e3a8a/ffc107?text=CB" alt="CarryBee Logo" class="rounded-full">
-          <span class="text-xl font-bold text-gray-800">CarryBee</span>
+          <div class="flex items-center space-x-2">
+    
+           <img src="https://cbonboard.com/logo/logo.png" alt="" height="70" width="120">
         </div>
+       
         <ul class="mt-10 space-y-2">
           <li><a href="{{ route('AdminDashboard') }}" class="nav-link flex items-center gap-3 p-3 rounded-lg font-semibold text-gray-800 transition-all duration-200"><i class="fas fa-home w-6 text-center"></i>Home</a></li>
             <li><a href="{{ route('DiscountData') }}" class="nav-link flex items-center gap-3 p-3 rounded-lg font-semibold text-gray-800 transition-all duration-200"><i class="fas fa-users w-6 text-center"></i>Merchant Data</a></li>

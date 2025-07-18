@@ -190,7 +190,7 @@
         <div class="row mb-4" style="padding: 1rem;">
           <div class="col-md-6">
             <div class="mb-2">
-              <span class="info-label">Merchant Email:</span>
+              <span class="info-label">KAM Email:</span>
               <span class="info-value">{{ $discount->merchant_email }}</span>
             </div>
             <div class="mb-2">
@@ -505,7 +505,7 @@
 
         // Start with the new headers for merchant info.
         let header = [
-            "Merchant Email", "Phone", "Onboarding Date", "Timestamp", "Pickup Hub", 
+            "KAM Email", "Phone", "Onboarding Date", "Timestamp", "Pickup Hub", 
             "Product Category", "Promised Parcels/Day"
         ];
         

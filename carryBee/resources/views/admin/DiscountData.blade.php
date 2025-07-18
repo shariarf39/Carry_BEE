@@ -93,9 +93,10 @@
             $minRevenue = $maxRevenue;
         }
 
-        $burnValues = collect($burnRecords)->pluck('burnPerParcel')->unique()->sortDesc()->values();
-        $topBurn1 = $burnValues[0] ?? 0;
-        $topBurn2 = $burnValues->filter(fn($v) => $v < $topBurn1)->first() ?? 0;
+        
+        $topBurn1 = collect($burnRecords)->sortBy('burnPerParcel')->first()['burnPerParcel'] ?? 0;
+        $topBurn2 = collect($burnRecords)->sortBy('burnPerParcel')->skip(1)->first()['burnPerParcel'] ?? 0;
+        $lowestBurn = collect($burnRecords)->sortByDesc('burnPerParcel')->first()['burnPerParcel'] ?? 0;
 
         $topRevenue1 = collect($burnRecords)->where('burnPerParcel', $topBurn1)->pluck('revenuePerParcel')->max() ?? 0;
         $topRevenue2 = collect($burnRecords)->where('burnPerParcel', $topBurn2)->pluck('revenuePerParcel')->max() ?? 0;
@@ -104,7 +105,7 @@
         $parcel40 = ($parcelCount * 40) / 100;
 
         $avgRevenue = (($topRevenue1 * $parcel60) + ($topRevenue2 * $parcel40)) / 2;
-        $avgBurn = (($topBurn1 * $parcel60) + ($topBurn2 * $parcel40)) / 2;
+        $avgBurn = (($topBurn1 * $parcel60) + ($lowestBurn * $parcel40)) / 2;
 
         $regionWiseDetails[] = [
              'region' => 'Average',
@@ -114,7 +115,7 @@
                         'dailyRevenue' => '-',
                         'dailyBurn' => '-',
                         'monthlyRevenue' => '-',
-                        'monthlyBurn' => '-',
+                        'monthlyBurn' =>  '-',
                         'avgRevenue' => number_format($avgRevenue, 2),
                         'avgBurn' => number_format($avgBurn, 2),
         ];
@@ -139,7 +140,8 @@
                     </td>
                     <td class="text-start">
                         <strong>{{ $merchant->pickup_hub }}</strong><br>
-                        <small>Total Revenue: ৳{{ number_format($totalRevenue) }}</small>
+                        <small>AVG Revenue: ৳{{ number_format($avgRevenue) }}</small><br>
+                        <small>AVG Burn: ৳{{ number_format($avgBurn) }}</small>
                     </td>
                     <td>
                         <strong>{{ $parcelCount }}/day</strong><br>
