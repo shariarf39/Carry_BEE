@@ -235,8 +235,10 @@
                 <th class="weight-range">2500+ per kg</th>
                 <th>RC</th>
                 <th>COD</th>
+                
                
                 <th>ACQ By</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -293,6 +295,14 @@
                 
             
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
+                  @if($discount->is_active == 0)
+                   <td><span class="badge bg-warning text-dark">Pending</span></td>
+                   @elseif($discount->is_active == 1)
+                    <td><span class="badge bg-success">Approved</span></td> 
+                     @else
+                    <td><span class="badge bg-danger">Rejected</span></td>
+                   @endif
+
               </tr>
               
               <!-- DHK Sub City -->
@@ -337,6 +347,14 @@
                 @endif
           
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
+                 @if($discount->is_active == 0)
+                   <td><span class="badge bg-warning text-dark">Pending</span></td>
+                   @elseif($discount->is_active == 1)
+                    <td><span class="badge bg-success">Approved</span></td> 
+                     @else
+                    <td><span class="badge bg-danger">Rejected</span></td>
+                   @endif
+
               </tr>
               
               <!-- DHK Outside City -->
@@ -381,6 +399,14 @@
                 @endif
                 
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
+                 @if($discount->is_active == 0)
+                   <td><span class="badge bg-warning text-dark">Pending</span></td>
+                   @elseif($discount->is_active == 1)
+                    <td><span class="badge bg-success">Approved</span></td> 
+                     @else
+                    <td><span class="badge bg-danger">Rejected</span></td>
+                   @endif
+
               </tr>
 
               <!-- Outside DHK to DHK -->
@@ -425,6 +451,14 @@
                 @endif
                 
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
+                 @if($discount->is_active == 0)
+                   <td><span class="badge bg-warning text-dark">Pending</span></td>
+                   @elseif($discount->is_active == 1)
+                    <td><span class="badge bg-success">Approved</span></td> 
+                     @else
+                    <td><span class="badge bg-danger">Rejected</span></td>
+                   @endif
+
               </tr>
 
               <!-- Outside DHK to Outside DHK -->
@@ -469,6 +503,14 @@
                 @endif
                
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
+                 @if($discount->is_active == 0)
+                   <td><span class="badge bg-warning text-dark">Pending</span></td>
+                   @elseif($discount->is_active == 1)
+                    <td><span class="badge bg-success">Approved</span></td> 
+                     @else
+                    <td><span class="badge bg-danger">Rejected</span></td>
+                   @endif
+
               </tr>
             </tbody>
           </table>

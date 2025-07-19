@@ -224,7 +224,7 @@
         <tbody>
           
           <tr class="title-row">
-            <td colspan="15">CarryBee Default Rate</td>
+            <td colspan="15">CarryBee /td>
           </tr>
           <tr>
           

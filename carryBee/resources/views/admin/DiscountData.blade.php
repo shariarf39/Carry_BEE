@@ -104,8 +104,11 @@
         $parcel60 = ($parcelCount * 60) / 100;
         $parcel40 = ($parcelCount * 40) / 100;
 
-        $avgRevenue = (($topRevenue1 * $parcel60) + ($topRevenue2 * $parcel40)) / 2;
-        $avgBurn = (($topBurn1 * $parcel60) + ($lowestBurn * $parcel40)) / 2;
+        $avgRevenue = ((($topRevenue1 * $parcel60) + ($topRevenue2 * $parcel40)) / 2)*30;
+        $avgBurn = ((($topBurn1 * $parcel60) + ($lowestBurn * $parcel40)) / 2)*30;
+
+        $avgRevenueD = (($topRevenue1 * $parcel60) + ($topRevenue2 * $parcel40)) / 2;
+        $avgBurnD = (($topBurn1 * $parcel60) + ($lowestBurn * $parcel40)) / 2;
 
         $regionWiseDetails[] = [
              'region' => 'Average',
@@ -140,8 +143,10 @@
                     </td>
                     <td class="text-start">
                         <strong>{{ $merchant->pickup_hub }}</strong><br>
-                        <small>AVG Revenue: ৳{{ number_format($avgRevenue) }}</small><br>
-                        <small>AVG Burn: ৳{{ number_format($avgBurn) }}</small>
+                        <small>AVG Revenue(Daily): ৳{{ number_format($avgRevenueD) }}</small><br>
+                        <small>AVG Burn(Daily): ৳{{ number_format($avgBurnD) }}</small><br>
+                        <small>AVG Revenue(Monthly): ৳{{ number_format($avgRevenue) }}</small><br>
+                        <small>AVG Burn(Monthly): ৳{{ number_format($avgBurn) }}</small>
                     </td>
                     <td>
                         <strong>{{ $parcelCount }}/day</strong><br>
