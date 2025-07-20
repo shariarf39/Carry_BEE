@@ -99,7 +99,7 @@
         $lowestBurn = collect($burnRecords)->sortByDesc('burnPerParcel')->first()['burnPerParcel'] ?? 0;
 
         $topRevenue1 = collect($burnRecords)->where('burnPerParcel', $topBurn1)->pluck('revenuePerParcel')->max() ?? 0;
-        $topRevenue2 = collect($burnRecords)->where('burnPerParcel', $topBurn2)->pluck('revenuePerParcel')->max() ?? 0;
+        $topRevenue2 = collect($burnRecords)->where('burnPerParcel', $lowestBurn)->pluck('revenuePerParcel')->max() ?? 0;
 
         $parcel60 = ($parcelCount * 60) / 100;
         $parcel40 = ($parcelCount * 40) / 100;
