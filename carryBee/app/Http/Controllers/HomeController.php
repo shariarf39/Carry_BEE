@@ -39,47 +39,69 @@ class HomeController extends Controller
     }
 
 
-     public function storeDiscount(Request $request)
+       public function storeDiscount(Request $request)
     {
+        // **MODIFIED**: Added validation rules for the arrays of discount rules.
         $validated = $request->validate([
-        'merchant_id' => 'required|string',
-        'merchant_name' => 'required|string',
-        'merchant_email' => 'required|string',
-        'onboarding_date' => 'required|date',
-        'phone' => 'required|string',
-        'pickup_hub' => 'required|string',
-        'product_category' => 'required|string',
-        'kma' => 'required|string',
-        'promised_parcels' => 'required|integer',
-    ]);
+            'merchant_id' => 'required|string|max:255',
+            'merchant_name' => 'required|string|max:255',
+            'merchant_email' => 'required|email',
+            'onboarding_date' => 'required|date',
+            'phone' => 'required|string|max:20',
+            'pickup_hub' => 'required|string|max:255',
+            'product_category' => 'required|string|max:255',
+            'kma' => 'required|string|max:255',
+            'promised_parcels' => 'required|integer|min:0',
+            
+            // Validation for the custom rules, if they exist
+            'region' => 'nullable|array',
+            'region.*' => 'required_with:region|string',
+            'weight_range' => 'nullable|array',
+            'weight_range.*' => 'required_with:region|array', // Each rule must have weight ranges
+            'weight_range.*.*' => 'required_with:region|string', // Each weight range must be a string
+            'discounted_rate' => 'nullable|array',
+            'discounted_rate.*' => 'required_with:region|numeric|min:0',
+            'return_charge' => 'nullable|array',
+            'return_charge.*' => 'required_with:region|numeric|min:0',
+            'cod' => 'nullable|array',
+            'cod.*' => 'required_with:region|numeric|min:0',
+        ]);
 
-    $discount = Discount::create([
-        'merchant_id' => $validated['merchant_id'],
-        'merchant_name' => $validated['merchant_name'],
-        'merchant_email' => $validated['merchant_email'],
-        'onboarding_date' => $validated['onboarding_date'],
-        'phone' => $validated['phone'],
-        'kma' => $validated['kma'],
-        'pickup_hub' => $validated['pickup_hub'],
-        'product_category' => $validated['product_category'],
-        'promised_parcels' => $validated['promised_parcels'],
-        'requirements' => $request->input('requirements', []),
-    ]);
+        $discount = Discount::create([
+            'merchant_id' => $validated['merchant_id'],
+            'merchant_name' => $validated['merchant_name'],
+            'merchant_email' => $validated['merchant_email'],
+            'onboarding_date' => $validated['onboarding_date'],
+            'phone' => $validated['phone'],
+            'kma' => $validated['kma'],
+            'pickup_hub' => $validated['pickup_hub'],
+            'product_category' => $validated['product_category'],
+            'promised_parcels' => $validated['promised_parcels'],
+            'requirements' => $request->input('requirements', []), // requirements are optional checkboxes
+        ]);
 
-    if ($request->has('region')) {
-        for ($i = 0; $i < count($request->region); $i++) {
-            DiscountRule::create([
-                'discount_id' => $discount->id,
-                'region' => $request->region[$i],
-                'weight_range' => $request->weight_range[$i],
-                'discounted_rate' => $request->discounted_rate[$i],
-                'return_charge' => $request->return_charge[$i],
-                'cod' => $request->cod[$i],
-            ]);
+        // **MODIFIED**: This block now correctly loops through the structured data.
+        // It iterates through each rule and then through each weight range within that rule.
+        if ($request->has('region') && is_array($request->region)) {
+            foreach ($request->region as $index => $regionValue) {
+                // Ensure the corresponding weight_range for the current rule index exists and is an array.
+                if (isset($request->weight_range[$index]) && is_array($request->weight_range[$index])) {
+                    // Loop through each selected weight for the current rule.
+                    foreach ($request->weight_range[$index] as $weight) {
+                        DiscountRule::create([
+                            'discount_id' => $discount->id,
+                            'region' => $regionValue,
+                            'weight_range' => $weight,
+                            'discounted_rate' => $request->discounted_rate[$index],
+                            'return_charge' => $request->return_charge[$index],
+                            'cod' => $request->cod[$index],
+                        ]);
+                    }
+                }
+            }
         }
-    }
 
-    return redirect()->back()->with('success', 'Discount saved with rules.');
+        return redirect()->back()->with('success', 'Discount has been saved successfully!');
     }
 
 
