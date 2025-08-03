@@ -149,7 +149,7 @@
   <div class="container py-4">
     <div class="page-header">
       <h2 class="mb-0">
-        <i class="fas fa-truck me-2" style="color: var(--primary-color);"></i>CarryBee Default Rate
+        <i class="fas fa-truck me-2" style="color: var(--primary-color);"></i>CarryBee 
       </h2>
     </div>
     
@@ -632,7 +632,8 @@
            
           </tr>
           <tr>
-       
+          <td data-label="Pickup">Outside DHK</td>
+            <td data-label="Delivery">DHK</td>
          
                 @php
   $weight_ranges = [
