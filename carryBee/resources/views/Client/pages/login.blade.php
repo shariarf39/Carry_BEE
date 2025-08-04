@@ -13,18 +13,18 @@
             --primary-color: #ecb90d;
             --light-primary: #e3ebf7;
         }
-        
+
         body {
             background-color: #f8f9fc;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         .card {
             border-radius: 0.5rem;
             box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
             border: none;
         }
-        
+
         .card-header {
             border-radius: 0.5rem 0.5rem 0 0 !important;
             padding: 1rem 1.5rem;
@@ -32,20 +32,37 @@
             background-color: var(--primary-color);
             color: white;
         }
-        
+
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
         }
-        
+
         .input-group-text {
             cursor: pointer;
         }
-        
+
         .form-container {
             max-width: 500px;
             margin: 0 auto;
             padding-top: 3rem;
+        }
+
+        .footer-text {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .footer-text a {
+            color: #ecb90d;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-text a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -55,7 +72,7 @@
             <div class="card-header text-center">
                 <h4 class="mb-0"><i class="fas fa-sign-in-alt me-2"></i>Login to Your Account</h4>
             </div>
-            
+
             <div class="card-body p-4">
                 @if($errors->any())
                     <div class="alert alert-danger">
@@ -115,6 +132,11 @@
                 </form>
             </div>
         </div>
+
+        <!-- Footer -->
+        <div class="footer-text">
+            Design and developed by <a href="https://fabtechit.com" target="_blank" rel="noopener noreferrer">FabTech.IT</a>
+        </div>
     </div>
 
     <!-- Bootstrap JS Bundle with Popper -->
@@ -123,7 +145,7 @@
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const eyeIcon = document.getElementById('eyeIcon');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 eyeIcon.classList.remove('fa-eye');

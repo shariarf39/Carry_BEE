@@ -96,7 +96,13 @@
         
         $topBurn1 = collect($burnRecords)->sortBy('burnPerParcel')->first()['burnPerParcel'] ?? 0;
         $topBurn2 = collect($burnRecords)->sortBy('burnPerParcel')->skip(1)->first()['burnPerParcel'] ?? 0;
-        $lowestBurn = collect($burnRecords)->sortByDesc('burnPerParcel')->first()['burnPerParcel'] ?? 0;
+          $lowestBurn_fixed = collect($burnRecords)->sortByDesc('burnPerParcel')->first()['burnPerParcel'] ?? 0;
+
+        if(0 <= $lowestBurn_fixed) {
+            $lowestBurn = 0;
+        } else {
+            $lowestBurn = collect($burnRecords)->sortByDesc('burnPerParcel')->skip(1)->first()['burnPerParcel'] ?? 0;
+        }
 
         $topRevenue1 = collect($burnRecords)->where('burnPerParcel', $topBurn1)->pluck('revenuePerParcel')->max() ?? 0;
         $topRevenue2 = collect($burnRecords)->where('burnPerParcel', $lowestBurn)->pluck('revenuePerParcel')->max() ?? 0;
