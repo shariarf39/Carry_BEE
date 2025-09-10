@@ -271,9 +271,15 @@
                 
                 @foreach ($weight_ranges as $range => $default)
                   @if ($same_city_rules->has($range))
+                  @if($same_city_rules[$range]->discounted_rate <40)
+                    <td data-label="{{ $range }}g" class="highlight" style="background-color: red; color: white;">
+                      {{ $same_city_rules[$range]->discounted_rate }}
+                    </td>
+                  @else
                     <td data-label="{{ $range }}g" class="highlight" style="background-color: #ecb90d; color: white;">
                       {{ $same_city_rules[$range]->discounted_rate }}
                     </td>
+                  @endif
                   @else
                     <td data-label="{{ $range }}g" class="highlight">
                       {{ $default }}
@@ -325,9 +331,15 @@
                 <td data-label="Delivery">Sub City</td>
                 @foreach ($weight_ranges_sub as $range => $default)
                   @if ($dhk_sub_rules->has($range))
+                  @if($dhk_sub_rules[$range]->discounted_rate <50)
+                    <td data-label="{{ $range }}g" class="highlight" style="background-color: red; color: white;">
+                      {{ $dhk_sub_rules[$range]->discounted_rate }}
+                    </td>
+                    @else
                     <td data-label="{{ $range }}g" class="highlight" style="background-color: #ecb90d; color: white;">
                       {{ $dhk_sub_rules[$range]->discounted_rate }}
                     </td>
+                  @endif
                   @else
                     <td data-label="{{ $range }}g" class="highlight">
                       {{ $default }}
@@ -348,7 +360,7 @@
           
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
                  @if($discount->is_active == 0)
-                   <td><span class="badge bg-warning text-dark">Pending</span></td>
+                   <td><span class="badge bg-warning text-dark">Upon Discussion</span></td>
                    @elseif($discount->is_active == 1)
                     <td><span class="badge bg-success">Approved</span></td> 
                      @else
@@ -377,9 +389,15 @@
                 <td data-label="Delivery">Outside City</td>
                 @foreach ($weight_ranges_outside as $range => $default)
                   @if ($outside_rules->has($range))
+                  @if($outside_rules[$range]->discounted_rate <70)
+                    <td data-label="{{ $range }}g" class="highlight" style="background-color: red; color: white;">
+                      {{ $outside_rules[$range]->discounted_rate }}
+                    </td>
+                  @else
                     <td data-label="{{ $range }}g" class="highlight" style="background-color: #ecb90d; color: white;">
                       {{ $outside_rules[$range]->discounted_rate }}
                     </td>
+                  @endif
                   @else
                     <td data-label="{{ $range }}g" class="highlight">
                       {{ $default }}
@@ -429,9 +447,15 @@
                 <td data-label="Delivery">DHK</td>
                 @foreach ($weight_ranges_outside_dhk as $range => $default)
                   @if ($outside_dhk_rules->has($range))
+                  @if($outside_dhk_rules[$range]->discounted_rate <70)
+                    <td data-label="{{ $range }}g" class="highlight" style="background-color: red; color: white;">
+                      {{ $outside_dhk_rules[$range]->discounted_rate }}
+                    </td>
+                  @else
                     <td data-label="{{ $range }}g" class="highlight" style="background-color: #ecb90d; color: white;">
                       {{ $outside_dhk_rules[$range]->discounted_rate }}
                     </td>
+                  @endif
                   @else
                     <td data-label="{{ $range }}g" class="highlight">
                       {{ $default }}
@@ -481,9 +505,15 @@
                 <td data-label="Delivery">Outside DHK</td>
                 @foreach ($weight_ranges_outside_outside as $range => $default)
                   @if ($outside_outside_rules->has($range))
+                  @if($outside_outside_rules[$range]->discounted_rate <70)
+                    <td data-label="{{ $range }}g" class="highlight" style="background-color: red; color: white;">
+                      {{ $outside_outside_rules[$range]->discounted_rate }}
+                    </td>
+                    @else
                     <td data-label="{{ $range }}g" class="highlight" style="background-color: #ecb90d; color: white;">
                       {{ $outside_outside_rules[$range]->discounted_rate }}
                     </td>
+                    @endif
                   @else
                     <td data-label="{{ $range }}g" class="highlight">
                       {{ $default }}

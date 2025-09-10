@@ -18,9 +18,27 @@
 
     <style>
         /* Custom styles to complement Tailwind */
+
+        :root{
+            --primary-color: #ecb90d; /* blue-500 */
+            --secondary-color: #64748b; /* slate-500 */
+            --light-bg: #f8fafc; /* slate-50 */
+            --border-color: #e2e8f0; /* slate-200 */
+            --success-color: #28a745; /* green-500 */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc; /* slate-50 */
+        }
+
+        .back-btn{
+            background-color: var(--secondary-color);
+            padding: 0.5rem 1rem;
+            width: 170px ;
+            border-radius: 0.375rem;
+        
+            color: white;
         }
 
         /* Custom styling for responsive table headers */
@@ -65,6 +83,11 @@
                 Onboarding Dashboard
             </h1>
             <p class="mt-1 text-slate-500">Manage and track all merchant discounts.</p>
+             <div class="text-left mt-4 back-btn">
+            <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-back">
+                <i class="fas fa-arrow-left me-2"></i>Back to Home
+            </a>
+        </div>
         </header>
 
         <!-- Search and Filter Section -->
@@ -150,7 +173,7 @@
                             <td data-label="Status" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
                                 @if($discount->is_active == 0)
                                     <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
-                                        <i class="fas fa-clock mr-1.5"></i> Pending
+                                        <i class="fas fa-clock mr-1.5"></i> Upon Discussion
                                     </span>
                                 @elseif($discount->is_active == 1)
                                     <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
@@ -188,11 +211,13 @@
                     </tbody>
                 </table>
             </div>
+
+            
         </div>
         
         <!-- Pagination (Example) -->
         <div class="mt-6">
-            {{-- $discounts->links() --}}
+           
         </div>
 
     </div>

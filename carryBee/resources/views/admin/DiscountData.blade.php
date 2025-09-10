@@ -164,7 +164,7 @@
                     </a>
                    </td>
                    @if($merchant->is_active == 0)
-                   <td><span class="badge bg-warning text-dark">Pending</span></td>
+                   <td><span class="badge bg-warning text-dark">Upon Discussion</span></td>
                    @elseif($merchant->is_active == 1)
                     <td><span class="badge bg-success">Approved</span></td> 
                      @else

@@ -399,7 +399,7 @@
                                         <!-- **MODIFIED**: Note the indexed names like region[0], weight_range[0][], etc. -->
                                         <tr>
                                             <td data-label="Region">
-                                                <select class="form-select" name="region[0]">
+                                                <select class="form-select" name="region[0]" required>
                                                     <option value="" selected disabled>Select region</option>
                                                     <option value="same_city">Same City</option>
                                                     <option value="dhk_sub">DHK > Sub City</option>
