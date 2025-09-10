@@ -5,20 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Discount Management Dashboard</title>
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Font Awesome for Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         /* Custom styles to complement Tailwind */
-
         :root{
             --primary-color: #ecb90d; /* blue-500 */
             --secondary-color: #64748b; /* slate-500 */
@@ -37,7 +33,6 @@
             padding: 0.5rem 1rem;
             width: 170px ;
             border-radius: 0.375rem;
-        
             color: white;
         }
 
@@ -56,41 +51,39 @@
         }
     </style>
     <script>
-      // Configuration for Tailwind CSS
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: {
-                DEFAULT: '#ecb90d', // blue-500
-                hover: '#ecb90d', // blue-600
-              },
-              secondary: '#64748b', // slate-500
+        // Configuration for Tailwind CSS
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#ecb90d', // blue-500
+                            hover: '#ecb90d', // blue-600
+                        },
+                        secondary: '#64748b', // slate-500
+                    }
+                }
             }
-          }
         }
-      }
     </script>
 </head>
 <body class="antialiased text-slate-700">
 
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         
-        <!-- Page Header -->
         <header class="mb-8">
             <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 flex items-center">
                 <i class="fas fa-tags mr-3 text-primary-DEFAULT"></i>
                 Onboarding Dashboard
             </h1>
             <p class="mt-1 text-slate-500">Manage and track all merchant discounts.</p>
-             <div class="text-left mt-4 back-btn">
-            <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-back">
-                <i class="fas fa-arrow-left me-2"></i>Back to Home
-            </a>
-        </div>
+            <div class="text-left mt-4 back-btn">
+                <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-back">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Home
+                </a>
+            </div>
         </header>
 
-        <!-- Search and Filter Section -->
         <div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm mb-6">
             <form action="{{ route('discounts') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-4">
                 <div class="relative w-full sm:w-auto sm:flex-grow">
@@ -115,11 +108,9 @@
             </form>
         </div>
 
-        <!-- Discounts Table Card -->
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left">
-                    <!-- Table Header -->
                     <thead class="hidden md:table-header-group bg-slate-50 border-b border-slate-200 text-xs text-slate-500 uppercase tracking-wider">
                         <tr>
                             <th scope="col" class="px-6 py-4 font-medium">Merchant</th>
@@ -131,18 +122,15 @@
                         </tr>
                     </thead>
                     
-                    <!-- Table Body -->
                     <tbody>
                         @forelse($discounts as $discount)
                         <tr class="block md:table-row bg-white hover:bg-slate-50 transition-colors duration-150 border-b border-slate-200 last:border-b-0 md:border-b">
                             
-                            <!-- Merchant Info Cell -->
                             <td data-label="Merchant" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
-                                <div class="font-semibold text-slate-800">{{ $discount->merchant_name }}</div>
-                                <div class="text-slate-500 md:hidden">{{ $discount->merchant_id }}</div>
+                                <div class="font-semibold text-slate-800">{{ $discount->merchant_name }} </div>
+                                <div class="text-slate-500">{{ $discount->merchant_id }}</div>
                             </td>
 
-                            <!-- Contact Info Cell -->
                             <td data-label="Contact" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
                                 <div>
                                     <div class="text-slate-800">{{ $discount->merchant_email }}</div>
@@ -150,7 +138,6 @@
                                 </div>
                             </td>
 
-                            <!-- Details Cell -->
                             <td data-label="Details" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
                                 <div>
                                     <div class="text-slate-800">{{ $discount->pickup_hub }}</div>
@@ -158,7 +145,6 @@
                                 </div>
                             </td>
 
-                            <!-- Requirements Cell -->
                             <td data-label="Requirements" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
                                 <div class="flex flex-wrap gap-1.5">
                                     @foreach($discount->requirements ?? [] as $requirement)
@@ -169,7 +155,6 @@
                                 </div>
                             </td>
 
-                            <!-- Status Cell -->
                             <td data-label="Status" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
                                 @if($discount->is_active == 0)
                                     <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
@@ -186,9 +171,14 @@
                                 @endif
                             </td>
 
-                            <!-- Actions Cell -->
                             <td data-label="Actions" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-end md:justify-center">
                                 <div class="flex items-center gap-2">
+                                    @if($discount->is_active == 0)
+                                    <a href="{{ route('discount.edit', $discount->id) }}" title="Edit" class="h-9 w-9 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-primary-DEFAULT rounded-full transition-colors duration-200">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    @endif
+
                                     <a href="{{ route('DiscountRuleShow', $discount->id) }}" title="View Details" class="h-9 w-9 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-primary-DEFAULT rounded-full transition-colors duration-200">
                                         <i class="fas fa-eye"></i>
                                     </a>
@@ -199,7 +189,6 @@
                             </td>
                         </tr>
                         @empty
-                        <!-- Empty State -->
                         <tr>
                             <td colspan="6" class="text-center py-12 px-6">
                                 <i class="fas fa-inbox fa-3x text-slate-300 mb-4"></i>
@@ -211,11 +200,9 @@
                     </tbody>
                 </table>
             </div>
-
             
         </div>
         
-        <!-- Pagination (Example) -->
         <div class="mt-6">
            
         </div>

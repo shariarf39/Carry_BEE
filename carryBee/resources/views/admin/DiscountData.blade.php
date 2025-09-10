@@ -184,7 +184,7 @@
     <!-- Reject -->
     <form action="{{ route('merchant.reject', $merchant->id) }}" method="POST" class="d-inline">
         @csrf
-        <button type="submit" class="btn btn-sm btn-outline-danger me-1" onclick="return confirm('Are you sure you want to REJECT this merchant?')">
+        <button type="submit" class="btn btn-sm btn-outline-danger me-1" onclick="return confirm('Upon Discussion')">
             <i class="fa fa-times"></i>
         </button>
     </form>
@@ -192,7 +192,7 @@
     <!-- Ban -->
     <form action="{{ route('merchant.ban', $merchant->id) }}" method="POST" class="d-inline">
         @csrf
-        <button type="submit" class="btn btn-sm btn-outline-warning" onclick="return confirm('Are you sure you want to BAN this merchant?')">
+        <button type="submit" class="btn btn-sm btn-outline-warning" onclick="return confirm('Do you want to reject this discount?')">
             <i class="fa fa-ban"></i>
         </button>
     </form>

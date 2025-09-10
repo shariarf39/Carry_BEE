@@ -255,31 +255,7 @@
                 <form method="POST" action="{{ route('storeDiscount') }}" class="needs-validation" novalidate>
                     @csrf
 
-                    <!-- Configuration Toggle -->
-                    <div class="row mb-4">
-                        <div class="col-12">
-                            <div class="card border-0 shadow-sm">
-                                <div class="card-body p-3">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-primary bg-opacity-10 p-3 rounded me-3">
-                                                <i class="fas fa-percentage" style="color: #ecb90d; font-size: 1.5rem;"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-1 fw-semibold">Discount Configuration</h6>
-                                                <p class="text-muted small mb-0">Toggle ON for custom rules, OFF for defaults.</p>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch mb-0">
-                                            <input class="form-check-input" type="checkbox" id="autoApplyToggle" onchange="toggleDiscountType()" style="width: 3.5rem; height: 1.75rem;">
-                                            <label class="form-check-label" for="autoApplyToggle"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                  
                     <!-- Merchant Information Section -->
                     <div class="card mb-4 border-primary">
                         <div class="card-header bg-light-primary d-flex justify-content-between align-items-center">
@@ -328,7 +304,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                   <label for="kam_list" class="form-label">KAM LIST</label>
+                                   <label for="kam_list" class="form-label">KAM Name</label>
                                    <select class="form-select" id="kam_list" name="kma" required>
                                      <option value="" selected disabled>Select KAM</option>
                                      @foreach($kmaList as $kma)
@@ -466,6 +442,30 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+  <!-- Configuration Toggle -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body p-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-primary bg-opacity-10 p-3 rounded me-3">
+                                                <i class="fas fa-percentage" style="color: #ecb90d; font-size: 1.5rem;"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-1 fw-semibold">Discount Configuration</h6>
+                                                <p class="text-muted small mb-0">Toggle ON for custom rules, OFF for defaults.</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-check form-switch mb-0">
+                                            <input class="form-check-input" type="checkbox" id="autoApplyToggle" onchange="toggleDiscountType()" style="width: 3.5rem; height: 1.75rem;">
+                                            <label class="form-check-label" for="autoApplyToggle"></label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

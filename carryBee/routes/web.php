@@ -41,6 +41,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/rules/{id}',  'DeRuleShow')->name('DeRuleShow');
    
     Route::get('/default-rate', 'DefaultRate')->name('DefaultRate');
+
+    Route::get('/discounts/{discount}/edit',  'edit')->name('discount.edit');
+    Route::put('/discounts/{discount}', 'update')->name('discount.update');
+
+    Route::get('/discounts/export', 'export')->name('discounts.export');
 });
 
 });

@@ -159,4 +159,182 @@ class HomeController extends Controller
         return view('Client.pages.defultsRate', compact('discount', 'rules'));
     }
 
+
+
+     public function edit(Discount $discount)
+    {
+        // Load the related discount rules for this merchant
+         $discount->load('rules');
+        $discountRules = $discount->rules;
+
+        // Fetch other necessary data for the form (e.g., KMA, locations, categories)
+        $kmaList = KmaList::all();
+        $locations = Hub::all();
+        $categories = Catagories::all();
+
+        // Pass all data to the new edit view
+        return view('Client.pages.editdiscount', compact(
+            'discount', 
+            'discountRules', 
+            'kmaList', 
+            'locations', 
+            'categories'
+        ));
+    }
+
+
+ public function update(Request $request, Discount $discount)
+    {
+        $validatedData = $request->validate([
+            'merchant_id' => 'required|string|max:255',
+            'onboarding_date' => 'required|date',
+            'merchant_name' => 'required|string|max:255',
+            'promised_parcels' => 'required|integer|min:1',
+            'phone' => 'required|string|max:255',
+            'kma' => 'required|string|max:255',
+            'pickup_hub' => 'required|string|max:255',
+            'product_category' => 'required|string|max:255',
+            'requirements' => 'array',
+            'region' => 'nullable|array',
+            'region.*' => 'required_with:region|string',
+            'weight_range' => 'nullable|array',
+            'weight_range.*' => 'required_with:region|array',
+            'weight_range.*.*' => 'required_with:region|string',
+            'discounted_rate' => 'nullable|array',
+            'discounted_rate.*' => 'required_with:region|numeric|min:0',
+            'return_charge' => 'nullable|array',
+            'return_charge.*' => 'required_with:region|numeric|min:0',
+            'cod' => 'nullable|array',
+            'cod.*' => 'required_with:region|numeric|min:0',
+        ]);
+
+        $discount->update([
+            'merchant_id' => $validatedData['merchant_id'],
+            'onboarding_date' => $validatedData['onboarding_date'],
+            'merchant_name' => $validatedData['merchant_name'],
+            'promised_parcels' => $validatedData['promised_parcels'],
+            'phone' => $validatedData['phone'],
+            'kma' => $validatedData['kma'],
+            'pickup_hub' => $validatedData['pickup_hub'],
+            'product_category' => $validatedData['product_category'],
+            'requirements' => $validatedData['requirements'] ?? null,
+            'is_active' => 0,
+        ]);
+
+        $discount->rules()->delete();
+
+        if ($request->has('region') && is_array($request->input('region'))) {
+            foreach ($request->input('region') as $index => $region) {
+                if (!empty($request->input("weight_range.$index"))) {
+                    foreach ($request->input("weight_range.$index") as $weightRange) {
+                        $discount->rules()->create([
+                            'region' => $region,
+                            'weight_range' => $weightRange,
+                            'discounted_rate' => $request->input("discounted_rate.$index"),
+                            'return_charge' => $request->input("return_charge.$index"),
+                            'cod' => $request->input("cod.$index"),
+                        ]);
+                    }
+                }
+            }
+        }
+
+        return redirect()->route('discounts')->with('success', 'Discount updated successfully!');
+    }
+
+    public function export()
+    {
+        // Define the headers for the CSV file.
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="discounts.csv"',
+        ];
+
+        // Create a StreamedResponse to handle large datasets efficiently.
+        $callback = function () {
+            $file = fopen('php://output', 'w');
+
+            // Write the column headers to the CSV file.
+            fputcsv($file, [
+                'Merchant Name',
+                'Merchant ID',
+                'Merchant Email',
+                'Onboarding Date',
+                'Phone',
+                'KAM',
+                'Pickup Hub',
+                'Product Category',
+                'Promised Parcels',
+                'Special Requirements',
+                'Region',
+                'Weight Range',
+                'Discounted Rate',
+                'Return Charge (%)',
+                'COD (%)',
+                'Status'
+            ]);
+
+            // Fetch all discounts along with their associated rules.
+            $discounts = Discount::with('rules')->get();
+
+            foreach ($discounts as $discount) {
+                // Determine the status label based on the is_active field.
+                $status = 'Upon Discussion';
+                if ($discount->is_active === 1) {
+                    $status = 'Approved';
+                } elseif ($discount->is_active === 2) { // Assuming 2 is for 'Rejected'
+                    $status = 'Rejected';
+                }
+
+                // If a discount has custom rules, write a row for each rule.
+                if ($discount->rules->isNotEmpty()) {
+                    foreach ($discount->rules as $rule) {
+                        fputcsv($file, [
+                            $discount->merchant_name,
+                            $discount->merchant_id,
+                            $discount->merchant_email,
+                            $discount->onboarding_date,
+                            $discount->phone,
+                            $discount->kma,
+                            $discount->pickup_hub,
+                            $discount->product_category,
+                            $discount->promised_parcels,
+                            implode(', ', (array) $discount->requirements),
+                            $rule->region,
+                            $rule->weight_range,
+                            $rule->discounted_rate,
+                            $rule->return_charge,
+                            $rule->cod,
+                            $status
+                        ]);
+                    }
+                } else {
+                    // If no custom rules exist, write a single row with default placeholders.
+                    fputcsv($file, [
+                        $discount->merchant_name,
+                        $discount->merchant_id,
+                        $discount->merchant_email,
+                        $discount->onboarding_date,
+                        $discount->phone,
+                        $discount->kma,
+                        $discount->pickup_hub,
+                        $discount->product_category,
+                        $discount->promised_parcels,
+                        implode(', ', (array) $discount->requirements),
+                        'Default', // Indicate that default rates apply
+                        'N/A',
+                        'N/A',
+                        'N/A',
+                        'N/A',
+                        $status
+                    ]);
+                }
+            }
+
+            fclose($file);
+        };
+
+        return new StreamedResponse($callback, 200, $headers);
+    }
+
 }
