@@ -438,7 +438,7 @@
                                                     </td>
                                                     <td data-label="Weight Range">
                                                         <div class="weight-range-checkboxes">
-                                                            @foreach(['0-200', '201-500', '501-1000', '1001-1500', '1501-2000', '2001-2500', '2500+'] as $weight)
+                                                            @foreach(['0-200', '201-500', '501-1000', '1001-1500', '1501-2000', '2001-2500'] as $weight)
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox" name="weight_range[{{ $i }}][]" value="{{ $weight }}" id="weight{{$i}}-{{ str_replace('+', '', $weight) }}" {{ $rules->pluck('weight_range')->contains($weight) ? 'checked' : '' }}>
                                                                 <label class="form-check-label" for="weight{{$i}}-{{ str_replace('+', '', $weight) }}">{{ $weight }} gm</label>

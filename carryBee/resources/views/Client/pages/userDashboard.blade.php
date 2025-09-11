@@ -411,7 +411,7 @@
                                                         <label class="form-check-label" for="weight2001-2500">2001-2500 gm</label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="weight_range[0][]" value="2500+" id="weight2500+">
+                                                        <input class="form-check-input" type="checkbox" name="weight_range[0][]" value="2500+" id="weight2500+" disabled>
                                                         <label class="form-check-label" for="weight2500+">2500+ per gm</label>
                                                     </div>
                                                 </div>
