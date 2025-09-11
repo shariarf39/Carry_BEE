@@ -67,6 +67,14 @@ class HomeController extends Controller
             'cod.*' => 'required_with:region|numeric|min:0',
         ]);
 
+
+         $existing = Discount::where('merchant_id', $validated['merchant_id'])
+            ->where('is_active', 0)
+            ->first();
+        if ($existing) {
+            return redirect()->back()->with('error', 'A request for this Merchant ID is already under discussion. Please wait for approval or rejection before submitting again.');
+        }
+
         $discount = Discount::create([
             'merchant_id' => $validated['merchant_id'],
             'merchant_name' => $validated['merchant_name'],
