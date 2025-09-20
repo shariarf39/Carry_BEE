@@ -70,7 +70,7 @@
     <div class="container form-container">
         <div class="card shadow-sm">
             <div class="card-header text-center">
-                <h4 class="mb-0"><i class="fas fa-sign-in-alt me-2"></i>Carry Bee Acquisition</h4>
+                <h4 class="mb-0"><i class="fas "></i>Carry Bee Acquisition</h4>
             </div>
 
             <div class="card-body p-4">
