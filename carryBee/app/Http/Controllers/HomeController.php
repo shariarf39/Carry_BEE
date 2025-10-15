@@ -52,6 +52,8 @@ class HomeController extends Controller
             'product_category' => 'required|string|max:255',
             'kma' => 'required|string|max:255',
             'promised_parcels' => 'required|integer|min:0',
+            'acquisition_type' => 'required|string|max:255',
+            'business_owner' => 'required|string|max:255',
             
             // Validation for the custom rules, if they exist
             'region' => 'nullable|array',
@@ -83,6 +85,8 @@ class HomeController extends Controller
             'phone' => $validated['phone'],
             'kma' => $validated['kma'],
             'pickup_hub' => $validated['pickup_hub'],
+            'acquisition_type' => $validated['acquisition_type'],
+            'business_owner' => $validated['business_owner'],
             'product_category' => $validated['product_category'],
             'promised_parcels' => $validated['promised_parcels'],
             'requirements' => $request->input('requirements', []), // requirements are optional checkboxes

@@ -215,6 +215,14 @@
               <span class="info-label">Promised Parcels/Day:</span>
               <span class="info-value">{{ $discount->promised_parcels }}</span>
             </div>
+              <div class="mb-2">
+              <span class="info-label">Acquisition Type:</span>
+              <span class="info-value">{{ $discount->acquisition_type }}</span>
+            </div>
+              <div class="mb-2">
+              <span class="info-label">Business Owner/ Merchant Name:</span>
+              <span class="info-value">{{ $discount->business_owner }}</span>
+            </div>
           </div>
         </div>
         
@@ -549,15 +557,12 @@
       @endforeach
     @endif
   </div>
-
-  <!-- Bootstrap JS Bundle with Popper -->
+ <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Font Awesome JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   
   <script>
-    // This script handles exporting all merchant table data to a single CSV file,
-    // with each merchant's data consolidated into a single row.
     document.querySelector('.export-all-btn').addEventListener('click', () => {
         let csvRows = [];
         const merchants = document.querySelectorAll('.merchant-section');
@@ -567,7 +572,7 @@
             return;
         }
 
-        // 1. Build the dynamic header row.
+        // 1. Build the dynamic header row
         const firstTable = merchants[0].querySelector('table');
         if (!firstTable) return;
 
@@ -575,34 +580,31 @@
         const dataRowsForHeader = firstTable.querySelectorAll('tbody tr:not(.title-row)');
         const numDataRows = dataRowsForHeader.length;
 
-        // Start with the new headers for merchant info.
         let header = [
             "KAM Email", "Phone", "Onboarding Date", "Timestamp", "Pickup Hub", 
-            "Product Category", "Promised Parcels/Day"
+            "Product Category", "Promised Parcels/Day", 
+            "Business Owner/Merchant Name", "Acquisition Type"
         ];
         
-        // Add "Merchant ID" and "Merchant Name" headers.
-        header.push(headerCells[0].innerText.trim());
-        header.push(headerCells[1].innerText.trim());
+        // Business ID & Business Name (renamed)
+        header.push("Business ID");
+        header.push("Business Name");
 
-        // Define the block of headers that repeats for each region.
         const repeatingHeaderBlock = [];
         for (let i = 2; i < headerCells.length - 2; i++) { 
             repeatingHeaderBlock.push(headerCells[i].innerText.trim().replace(/\n/g, ' '));
         }
 
-        // Repeat the block of headers for each region.
         for (let i = 0; i < numDataRows; i++) {
             header.push(...repeatingHeaderBlock);
         }
 
-        // Add the final two headers.
         header.push(headerCells[headerCells.length - 2].innerText.trim());
         header.push(headerCells[headerCells.length - 1].innerText.trim());
 
         csvRows.push(header.map(h => `"${h.replace(/"/g, '""')}"`).join(','));
 
-        // 2. Build the data rows, one consolidated row per merchant.
+        // 2. Build consolidated data rows
         merchants.forEach(merchant => {
             const table = merchant.querySelector('table');
             if (!table) return;
@@ -610,35 +612,33 @@
             const rows = table.querySelectorAll('tbody tr:not(.title-row)');
             if (rows.length === 0) return;
 
-            // --- Extract Merchant Info ---
             const merchantInfo = {};
             merchant.querySelectorAll('.info-label').forEach(span => {
                 const label = span.innerText.trim().replace(':', '');
                 const value = span.nextElementSibling ? span.nextElementSibling.innerText.trim() : '';
                 merchantInfo[label] = value;
             });
+
             const timestamp = new Date().toLocaleString('en-CA', { timeZone: 'Asia/Dhaka' }).replace(',', '');
 
-
-            // --- Start building the single line of data ---
             let singleLineData = [
-                merchantInfo["Merchant Email"],
+                merchantInfo["KAM Email"],
                 merchantInfo["Phone"],
                 merchantInfo["Onboarding Date"],
                 timestamp,
                 merchantInfo["Pickup Hub"],
                 merchantInfo["Product Category"],
-                merchantInfo["Promised Parcels/Day"]
+                merchantInfo["Promised Parcels/Day"],
+                merchantInfo["Business Owner/ Merchant Name"],
+                merchantInfo["Acquisition Type"]
             ];
             
             let lastTwoCellsData = [];
 
-            // Get Merchant ID and Name from the first data row.
             const firstRowCells = rows[0].querySelectorAll('td');
-            singleLineData.push(firstRowCells[0].innerText.trim()); // Merchant ID
-            singleLineData.push(firstRowCells[1].innerText.trim()); // Merchant Name
+            singleLineData.push(firstRowCells[0].innerText.trim()); // Business ID
+            singleLineData.push(firstRowCells[1].innerText.trim()); // Business Name
 
-            // Process each data row to collect the rate information.
             rows.forEach((row, index) => {
                 const cells = row.querySelectorAll('td');
                 const startIndex = (index === 0) ? 2 : 0;
@@ -654,13 +654,12 @@
                 }
             });
 
-            // Append the final two data points.
             singleLineData.push(...lastTwoCellsData);
 
             csvRows.push(singleLineData.map(d => `"${String(d).replace(/"/g, '""')}"`).join(','));
         });
 
-        // 3. Create the CSV file content and trigger the download.
+        // 3. Create CSV and download
         const csvContent = csvRows.join('\n');
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
@@ -676,5 +675,6 @@
         URL.revokeObjectURL(url);
     });
   </script>
+
 </body>
 </html>

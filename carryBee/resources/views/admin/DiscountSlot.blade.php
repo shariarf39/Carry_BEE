@@ -193,6 +193,7 @@
                             <span class="info-label">Promised Parcels/Day:</span>
                             <span class="info-value">{{ $discount->promised_parcels }}</span>
                         </div>
+                        
                     </div>
                 </div>
             </div>

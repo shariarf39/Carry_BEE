@@ -142,6 +142,8 @@
                                 <div>
                                     <div class="text-slate-800">{{ $discount->pickup_hub }}</div>
                                     <div class="text-slate-500">{{ $discount->product_category }} ({{ $discount->promised_parcels }}/day)</div>
+                                    <div class="text-slate-800">Business Owner- {{ $discount->business_owner }}</div>
+                                    <div class="text-slate-800">{{ $discount->acquisition_type }}</div>
                                 </div>
                             </td>
 

@@ -273,11 +273,11 @@
                         <div class="card-body">
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label for="merchant_id" class="form-label">Merchant ID</label>
+                                    <label for="merchant_id" class="form-label">Business ID</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                                         <input type="text" class="form-control" id="merchant_id" name="merchant_id" placeholder="MER12345" required>
-                                        <div class="invalid-feedback">Please provide a merchant ID.</div>
+                                        <div class="invalid-feedback">Please provide a business ID.</div>
                                     </div>
                                 </div>
                                 <input type="hidden" name="merchant_email" value="{{ Auth::user()->email }}">
@@ -289,10 +289,17 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="merchant_name" class="form-label">Merchant Name</label>
+                                    <label for="merchant_name" class="form-label">Business Name</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                                         <input type="text" class="form-control" id="merchant_name" name="merchant_name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="business_owner" class="form-label">Business Owner/ Merchant Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        <input type="text" class="form-control" id="business_owner" name="business_owner" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -311,6 +318,20 @@
                                         <div class="invalid-feedback">Please provide a valid phone number.</div>
                                     </div>
                                 </div>
+
+                                 <div class="col-md-6">
+                                   <label for="kam_list" class="form-label">Acquisition Type</label>
+                                   <select class="form-select" id="kam_list" name="acquisition_type" required>
+                                     <option value="" selected disabled>Select Acquisition Type</option>
+
+                                     <option value="lead_gen">Lead Gen</option>
+                                        <option value="hunt">Hunt</option>
+                                        <option value="self_registered">Self Registered</option>
+                                        <option value="churn_back">Churn Back</option>
+
+                                   </select>
+                                </div>
+
                                 <div class="col-md-6">
                                    <label for="kam_list" class="form-label">KAM Name</label>
                                    <select class="form-select" id="kam_list" name="kma" required>

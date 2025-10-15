@@ -135,6 +135,11 @@
                         <strong>{{ $merchant->merchant_name }}</strong><br>
                         <small class="text-muted">#{{ $merchant->merchant_id }}</small><br>
                         <small class="text-muted">-{{ $merchant->kma }}</small>
+                        <br>
+                        <br>
+                         <small class="text-muted">{{ $merchant->business_owner }}</small>
+                            <br>
+                          <small class="text-muted">{{ $merchant->acquisition_type }}</small>
                     </td>
                     <td class="text-start">
                         <strong>{{ ucfirst($merchant->product_category) }}</strong><br>
@@ -285,136 +290,149 @@ document.querySelectorAll('.action-btn').forEach(button => {
 });
 
 
-  document.getElementById('tableSearch').addEventListener('input', function () {
-        const searchValue = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#approvalTable tbody tr');
+document.getElementById('tableSearch').addEventListener('input', function () {
+            const searchValue = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#approvalTable tbody tr');
 
-        rows.forEach(row => {
-            const rowText = row.innerText.toLowerCase();
-            row.style.display = rowText.includes(searchValue) ? '' : 'none';
-        });
+            rows.forEach(row => {
+                    const rowText = row.innerText.toLowerCase();
+                    row.style.display = rowText.includes(searchValue) ? '' : 'none';
+            });
     });
 
     function formatCurrency(value) {
-        return value.toString().replace(/[৳à§³]/g, '').trim();
+            return value.toString().replace(/[৳à§³]/g, '').trim();
     }
 
     function showBreakdown(data) {
-        const tbody = document.querySelector('#breakdownTable tbody');
-        tbody.innerHTML = '';
+            const tbody = document.querySelector('#breakdownTable tbody');
+            tbody.innerHTML = '';
 
-        data.forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${row.region}</td>
-                <td>${row.weightRange}</td>
-                <td>৳${row.defaultRate}</td>
-                <td>৳${row.discountedRate}</td>
-                <td>৳${row.dailyRevenue}</td>
-                <td>৳${row.dailyBurn}</td>
-                <td>৳${row.monthlyRevenue}</td>
-                <td>৳${row.monthlyBurn}</td>
-                <td>৳${row.avgRevenue}</td>
-                <td>৳${row.avgBurn}</td>
-            `;
-            tbody.appendChild(tr);
-        });
+            data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                            <td>${row.region}</td>
+                            <td>${row.weightRange}</td>
+                            <td>৳${row.defaultRate}</td>
+                            <td>৳${row.discountedRate}</td>
+                            <td>৳${row.dailyRevenue}</td>
+                            <td>৳${row.dailyBurn}</td>
+                            <td>৳${row.monthlyRevenue}</td>
+                            <td>৳${row.monthlyBurn}</td>
+                            <td>৳${row.avgRevenue}</td>
+                            <td>৳${row.avgBurn}</td>
+                    `;
+                    tbody.appendChild(tr);
+            });
 
-        const modal = new bootstrap.Modal(document.getElementById('breakdownModal'));
-        modal.show();
+            const modal = new bootstrap.Modal(document.getElementById('breakdownModal'));
+            modal.show();
     }
 
     document.getElementById('exportTableBtn').addEventListener('click', () => {
-        const table = document.getElementById('approvalTable');
-        const headers = [
-            'Merchant Name', 'Merchant ID', 'Category', 
-            'Min Burn Daily (BDT)', 'Max Burn Daily (BDT)',
-            'Max Revenue Daily (BDT)', 'Min Revenue Daily (BDT)',
-            'Location', 'Total Revenue Daily (BDT)',
-            'Parcels Daily', 'Parcels Monthly', 'Status'
-        ];
+            const table = document.getElementById('approvalTable');
+            const headers = [
+                    'Merchant Name', 'Merchant ID', 'Category', 
+                    'Min Burn Daily (BDT)', 'Max Burn Daily (BDT)',
+                    'Max Revenue Daily (BDT)', 'Min Revenue Daily (BDT)',
+                    'Location', 'Total Revenue Daily (BDT)',
+                    'Parcels Daily', 'Parcels Monthly', 'Business Owner', 'Acquisition Type', 'Status'
+            ];
 
-        const rows = [];
+            const rows = [];
 
-        table.querySelectorAll('tbody tr').forEach(tr => {
-            if (tr.style.display === 'none') return;
-            const cols = Array.from(tr.querySelectorAll('td'));
-            const rowData = [];
+            table.querySelectorAll('tbody tr').forEach(tr => {
+                    if (tr.style.display === 'none') return;
+                    const cols = Array.from(tr.querySelectorAll('td'));
+                    const rowData = [];
 
-            const merchantCol = cols[0].innerText.split('\n');
-            rowData.push(
-                merchantCol[0].trim(),
-                merchantCol[1] ? merchantCol[1].replace('#', '').trim() : ''
-            );
+                    // Merchant Name, Merchant ID
+                    const merchantCol = cols[0].innerText.split('\n');
+                    rowData.push(
+                            merchantCol[0].trim(),
+                            merchantCol[1] ? merchantCol[1].replace('#', '').trim() : ''
+                    );
 
-            const categoryCol = cols[1].innerText.split('\n');
-            rowData.push(
-                categoryCol[0].trim(),
-                formatCurrency(categoryCol.find(t => t.includes('Daily:')) || '0'),
-                formatCurrency(categoryCol.find(t => t.includes('Daily Burn:')) || '0'),
-                formatCurrency(categoryCol.find(t => t.includes('Max Revenue:')) || '0'),
-                formatCurrency(categoryCol.find(t => t.includes('Min Revenue:')) || '0')
-            );
+                    // Category, Min Burn, Max Burn, Max Revenue, Min Revenue
+                    const categoryCol = cols[1].innerText.split('\n');
+                    rowData.push(
+                            categoryCol[0].trim(),
+                            formatCurrency(categoryCol.find(t => t.includes('Daily Burn:')) || '0'),
+                            formatCurrency(categoryCol.find(t => t.includes('Daily Burn:')) || '0'),
+                            formatCurrency(categoryCol.find(t => t.includes('Max Revenue:')) || '0'),
+                            formatCurrency(categoryCol.find(t => t.includes('Min Revenue:')) || '0')
+                    );
 
-            const locationCol = cols[2].innerText.split('\n');
-            rowData.push(
-                locationCol[0].trim(),
-                formatCurrency(locationCol.find(t => t.includes('Total Revenue:')) || '0')
-            );
+                    // Location, Total Revenue
+                    const locationCol = cols[2].innerText.split('\n');
+                    rowData.push(
+                            locationCol[0].trim(),
+                            formatCurrency(locationCol.find(t => t.includes('Total Revenue:')) || '0')
+                    );
 
-            const volumeCol = cols[3].innerText.split('\n');
-            rowData.push(
-                volumeCol[0].replace('/day', '').trim(),
-                volumeCol[1] ? volumeCol[1].replace('/month', '').trim() : ''
-            );
+                    // Parcels Daily, Parcels Monthly
+                    const volumeCol = cols[3].innerText.split('\n');
+                    rowData.push(
+                            volumeCol[0].replace('/day', '').trim(),
+                            volumeCol[1] ? volumeCol[1].replace('/month', '').trim() : ''
+                    );
 
-            rowData.push(cols[4].innerText.trim());
-            rows.push(rowData);
-        });
+                    // Business Owner, Acquisition Type
+                    // These are in merchantCol[3] and merchantCol[4] (see your HTML)
+                    rowData.push(
+                            merchantCol[4] ? merchantCol[4].trim() : '',
+                            merchantCol[5] ? merchantCol[5].trim() : ''
+                    );
 
-        let csvContent = "\uFEFF" + headers.join(',') + '\n';
-        rows.forEach(row => {
-            csvContent += row.map(item => `"${item}"`).join(',') + '\n';
-        });
+                    // Status
+                    rowData.push(cols[5] ? cols[5].innerText.trim() : '');
 
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'merchant_approvals.csv');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+                    rows.push(rowData);
+            });
+
+            let csvContent = "\uFEFF" + headers.join(',') + '\n';
+            rows.forEach(row => {
+                    csvContent += row.map(item => `"${item}"`).join(',') + '\n';
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'merchant_approvals.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
     });
 
     function exportBreakdownToCSV() {
-        const table = document.getElementById('breakdownTable');
-        const headers = Array.from(table.querySelectorAll('thead th')).map(th => 
-            th.innerText.trim().includes('Rate') || th.innerText.trim().includes('Revenue') || th.innerText.trim().includes('Burn') ? 
-            `${th.innerText.trim()} (BDT)` : 
-            th.innerText.trim()
-        );
+            const table = document.getElementById('breakdownTable');
+            const headers = Array.from(table.querySelectorAll('thead th')).map(th => 
+                    th.innerText.trim().includes('Rate') || th.innerText.trim().includes('Revenue') || th.innerText.trim().includes('Burn') ? 
+                    `${th.innerText.trim()} (BDT)` : 
+                    th.innerText.trim()
+            );
 
-        const rows = [];
-        table.querySelectorAll('tbody tr').forEach(tr => {
-            rows.push(Array.from(tr.querySelectorAll('td')).map(td => 
-                formatCurrency(td.innerText.trim())
-            ));
-        });
+            const rows = [];
+            table.querySelectorAll('tbody tr').forEach(tr => {
+                    rows.push(Array.from(tr.querySelectorAll('td')).map(td => 
+                            formatCurrency(td.innerText.trim())
+                    ));
+            });
 
-        let csvContent = "\uFEFF" + headers.join(',') + '\n';
-        rows.forEach(row => {
-            csvContent += row.join(',') + '\n';
-        });
+            let csvContent = "\uFEFF" + headers.join(',') + '\n';
+            rows.forEach(row => {
+                    csvContent += row.join(',') + '\n';
+            });
 
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'breakdown_details.csv');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'breakdown_details.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
     }
 </script>
 @endpush
