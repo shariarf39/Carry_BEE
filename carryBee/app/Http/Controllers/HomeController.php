@@ -55,20 +55,20 @@ class HomeController extends Controller
             'acquisition_type' => 'required|string|max:255',
             'business_owner' => 'required|string|max:255',
             
-            // Validation for the custom rules, if they exist
-            'region' => 'nullable|array',
-            'region.*' => 'required_with:region|string',
-            'weight_range' => 'nullable|array',
-            'weight_range.*' => 'required_with:region|array', // Each rule must have weight ranges
-            'weight_range.*.*' => 'required_with:region|string', // Each weight range must be a string
-            'discounted_rate' => 'nullable|array',
-            'discounted_rate.*' => 'required_with:region|numeric|min:0',
-            'return_charge' => 'nullable|array',
-            'return_charge.*' => 'required_with:region|numeric|min:0',
-            'cod' => 'nullable|array',
-            'cod.*' => 'required_with:region|numeric|min:0',
+            // // Validation for the custom rules, only 'region' may be nullable
+            // 'region' => 'nullable|array',
+            // 'region.*' => 'required_with:region|string',
+            // 'weight_range' => 'array',
+            // 'weight_range.*' => 'required_with:region|array', // Each rule must have weight ranges
+            // 'weight_range.*.*' => 'required_with:region|string', // Each weight range must be a string
+            // 'discounted_rate' => 'array',
+            // 'discounted_rate.*' => 'required_with:region|numeric|min:0',
+            // 'return_charge' => 'array',
+            // 'return_charge.*' => 'required_with:region|numeric|min:0',
+            // 'cod' => 'array',
+            // 'cod.*' => 'required_with:region|numeric|min:0',
         ]);
-
+       
 
          $existing = Discount::where('merchant_id', $validated['merchant_id'])
             ->where('is_active', 0)
