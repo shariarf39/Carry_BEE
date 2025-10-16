@@ -377,8 +377,8 @@
                                                     <select class="form-select" name="region[0]" required>
                                                         <option value="" selected disabled>Select region</option>
                                                         <option value="same_city">Same City</option>
-                                                        <option value="dhk_sub">DHK > Sub City</option>
-                                                        <option value="dhk_outside">DHK > Outside City</option>
+                                                        <option value="dhk_sub">DHK > Sub City / Sub City > DHK / Sub City > Other Sub city</option>
+                                                    <option value="dhk_outside">DHK > Outside DHK / Sub City > Outside DHK </option>
                                                         <option value="outside_dhk">Outside DHK > DHK</option>
                                                         <option value="outside_outside">Outside DHK > Outside DHK</option>
                                                     </select>
