@@ -383,6 +383,8 @@
            
           </tr>
           <tr>
+            <td data-label="Pickup">Outside DHK</td>
+            <td data-label="Delivery">DHK</td>
           
                 @php
   $weight_ranges = [
