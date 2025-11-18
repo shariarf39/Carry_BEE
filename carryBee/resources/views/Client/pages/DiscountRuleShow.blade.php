@@ -146,6 +146,7 @@
                                 <th>Discounted Rate</th>
                                 <th>Return Charge</th>
                                 <th>COD Charge</th>
+                                <th>Additional Charge</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -156,6 +157,7 @@
                                 <td class="currency">৳{{ number_format($rule->discounted_rate, 2) }}</td>
                                 <td>{{ $rule->return_charge }}%</td>
                                 <td>{{ $rule->cod }}%</td>
+                                <td class="currency">{{ $rule->additional_charge ? '৳' . number_format($rule->additional_charge, 2) : 'N/A' }}</td>
                             </tr>
                             @endforeach
                         </tbody>

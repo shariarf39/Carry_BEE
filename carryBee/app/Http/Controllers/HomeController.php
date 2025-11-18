@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Hub;
 use App\Models\Catagories;
 use App\Models\KmaList;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class HomeController extends Controller
 {
@@ -54,6 +55,8 @@ class HomeController extends Controller
             'promised_parcels' => 'required|integer|min:0',
             'acquisition_type' => 'required|string|max:255',
             'business_owner' => 'required|string|max:255',
+            'pickup_zone' => 'required|string|max:255',
+            'merchant_type' => 'required|string|max:255',
             
             // // Validation for the custom rules, only 'region' may be nullable
             // 'region' => 'nullable|array',
@@ -89,6 +92,8 @@ class HomeController extends Controller
             'business_owner' => $validated['business_owner'],
             'product_category' => $validated['product_category'],
             'promised_parcels' => $validated['promised_parcels'],
+            'pickup_zone' => $validated['pickup_zone'],
+            'merchant_type' => $validated['merchant_type'],
             'requirements' => $request->input('requirements', []), // requirements are optional checkboxes
         ]);
 
@@ -105,8 +110,9 @@ class HomeController extends Controller
                             'region' => $regionValue,
                             'weight_range' => $weight,
                             'discounted_rate' => $request->discounted_rate[$index],
-                            'return_charge' => $request->return_charge[$index],
-                            'cod' => $request->cod[$index],
+                            'return_charge' => $request->return_charge[$index] ?? null,
+                            'cod' => $request->cod[$index] ?? null,
+                            'additional_charge' => $request->additional_charge[$index] ?? null,
                         ]);
                     }
                 }
@@ -201,11 +207,15 @@ class HomeController extends Controller
             'merchant_id' => 'required|string|max:255',
             'onboarding_date' => 'required|date',
             'merchant_name' => 'required|string|max:255',
+            'business_owner' => 'required|string|max:255',
             'promised_parcels' => 'required|integer|min:1',
             'phone' => 'required|string|max:255',
+            'acquisition_type' => 'required|string|max:255',
             'kma' => 'required|string|max:255',
             'pickup_hub' => 'required|string|max:255',
             'product_category' => 'required|string|max:255',
+            'pickup_zone' => 'required|string|max:255',
+            'merchant_type' => 'required|string|max:255',
             'requirements' => 'array',
             'region' => 'nullable|array',
             'region.*' => 'required_with:region|string',
@@ -215,20 +225,26 @@ class HomeController extends Controller
             'discounted_rate' => 'nullable|array',
             'discounted_rate.*' => 'required_with:region|numeric|min:0',
             'return_charge' => 'nullable|array',
-            'return_charge.*' => 'required_with:region|numeric|min:0',
+            'return_charge.*' => 'nullable|numeric|min:0',
             'cod' => 'nullable|array',
-            'cod.*' => 'required_with:region|numeric|min:0',
+            'cod.*' => 'nullable|numeric|min:0',
+            'additional_charge' => 'nullable|array',
+            'additional_charge.*' => 'nullable|numeric|min:0',
         ]);
 
         $discount->update([
             'merchant_id' => $validatedData['merchant_id'],
             'onboarding_date' => $validatedData['onboarding_date'],
             'merchant_name' => $validatedData['merchant_name'],
+            'business_owner' => $validatedData['business_owner'],
             'promised_parcels' => $validatedData['promised_parcels'],
             'phone' => $validatedData['phone'],
+            'acquisition_type' => $validatedData['acquisition_type'],
             'kma' => $validatedData['kma'],
             'pickup_hub' => $validatedData['pickup_hub'],
             'product_category' => $validatedData['product_category'],
+            'pickup_zone' => $validatedData['pickup_zone'],
+            'merchant_type' => $validatedData['merchant_type'],
             'requirements' => $validatedData['requirements'] ?? null,
             'is_active' => 0,
         ]);
@@ -245,6 +261,7 @@ class HomeController extends Controller
                             'discounted_rate' => $request->input("discounted_rate.$index"),
                             'return_charge' => $request->input("return_charge.$index"),
                             'cod' => $request->input("cod.$index"),
+                            'additional_charge' => $request->input("additional_charge.$index"),
                         ]);
                     }
                 }

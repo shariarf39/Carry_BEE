@@ -30,12 +30,15 @@
     
 .table-container {
       border-radius: 0.5rem;
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: visible;
       box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
     }
     
     .table {
       margin-bottom: 0;
+      min-width: 100%;
+      white-space: nowrap;
     }
     
     .table thead th {
@@ -223,6 +226,14 @@
               <span class="info-label">Business Owner/ Merchant Name:</span>
               <span class="info-value">{{ $discount->business_owner }}</span>
             </div>
+            <div class="mb-2">
+              <span class="info-label">Pick Up Zone:</span>
+              <span class="info-value">{{ $discount->pickup_zone ?? 'N/A' }}</span>
+            </div>
+            <div class="mb-2">
+              <span class="info-label">Merchant Type:</span>
+              <span class="info-value">{{ $discount->merchant_type ?? 'N/A' }}</span>
+            </div>
           </div>
         </div>
         
@@ -240,9 +251,10 @@
                 <th class="weight-range">1000-1500g</th>
                 <th class="weight-range">1500-2000g</th>
                 <th class="weight-range">2000-2500g</th>
-                <th class="weight-range">2500+ per kg</th>
+                <th class="weight-range">2501-3000 gm</th>
                 <th>RC</th>
                 <th>COD</th>
+                <th>AC</th>
                 
                
                 <th>ACQ By</th>
@@ -251,7 +263,7 @@
             </thead>
             <tbody>
               <tr class="title-row">
-                <td colspan="15"></td>
+                <td colspan="16"></td>
               </tr>
               
               @php
@@ -264,7 +276,7 @@
                   '1001-1500' => '80',
                   '1501-2000' => '90',
                   '2001-2500' => '100',
-                  '2500+' => '20 TK per kg'
+                  '2501-3000' => '110'
                 ];
 
                 $same_city_rules = $rules->where('region', 'same_city')->keyBy('weight_range');
@@ -302,9 +314,13 @@
                   <td data-label="COD" style="background-color: #ecb90d; color: white;">
                     {{ $same_city_extra->cod }}
                   </td>
+                  <td data-label="AC" style="background-color: #ecb90d; color: white;">
+                    {{ $same_city_extra->additional_charge ?? 'N/A' }}
+                  </td>
                 @else
                   <td data-label="RC">0%</td>
                   <td data-label="COD">1%</td>
+                  <td data-label="AC">N/A</td>
                 @endif
                 
             
@@ -329,7 +345,7 @@
                   '1001-1500' => '120',
                   '1501-2000' => '125',
                   '2001-2500' => '135',
-                  '2500+' => '20 TK per kg'
+                  '2501-3000' => '150'
                 ];
                 $dhk_sub_rules = $rules->where('region', 'dhk_sub')->keyBy('weight_range');
                 $dhk_sub_extra = $rules->firstWhere('region', 'dhk_sub');
@@ -361,9 +377,13 @@
                   <td data-label="COD" style="background-color: #ecb90d; color: white;">
                     {{ $dhk_sub_extra->cod }}
                   </td>
+                  <td data-label="AC" style="background-color: #ecb90d; color: white;">
+                    {{ $dhk_sub_extra->additional_charge ?? 'N/A' }}
+                  </td>
                 @else
                   <td data-label="RC">30%</td>
                   <td data-label="COD">1%</td>
+                  <td data-label="AC">N/A</td>
                 @endif
           
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
@@ -386,7 +406,7 @@
                   '1001-1500' => '140',
                   '1501-2000' => '150',
                   '2001-2500' => '160',
-                  '2500+' => '25 TK per kg'
+                  '2501-3000' => '170'
                 ];
 
                 $outside_rules = $rules->where('region', 'dhk_outside')->keyBy('weight_range');
@@ -419,9 +439,13 @@
                   <td data-label="COD" style="background-color: #ecb90d; color: white;">
                     {{ $outside_extra->cod }}
                   </td>
+                  <td data-label="AC" style="background-color: #ecb90d; color: white;">
+                    {{ $outside_extra->additional_charge ?? 'N/A' }}
+                  </td>
                 @else
                   <td data-label="RC">30%</td>
                   <td data-label="COD">1%</td>
+                  <td data-label="AC">N/A</td>
                 @endif
                 
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
@@ -444,7 +468,7 @@
                   '1001-1500' => '125',
                   '1501-2000' => '125',
                   '2001-2500' => '150',
-                  '2500+' => '25 TK per kg'
+                  '2501-3000' => '160'
                 ];
 
                 $outside_dhk_rules = $rules->where('region', 'outside_dhk')->keyBy('weight_range');
@@ -477,9 +501,13 @@
                   <td data-label="COD" style="background-color: #ecb90d; color: white;">
                     {{ $outside_dhk_extra->cod }}
                   </td>
+                  <td data-label="AC" style="background-color: #ecb90d; color: white;">
+                    {{ $outside_dhk_extra->additional_charge ?? 'N/A' }}
+                  </td>
                 @else
                   <td data-label="RC">30%</td>
                   <td data-label="COD">1%</td>
+                  <td data-label="AC">N/A</td>
                 @endif
                 
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
@@ -502,7 +530,7 @@
                   '1001-1500' => '145',
                   '1501-2000' => '155',
                   '2001-2500' => '165',
-                  '2500+' => '25 TK per kg'
+                  '2501-3000' => '170'
                 ];
 
                 $outside_outside_rules = $rules->where('region', 'outside_outside')->keyBy('weight_range');
@@ -535,9 +563,13 @@
                   <td data-label="COD" style="background-color: #ecb90d; color: white;">
                     {{ $outside_outside_extra->cod }}
                   </td>
+                  <td data-label="AC" style="background-color: #ecb90d; color: white;">
+                    {{ $outside_outside_extra->additional_charge ?? 'N/A' }}
+                  </td>
                 @else
                   <td data-label="RC">30%</td>
                   <td data-label="COD">1%</td>
+                  <td data-label="AC">N/A</td>
                 @endif
                
                 <td data-label="ACQ By">{{ $discount->kma }}</td>
@@ -583,7 +615,8 @@
         let header = [
             "KAM Email", "Phone", "Onboarding Date", "Timestamp", "Pickup Hub", 
             "Product Category", "Promised Parcels/Day", 
-            "Business Owner/Merchant Name", "Acquisition Type"
+            "Business Owner/Merchant Name", "Acquisition Type",
+            "Pick Up Zone", "Merchant Type"
         ];
         
         // Business ID & Business Name (renamed)
@@ -630,7 +663,9 @@
                 merchantInfo["Product Category"],
                 merchantInfo["Promised Parcels/Day"],
                 merchantInfo["Business Owner/ Merchant Name"],
-                merchantInfo["Acquisition Type"]
+                merchantInfo["Acquisition Type"],
+                merchantInfo["Pick Up Zone"] || 'N/A',
+                merchantInfo["Merchant Type"] || 'N/A'
             ];
             
             let lastTwoCellsData = [];
@@ -678,3 +713,4 @@
 
 </body>
 </html>
+

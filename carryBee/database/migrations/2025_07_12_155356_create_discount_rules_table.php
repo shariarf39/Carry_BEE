@@ -14,11 +14,12 @@ return new class extends Migration
     Schema::create('discount_rules', function (Blueprint $table) {
     $table->id();
     $table->foreignId('discount_id')->constrained()->onDelete('cascade');
-    $table->string('region');
-    $table->string('weight_range');
-    $table->decimal('discounted_rate', 10, 2);
-    $table->decimal('return_charge', 5, 2);
-    $table->decimal('cod', 5, 2);
+    $table->string('region')->nullable();
+    $table->string('weight_range')->nullable();
+    $table->decimal('discounted_rate', 10, 2)->nullable();
+    $table->decimal('return_charge', 5, 2)->nullable();
+    $table->decimal('cod', 5, 2)->nullable();
+    $table->decimal('additional_charge', 10, 2)->nullable();
     $table->timestamps();
 });
 

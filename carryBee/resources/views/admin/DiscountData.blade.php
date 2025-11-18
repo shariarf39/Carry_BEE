@@ -2,16 +2,41 @@
 
 @section('content')
 <div class="container py-4">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
-        <h4 class="mb-2 mb-md-0">Pending Approvals</h4>
-        <div class="d-flex align-items-center gap-2">
-            <!-- Search input -->
-             
-            <input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Search merchants...">
-            <a href="{{ route('AllRules') }}" class="btn btn-secondary btn-sm">
-                      <i class="fas fa-list-check me-1"></i> <span class="d-none d-sm-inline">View All Rules</span>
+    <div class="mb-4">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
+            <h4 class="mb-0 fw-bold">Merchant Approvals</h4>
+            
+            <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2 w-100 w-lg-auto">
+                <!-- Status Filter -->
+                <div class="input-group input-group-sm" style="min-width: 160px;">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-filter text-muted"></i>
+                    </span>
+                    <select id="statusFilter" class="form-select border-start-0 ps-0">
+                        <option value="">All Status</option>
+                        <option value="0">Upon Discussion</option>
+                        <option value="1">Approved</option>
+                        <option value="2">Rejected</option>
+                    </select>
+                </div>
+                
+                <!-- Search input -->
+                <div class="input-group input-group-sm" style="min-width: 220px;">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" id="tableSearch" class="form-control border-start-0 ps-0" placeholder="Search merchants...">
+                </div>
+                
+                <div class="d-flex gap-2">
+                    <a href="{{ route('AllRules') }}" class="btn btn-outline-secondary btn-sm text-nowrap">
+                        <i class="fas fa-list-check me-1"></i><span class="d-none d-md-inline">All Rules</span>
                     </a>
-            <button class="btn btn-success" id="exportTableBtn"><i class="fa fa-download"></i> Export CSV</button>
+                    <button class="btn btn-success btn-sm text-nowrap" id="exportTableBtn">
+                        <i class="fa fa-download me-1"></i><span class="d-none d-md-inline">Export</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -140,6 +165,10 @@
                          <small class="text-muted">{{ $merchant->business_owner }}</small>
                             <br>
                           <small class="text-muted">{{ $merchant->acquisition_type }}</small>
+                            <br>
+                          <small class="text-muted"><strong>Pick Up Zone:</strong> {{ $merchant->pickup_zone ?? 'N/A' }}</small>
+                            <br>
+                          <small class="text-muted"><strong>Merchant Type:</strong> {{ $merchant->merchant_type ?? 'N/A' }}</small>
                     </td>
                     <td class="text-start">
                         <strong>{{ ucfirst($merchant->product_category) }}</strong><br>
@@ -169,11 +198,11 @@
                     </a>
                    </td>
                    @if($merchant->is_active == 0)
-                   <td><span class="badge bg-warning text-dark">Upon Discussion</span></td>
+                   <td data-status="0"><span class="badge bg-warning text-dark">Upon Discussion</span></td>
                    @elseif($merchant->is_active == 1)
-                    <td><span class="badge bg-success">Approved</span></td> 
+                    <td data-status="1"><span class="badge bg-success">Approved</span></td> 
                      @else
-                    <td><span class="badge bg-danger">Rejected</span></td>
+                    <td data-status="2"><span class="badge bg-danger">Rejected</span></td>
                    @endif
                     
                
@@ -290,15 +319,39 @@ document.querySelectorAll('.action-btn').forEach(button => {
 });
 
 
-document.getElementById('tableSearch').addEventListener('input', function () {
-            const searchValue = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#approvalTable tbody tr');
+document.getElementById('statusFilter').addEventListener('change', function () {
+    const filterValue = this.value;
+    const searchValue = document.getElementById('tableSearch').value.toLowerCase();
+    const rows = document.querySelectorAll('#approvalTable tbody tr');
 
-            rows.forEach(row => {
-                    const rowText = row.innerText.toLowerCase();
-                    row.style.display = rowText.includes(searchValue) ? '' : 'none';
-            });
+    rows.forEach(row => {
+        const statusCell = row.querySelector('td[data-status]');
+        const statusValue = statusCell ? statusCell.getAttribute('data-status') : '';
+        const rowText = row.innerText.toLowerCase();
+        
+        const matchesStatus = filterValue === '' || statusValue === filterValue;
+        const matchesSearch = searchValue === '' || rowText.includes(searchValue);
+        
+        row.style.display = (matchesStatus && matchesSearch) ? '' : 'none';
     });
+});
+
+document.getElementById('tableSearch').addEventListener('input', function () {
+    const searchValue = this.value.toLowerCase();
+    const filterValue = document.getElementById('statusFilter').value;
+    const rows = document.querySelectorAll('#approvalTable tbody tr');
+
+    rows.forEach(row => {
+        const statusCell = row.querySelector('td[data-status]');
+        const statusValue = statusCell ? statusCell.getAttribute('data-status') : '';
+        const rowText = row.innerText.toLowerCase();
+        
+        const matchesStatus = filterValue === '' || statusValue === filterValue;
+        const matchesSearch = searchValue === '' || rowText.includes(searchValue);
+        
+        row.style.display = (matchesStatus && matchesSearch) ? '' : 'none';
+    });
+});
 
     function formatCurrency(value) {
             return value.toString().replace(/[৳à§³]/g, '').trim();

@@ -74,6 +74,9 @@
             <li><a href="{{ route('User') }}" class="nav-link flex items-center gap-3 p-3 rounded-lg font-semibold text-gray-800 transition-all duration-200">
             <i class="fas fa-user w-6 text-center"></i>Merchant </a>
             </li>
+            <li><a href="{{ route('ManageData') }}" class="nav-link flex items-center gap-3 p-3 rounded-lg font-semibold text-gray-800 transition-all duration-200">
+            <i class="fas fa-database w-6 text-center"></i>Manage Data </a>
+            </li>
           <li>
             <a href="{{ route('admin.logout') }}" class="nav-link flex items-center gap-3 p-3 rounded-lg font-semibold text-gray-800 transition-all duration-200">
               <i class="fas fa-sign-out-alt w-6 text-center"></i>Logout

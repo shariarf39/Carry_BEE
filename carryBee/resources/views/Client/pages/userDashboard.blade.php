@@ -209,6 +209,14 @@
         <!-- Header Card -->
         <div class="card mb-4">
 
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fa fa-exclamation-triangle me-2"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+
         @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="fa fa-check-circle me-2"></i>
@@ -359,6 +367,22 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="col-md-6">
+                                    <label for="pickup_zone" class="form-label">Pick Up Zone</label>
+                                    <select class="form-select" id="pickup_zone" name="pickup_zone" required>
+                                        <option value="" selected disabled>Select pick up zone</option>
+                                        <option value="ISD">ISD</option>
+                                        <option value="OSD">OSD</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="merchant_type" class="form-label">Merchant Type</label>
+                                    <select class="form-select" id="merchant_type" name="merchant_type" required>
+                                        <option value="" selected disabled>Select merchant type</option>
+                                        <option value="New">New</option>
+                                        <option value="Existing">Existing</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -381,11 +405,27 @@
 
                     <!-- Discount Rules Section -->
                     <div class="card mb-4 border-success" id="discountRulesCard" style="display:none;">
-                        <div class="card-header bg-light-success d-flex justify-content-between align-items-center">
+                        <div class="card-header bg-light-success d-flex justify-content-between align-items-center flex-wrap gap-2">
                             <h5 class="mb-0"><i class="fas fa-percentage me-2"></i>Custom Discount Rules</h5>
-                            <button type="button" class="btn btn-sm btn-success" onclick="addDiscountRow()">
-                                <i class="fas fa-plus me-1"></i>Add Rule
-                            </button>
+                            <div class="d-flex align-items-center gap-3">
+                                <!-- Weight Slab Discount Toggle -->
+                                <div class="d-flex align-items-center gap-2">
+                                    <label class="mb-0 small text-white">Weight Slab Discount</label>
+                                    <div class="form-check form-switch mb-0">
+                                        <input class="form-check-input" type="checkbox" id="customDiscountToggle" onchange="toggleCustomDiscount()" style="width: 2.5rem; height: 1.25rem;">
+                                    </div>
+                                </div>
+                                <!-- Additional Charges Toggle -->
+                                <div class="d-flex align-items-center gap-2">
+                                    <label class="mb-0 small text-white">Additional Charges</label>
+                                    <div class="form-check form-switch mb-0">
+                                        <input class="form-check-input" type="checkbox" id="additionalChargesToggle" onchange="toggleAdditionalCharges()" style="width: 2.5rem; height: 1.25rem;">
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-success" onclick="addDiscountRow()">
+                                    <i class="fas fa-plus me-1"></i>Add Rule
+                                </button>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -393,10 +433,11 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>Region</th>
-                                            <th>Weight Range</th>
-                                            <th>Discounted Rate</th>
-                                            <th>Return Charge</th>
-                                            <th>COD Charge</th>
+                                            <th class="custom-discount-column" style="display:none;">Weight Range</th>
+                                            <th class="custom-discount-column" style="display:none;">Discounted Rate</th>
+                                            <th class="additional-charge-column" style="display:none;">Return Charge</th>
+                                            <th class="additional-charge-column" style="display:none;">COD Charge</th>
+                                            <th class="additional-charge-column" style="display:none;">Additional Charge</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -413,7 +454,7 @@
                                                     <option value="outside_outside">Outside DHK > Outside DHK</option>
                                                 </select>
                                             </td>
-                                            <td data-label="Weight Range">
+                                            <td data-label="Weight Range" class="custom-discount-column" style="display:none;">
                                                 <div class="weight-range-checkboxes">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" name="weight_range[0][]" value="0-200" id="weight0-200">
@@ -440,27 +481,33 @@
                                                         <label class="form-check-label" for="weight2001-2500">2001-2500 gm</label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="weight_range[0][]" value="2500+" id="weight2500+" disabled>
-                                                        <label class="form-check-label" for="weight2500+">2500+ per gm</label>
+                                                        <input class="form-check-input" type="checkbox" name="weight_range[0][]" value="2501-3000" id="weight2501-3000">
+                                                        <label class="form-check-label" for="weight2501-3000">2501-3000 gm</label>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td data-label="Discounted Rate">
+                                            <td data-label="Discounted Rate" class="custom-discount-column" style="display:none;">
                                                 <div class="input-group">
                                                     <span class="input-group-text">৳</span>
                                                     <input type="number" class="form-control" name="discounted_rate[0]" step="0.01" min="0" placeholder="0.00">
                                                 </div>
                                             </td>
-                                            <td data-label="Return Charge">
+                                            <td data-label="Return Charge" class="additional-charge-column" style="display:none;">
                                                 <div class="input-group">
                                                     <input type="number" class="form-control" name="return_charge[0]" step="0.01" min="0" max="100" placeholder="0">
                                                     <span class="input-group-text">%</span>
                                                 </div>
                                             </td>
-                                            <td data-label="COD Charge">
+                                            <td data-label="COD Charge" class="additional-charge-column" style="display:none;">
                                                 <div class="input-group">
                                                     <input type="number" class="form-control" name="cod[0]" min="0" step="0.01" max="100" placeholder="0">
                                                     <span class="input-group-text">%</span>
+                                                </div>
+                                            </td>
+                                            <td data-label="Additional Charge" class="additional-charge-column" style="display:none;">
+                                                <div class="input-group">
+                                                    <span class="input-group-text">৳</span>
+                                                    <input type="number" class="form-control" name="additional_charge[0]" min="0" step="0.01" placeholder="0.00">
                                                 </div>
                                             </td>
                                             <td data-label="Actions" class="text-center">
@@ -474,6 +521,7 @@
                             </div>
                         </div>
                     </div>
+
   <!-- Configuration Toggle -->
                     <div class="row mb-4">
                         <div class="col-12">
@@ -516,6 +564,26 @@
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Toggles the visibility of weight slab discount columns (Weight Range and Discounted Rate)
+        function toggleCustomDiscount() {
+            const toggle = document.getElementById("customDiscountToggle");
+            const columns = document.querySelectorAll(".custom-discount-column");
+            
+            columns.forEach(column => {
+                column.style.display = toggle.checked ? "" : "none";
+            });
+        }
+
+        // Toggles the visibility of additional charge columns
+        function toggleAdditionalCharges() {
+            const toggle = document.getElementById("additionalChargesToggle");
+            const columns = document.querySelectorAll(".additional-charge-column");
+            
+            columns.forEach(column => {
+                column.style.display = toggle.checked ? "" : "none";
+            });
+        }
+
         // Toggles the visibility of the discount rules section.
         function toggleDiscountType() {
             const toggle = document.getElementById("autoApplyToggle");

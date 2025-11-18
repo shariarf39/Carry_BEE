@@ -21,6 +21,12 @@ class CreateDiscountsTable extends Migration
             $table->integer('promised_parcels');
             $table->json('requirements')->nullable();
             $table->json('discount_rules')->nullable();
+            $table->string('kma')->nullable();
+            $table->string('acquisition_type')->nullable();
+            $table->string('business_owner')->nullable();
+            $table->string('pickup_zone')->nullable();
+            $table->string('merchant_type')->nullable();
+            $table->integer('is_active')->default(0);
             $table->timestamps();
         });
     }

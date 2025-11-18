@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Discount Management Dashboard</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,202 +15,223 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Custom styles to complement Tailwind */
         :root{
-            --primary-color: #ecb90d; /* blue-500 */
-            --secondary-color: #64748b; /* slate-500 */
-            --light-bg: #f8fafc; /* slate-50 */
-            --border-color: #e2e8f0; /* slate-200 */
-            --success-color: #28a745; /* green-500 */
+            --primary-color: #ecb90d;
+            --secondary-color: #64748b;
+            --light-bg: #f8fafc;
+            --border-color: #e2e8f0;
+            --success-color: #28a745;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* slate-50 */
+            background-color: #f8fafc;
         }
 
         .back-btn{
             background-color: var(--secondary-color);
             padding: 0.5rem 1rem;
-            width: 170px ;
+            width: 170px;
             border-radius: 0.375rem;
             color: white;
+            text-decoration: none;
+            display: inline-block;
         }
-
-        /* Custom styling for responsive table headers */
-        @media (max-width: 768px) {
-            .responsive-table-cell:before {
-                content: attr(data-label);
-                font-weight: 600;
-                margin-right: 1rem;
-                color: #475569; /* slate-600 */
-                text-transform: uppercase;
-                font-size: 0.75rem;
-                line-height: 1rem;
-                flex-shrink: 0;
-            }
+        
+        .back-btn:hover {
+            background-color: #475569;
+            color: white;
+        }
+        
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary-custom:hover {
+            background-color: #d6a70b;
+            border-color: #d6a70b;
+        }
+        
+        .badge-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-approved {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-rejected {
+            background-color: #fee2e2;
+            color: #991b1b;
         }
     </style>
-    <script>
-        // Configuration for Tailwind CSS
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            DEFAULT: '#ecb90d', // blue-500
-                            hover: '#ecb90d', // blue-600
-                        },
-                        secondary: '#64748b', // slate-500
-                    }
-                }
-            }
-        }
-    </script>
 </head>
-<body class="antialiased text-slate-700">
+<body>
 
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+    <div class="container py-4">
         
-        <header class="mb-8">
-            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 flex items-center">
-                <i class="fas fa-tags mr-3 text-primary-DEFAULT"></i>
-                Onboarding Dashboard
-            </h1>
-            <p class="mt-1 text-slate-500">Manage and track all merchant discounts.</p>
-            <div class="text-left mt-4 back-btn">
-                <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-back">
+        <header class="mb-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-3">
+                <div>
+                    <h1 class="h2 fw-bold d-flex align-items-center mb-2">
+                        <i class="fas fa-tags me-3" style="color: var(--primary-color);"></i>
+                        Onboarding Dashboard
+                    </h1>
+                    <p class="text-muted mb-0">Manage and track all merchant discounts.</p>
+                </div>
+                <div>
+                    <a href="{{ route('discounts.export') }}" class="btn btn-success">
+                        <i class="fas fa-file-export me-2"></i>
+                        Export Data
+                    </a>
+                </div>
+            </div>
+            <div class="mb-3">
+                <a href="{{ route('dashboard') }}" class="back-btn">
                     <i class="fas fa-arrow-left me-2"></i>Back to Home
                 </a>
             </div>
         </header>
 
-        <div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm mb-6">
-            <form action="{{ route('discounts') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-4">
-                <div class="relative w-full sm:w-auto sm:flex-grow">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input
-                        type="text"
-                        name="search"
-                        value="{{ request('search') }}"
-                        class="w-full pl-12 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-DEFAULT/50 focus:border-primary-DEFAULT outline-none transition duration-200"
-                        placeholder="Search by name, email, ID or phone"
-                    />
-                </div>
-                <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <button type="submit" class="w-full sm:w-auto bg-primary-DEFAULT hover:bg-primary-hover text-white font-semibold px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-200 flex items-center justify-center">
-                        <i class="fas fa-search sm:hidden mr-2"></i>
-                        <span>Search</span>
-                    </button>
-                    <a href="{{ route('discounts') }}" class="w-full sm:w-auto text-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2.5 rounded-lg transition-colors duration-200">
-                        Reset
-                    </a>
-                </div>
-            </form>
+        <div class="card mb-4">
+            <div class="card-body">
+                <form action="{{ route('discounts') }}" method="GET" class="row g-3">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white">
+                                <i class="fas fa-search text-muted"></i>
+                            </span>
+                            <input
+                                type="text"
+                                name="search"
+                                value="{{ request('search') }}"
+                                class="form-control"
+                                placeholder="Search by name, email, ID or phone"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary-custom flex-grow-1">
+                                <i class="fas fa-search me-2"></i>Search
+                            </button>
+                            <a href="{{ route('discounts') }}" class="btn btn-secondary">
+                                Reset
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left">
-                    <thead class="hidden md:table-header-group bg-slate-50 border-b border-slate-200 text-xs text-slate-500 uppercase tracking-wider">
-                        <tr>
-                            <th scope="col" class="px-6 py-4 font-medium">Merchant</th>
-                            <th scope="col" class="px-6 py-4 font-medium">Contact</th>
-                            <th scope="col" class="px-6 py-4 font-medium">Details</th>
-                            <th scope="col" class="px-6 py-4 font-medium">Requirements</th>
-                            <th scope="col" class="px-6 py-4 font-medium">Status</th>
-                            <th scope="col" class="px-6 py-4 font-medium text-center">Actions</th>
-                        </tr>
-                    </thead>
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Merchant</th>
+                                <th>Contact</th>
+                                <th>Details</th>
+                                <th>Additional Info</th>
+                                <th>Requirements</th>
+                                <th>Status</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
                     
-                    <tbody>
-                        @forelse($discounts as $discount)
-                        <tr class="block md:table-row bg-white hover:bg-slate-50 transition-colors duration-150 border-b border-slate-200 last:border-b-0 md:border-b">
-                            
-                            <td data-label="Merchant" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
-                                <div class="font-semibold text-slate-800">{{ $discount->merchant_name }} </div>
-                                <div class="text-slate-500">{{ $discount->merchant_id }}</div>
-                            </td>
+                        <tbody>
+                            @forelse($discounts as $discount)
+                            <tr>
+                                
+                                <td>
+                                    <div class="fw-semibold">{{ $discount->merchant_name }}</div>
+                                    <small class="text-muted">{{ $discount->merchant_id }}</small>
+                                </td>
 
-                            <td data-label="Contact" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
-                                <div>
-                                    <div class="text-slate-800">{{ $discount->merchant_email }}</div>
-                                    <div class="text-slate-500">{{ $discount->phone }}</div>
-                                </div>
-                            </td>
+                                <td>
+                                    <div>{{ $discount->merchant_email }}</div>
+                                    <small class="text-muted">{{ $discount->phone }}</small>
+                                </td>
 
-                            <td data-label="Details" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
-                                <div>
-                                    <div class="text-slate-800">{{ $discount->pickup_hub }}</div>
-                                    <div class="text-slate-500">{{ $discount->product_category }} ({{ $discount->promised_parcels }}/day)</div>
-                                    <div class="text-slate-800">Business Owner- {{ $discount->business_owner }}</div>
-                                    <div class="text-slate-800">{{ $discount->acquisition_type }}</div>
-                                </div>
-                            </td>
+                                <td>
+                                    <div><strong>Hub:</strong> {{ $discount->pickup_hub }}</div>
+                                    <div class="text-muted small"><strong>Category:</strong> {{ $discount->product_category }}</div>
+                                    <div class="text-muted small"><strong>Parcels/Day:</strong> {{ $discount->promised_parcels }}</div>
+                                </td>
 
-                            <td data-label="Requirements" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
-                                <div class="flex flex-wrap gap-1.5">
-                                    @foreach($discount->requirements ?? [] as $requirement)
-                                    <span class="px-2.5 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-full">
-                                        {{ ucwords(str_replace('_', ' ', $requirement)) }}
-                                    </span>
-                                    @endforeach
-                                </div>
-                            </td>
+                                <td>
+                                    <div><strong>KAM:</strong> {{ $discount->kma ?? 'N/A' }}</div>
+                                    <div class="text-muted small"><strong>Business Owner:</strong> {{ $discount->business_owner ?? 'N/A' }}</div>
+                                    <div class="text-muted small"><strong>Acquisition:</strong> {{ $discount->acquisition_type ?? 'N/A' }}</div>
+                                    <div class="text-muted small"><strong>Pickup Zone:</strong> {{ $discount->pickup_zone ?? 'N/A' }}</div>
+                                    <div class="text-muted small"><strong>Merchant Type:</strong> {{ $discount->merchant_type ?? 'N/A' }}</div>
+                                    <div class="text-muted small"><strong>Onboarding Date:</strong> {{ $discount->onboarding_date }}</div>
+                                </td>
 
-                            <td data-label="Status" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-between md:justify-start border-b md:border-none">
-                                @if($discount->is_active == 0)
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
-                                        <i class="fas fa-clock mr-1.5"></i> Upon Discussion
-                                    </span>
-                                @elseif($discount->is_active == 1)
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                                        <i class="fas fa-check-circle mr-1.5"></i> Approved
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
-                                        <i class="fas fa-times-circle mr-1.5"></i> Rejected
-                                    </span>
-                                @endif
-                            </td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        @foreach($discount->requirements ?? [] as $requirement)
+                                        <span class="badge bg-primary small">
+                                            {{ ucwords(str_replace('_', ' ', $requirement)) }}
+                                        </span>
+                                        @endforeach
+                                    </div>
+                                </td>
 
-                            <td data-label="Actions" class="responsive-table-cell px-6 py-4 flex md:table-cell items-center justify-end md:justify-center">
-                                <div class="flex items-center gap-2">
+                                <td>
                                     @if($discount->is_active == 0)
-                                    <a href="{{ route('discount.edit', $discount->id) }}" title="Edit" class="h-9 w-9 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-primary-DEFAULT rounded-full transition-colors duration-200">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                        <span class="badge badge-pending">
+                                            <i class="fas fa-clock me-1"></i> Upon Discussion
+                                        </span>
+                                    @elseif($discount->is_active == 1)
+                                        <span class="badge badge-approved">
+                                            <i class="fas fa-check-circle me-1"></i> Approved
+                                        </span>
+                                    @else
+                                        <span class="badge badge-rejected">
+                                            <i class="fas fa-times-circle me-1"></i> Rejected
+                                        </span>
                                     @endif
+                                </td>
 
-                                    <a href="{{ route('DiscountRuleShow', $discount->id) }}" title="View Details" class="h-9 w-9 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-primary-DEFAULT rounded-full transition-colors duration-200">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('DeRuleShow', $discount->id) }}" title="Manage Rules" class="h-9 w-9 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-primary-DEFAULT rounded-full transition-colors duration-200">
-                                        <i class="fas fa-list-check"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center py-12 px-6">
-                                <i class="fas fa-inbox fa-3x text-slate-300 mb-4"></i>
-                                <h3 class="text-xl font-semibold text-slate-700">No Discounts Found</h3>
-                                <p class="text-slate-500 mt-1">There are no discounts matching your search criteria.</p>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-1">
+                                        @if($discount->is_active == 0)
+                                        <a href="{{ route('discount.edit', $discount->id) }}" title="Edit" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @endif
+
+                                        <a href="{{ route('DiscountRuleShow', $discount->id) }}" title="View Details" class="btn btn-sm btn-outline-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('DeRuleShow', $discount->id) }}" title="Manage Rules" class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-list-check"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center py-5">
+                                    <i class="fas fa-inbox fa-3x text-muted mb-3 d-block"></i>
+                                    <h5 class="fw-semibold">No Discounts Found</h5>
+                                    <p class="text-muted">There are no discounts matching your search criteria.</p>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            
         </div>
         
-        <div class="mt-6">
-           
-        </div>
-
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

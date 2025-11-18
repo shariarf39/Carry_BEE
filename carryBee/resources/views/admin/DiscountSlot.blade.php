@@ -30,12 +30,15 @@
     
     .table-container {
       border-radius: 0.5rem;
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: visible;
       box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
     }
     
     .table {
       margin-bottom: 0;
+      min-width: 100%;
+      white-space: nowrap;
     }
     
     .table thead th {
@@ -160,9 +163,35 @@
   <div class="page-header mb-0">
    
   </div>
-  <button id="exportCSV" class="btn btn-success" style="background-color: #ecb90d; border-color: #ecb90d; color: #fff;">
-    <i class="fas fa-download me-1"></i> Export CSV
-  </button>
+  <div>
+    <!-- Approve -->
+    <form action="{{ route('merchant.approve', $discount->id) }}" method="POST" class="d-inline">
+        @csrf
+        <button type="submit" class="btn btn-sm btn-success me-1" onclick="return confirm('Are you sure you want to APPROVE this merchant?')">
+            <i class="fa fa-check"></i> Approve
+        </button>
+    </form>
+
+    <!-- Reject -->
+    <form action="{{ route('merchant.reject', $discount->id) }}" method="POST" class="d-inline">
+        @csrf
+        <button type="submit" class="btn btn-sm btn-warning me-1" onclick="return confirm('Upon Discussion')">
+            <i class="fa fa-times"></i> Upon Discussion
+        </button>
+    </form>
+
+    <!-- Ban -->
+    <form action="{{ route('merchant.ban', $discount->id) }}" method="POST" class="d-inline">
+        @csrf
+        <button type="submit" class="btn btn-sm btn-danger me-2" onclick="return confirm('Do you want to reject this discount?')">
+            <i class="fa fa-ban"></i> Reject
+        </button>
+    </form>
+
+    <button id="exportCSV" class="btn btn-success" style="background-color: #ecb90d; border-color: #ecb90d; color: #fff;">
+      <i class="fas fa-download me-1"></i> Export CSV
+    </button>
+  </div>
 </div>
 
                 <h5 class="card-title mb-4">
@@ -183,6 +212,10 @@
                             <span class="info-label">Pickup Hub:</span>
                             <span class="info-value">{{ $discount->pickup_hub }}</span>
                         </div>
+                        <div class="mb-3">
+                            <span class="info-label">Pick Up Zone:</span>
+                            <span class="info-value">{{ $discount->pickup_zone ?? 'N/A' }}</span>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
@@ -193,7 +226,20 @@
                             <span class="info-label">Promised Parcels/Day:</span>
                             <span class="info-value">{{ $discount->promised_parcels }}</span>
                         </div>
-                        
+                        <div class="mb-3">
+                            <span class="info-label">Merchant Type:</span>
+                            <span class="info-value">{{ $discount->merchant_type ?? 'N/A' }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="info-label">Status:</span>
+                            @if($discount->is_active == 0)
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            @elseif($discount->is_active == 1)
+                                <span class="badge bg-success">Approved</span>
+                            @else
+                                <span class="badge bg-danger">Rejected</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -216,16 +262,17 @@
             <th class="weight-range">1000-1500g</th>
             <th class="weight-range">1500-2000g</th>
             <th class="weight-range">2000-2500g</th>
-            <th class="weight-range">2500+ per kg</th>
+            <th class="weight-range">2501-3000 gm</th>
             <th>RC</th>
             <th>COD</th>
+            <th>AC</th>
             <th>ACQ By</th>
           </tr>
         </thead>
         <tbody>
           
           <tr class="title-row">
-            <td colspan="15">CarryBee /td>
+            <td colspan="16">CarryBee</td>
           </tr>
           <tr>
           
@@ -241,7 +288,7 @@
     '1001-1500' => '80',
     '1501-2000' => '90',
     '2001-2500' => '100',
-    '2500+' => '20 TK per kg'
+    '2501-3000' => '110'
   ];
 
   $same_city_rules = collect($rules)->where('region', 'same_city')->keyBy('weight_range');
@@ -273,9 +320,13 @@
   <td data-label="COD" style="background-color: #ecb90d; color: white;">
     {{ $same_city_extra->cod }}
   </td>
+  <td data-label="AC" style="background-color: #ecb90d; color: white;">
+    {{ $same_city_extra->additional_charge ?? 'N/A' }}
+  </td>
 @else
   <td data-label="RC">0%</td>
   <td data-label="COD">1%</td>
+  <td data-label="AC">N/A</td>
 @endif
 
            
@@ -293,7 +344,7 @@
     '1001-1500' => '120',
     '1501-2000' => '125',
     '2001-2500' => '135',
-    '2500+' => '20 TK per kg'
+    '2501-3000' => '150'
   ];
 
   $dhk_sub_rules = collect($rules)->where('region', 'dhk_sub')->keyBy('weight_range');
@@ -325,9 +376,13 @@
   <td data-label="COD" style="background-color: #ecb90d; color: white;">
     {{ $dhk_sub_extra->cod }}
   </td>
+  <td data-label="AC" style="background-color: #ecb90d; color: white;">
+    {{ $dhk_sub_extra->additional_charge ?? 'N/A' }}
+  </td>
 @else
   <td data-label="RC">30%</td>
   <td data-label="COD">1%</td>
+  <td data-label="AC">N/A</td>
 @endif
          
            
@@ -343,7 +398,7 @@
     '1001-1500' => '140',
     '1501-2000' => '150',
     '2001-2500' => '160',
-    '2500+' => '25 TK per kg'
+    '2501-3000' => '170'
   ];
 
   $outside_rules = collect($rules)->where('region', 'dhk_outside')->keyBy('weight_range');
@@ -375,9 +430,13 @@
   <td data-label="COD" style="background-color: #ecb90d; color: white;">
     {{ $outside_extra->cod }}
   </td>
+  <td data-label="AC" style="background-color: #ecb90d; color: white;">
+    {{ $outside_extra->additional_charge ?? 'N/A' }}
+  </td>
 @else
   <td data-label="RC">30%</td>
   <td data-label="COD">1%</td>
+  <td data-label="AC">N/A</td>
 @endif
 
            
@@ -394,7 +453,7 @@
     '1001-1500' => '125',
     '1501-2000' => '125',
     '2001-2500' => '150',
-    '2500+' => '25 TK per kg'
+    '2501-3000' => '160'
   ];
 
   $outside_dhk_rules = collect($rules)->where('region', 'outside_dhk')->keyBy('weight_range');
@@ -426,9 +485,13 @@
   <td data-label="COD" style="background-color: #ecb90d; color: white;">
     {{ $outside_dhk_extra->cod }}
   </td>
+  <td data-label="AC" style="background-color: #ecb90d; color: white;">
+    {{ $outside_dhk_extra->additional_charge ?? 'N/A' }}
+  </td>
 @else
   <td data-label="RC">30%</td>
   <td data-label="COD">1%</td>
+  <td data-label="AC">N/A</td>
 @endif
        
            
@@ -444,7 +507,7 @@
     '1001-1500' => '145',
     '1501-2000' => '155',
     '2001-2500' => '165',
-    '2500+' => '25 TK per kg'
+    '2501-3000' => '170'
   ];
 
   $outside_outside_rules = collect($rules)->where('region', 'outside_outside')->keyBy('weight_range');
@@ -476,9 +539,13 @@
   <td data-label="COD" style="background-color: #ecb90d; color: white;">
     {{ $outside_outside_extra->cod }}
   </td>
+  <td data-label="AC" style="background-color: #ecb90d; color: white;">
+    {{ $outside_outside_extra->additional_charge ?? 'N/A' }}
+  </td>
 @else
   <td data-label="RC">30%</td>
   <td data-label="COD">1%</td>
+  <td data-label="AC">N/A</td>
 @endif
           
            
@@ -498,29 +565,104 @@
   <!-- Add before </body> -->
 <script>
   document.getElementById("exportCSV").addEventListener("click", function () {
-    let table = document.querySelector("table");
-    let rows = table.querySelectorAll("tr");
-    let csv = [];
+    let csvRows = [];
+    
+    const table = document.querySelector('table');
+    if (!table) return;
 
-    for (let row of rows) {
-      let cols = row.querySelectorAll("th, td");
-      let rowData = [];
-      for (let col of cols) {
-        rowData.push('"' + col.innerText.replace(/\n/g, ' ').trim() + '"');
-      }
-      csv.push(rowData.join(","));
+    const headerCells = table.querySelectorAll('thead th');
+    const dataRows = table.querySelectorAll('tbody tr:not(.title-row)');
+    const numDataRows = dataRows.length;
+
+    // Build header
+    let header = [
+        "KAM Email", "Phone", "Onboarding Date", "Timestamp", "Pickup Hub", 
+        "Product Category", "Promised Parcels/Day", "Pick Up Zone", "Merchant Type",
+        "Business Owner/Merchant Name", "Acquisition Type", "Status"
+    ];
+    
+    // Add Merchant ID & Merchant Name
+    header.push("Business ID");
+    header.push("Business Name");
+
+    // Add repeating columns (Pickup, Delivery, weight ranges, RC, COD, AC)
+    const repeatingHeaderBlock = [];
+    for (let i = 2; i < headerCells.length - 1; i++) { 
+        repeatingHeaderBlock.push(headerCells[i].innerText.trim().replace(/\n/g, ' '));
     }
 
-    let csvContent = csv.join("\n");
-    let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    let url = URL.createObjectURL(blob);
-    let a = document.createElement("a");
-    a.setAttribute("href", url);
-    a.setAttribute("download", "carrybee_rates.csv");
-    a.style.display = "none";
+    for (let i = 0; i < numDataRows; i++) {
+        header.push(...repeatingHeaderBlock);
+    }
+
+    // Add ACQ By column
+    header.push(headerCells[headerCells.length - 1].innerText.trim());
+
+    csvRows.push(header.map(h => `"${h.replace(/"/g, '""')}"`).join(','));
+
+    // Build data row
+    const merchantInfo = {};
+    document.querySelectorAll('.info-label').forEach(span => {
+        const label = span.innerText.trim().replace(':', '');
+        const value = span.nextElementSibling ? span.nextElementSibling.innerText.trim() : '';
+        merchantInfo[label] = value;
+    });
+
+    const timestamp = new Date().toLocaleString('en-CA', { timeZone: 'Asia/Dhaka' }).replace(',', '');
+
+    let singleLineData = [
+        merchantInfo["KAM Email"] || '',
+        merchantInfo["Phone"] || '',
+        '{{ $discount->onboarding_date }}',
+        timestamp,
+        merchantInfo["Pickup Hub"] || '',
+        merchantInfo["Product Category"] || '',
+        merchantInfo["Promised Parcels/Day"] || '',
+        merchantInfo["Pick Up Zone"] || 'N/A',
+        merchantInfo["Merchant Type"] || 'N/A',
+        '{{ $discount->business_owner ?? "N/A" }}',
+        '{{ $discount->acquisition_type ?? "N/A" }}',
+        merchantInfo["Status"] || ''
+    ];
+
+    const firstRowCells = dataRows[0].querySelectorAll('td');
+    singleLineData.push(firstRowCells[0].innerText.trim()); // Business ID
+    singleLineData.push(firstRowCells[1].innerText.trim()); // Business Name
+
+    let lastCellData = [];
+
+    dataRows.forEach((row, index) => {
+        const cells = row.querySelectorAll('td');
+        const startIndex = (index === 0) ? 2 : 0;
+        const endIndex = cells.length - 1;
+
+        for (let i = startIndex; i < endIndex; i++) {
+            singleLineData.push(cells[i].innerText.trim().replace(/\n/g, ' '));
+        }
+
+        if (index === 0) {
+            lastCellData.push(cells[cells.length - 1].innerText.trim());
+        }
+    });
+
+    singleLineData.push(...lastCellData);
+
+    csvRows.push(singleLineData.map(d => `"${String(d).replace(/"/g, '""')}"`).join(','));
+
+    // Create CSV and download
+    const csvContent = csvRows.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'carrybee_merchant_{{ $discount->merchant_id }}_rates.csv');
+    a.style.display = 'none';
+
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   });
 </script>
 

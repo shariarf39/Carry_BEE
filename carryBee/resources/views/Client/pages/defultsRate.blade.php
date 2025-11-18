@@ -167,7 +167,7 @@
             <th class="weight-range">1000-1500g</th>
             <th class="weight-range">1500-2000g</th>
             <th class="weight-range">2000-2500g</th>
-            <th class="weight-range">2500+ per kg</th>
+            <th class="weight-range">2501-3000 gm</th>
             <th>RC</th>
             <th>COD</th>
             <th>Regular order/day</th>
@@ -189,7 +189,7 @@
             <td data-label="1000-1500g" class="highlight">80</td>
             <td data-label="1500-2000g" class="highlight">90</td>
             <td data-label="2000-2500g" class="highlight">100</td>
-            <td data-label="2500+ per kg">20 TK per kg</td>
+            <td data-label="2501-3000 gm">110</td>
             <td data-label="RC">0%</td>
             <td data-label="COD">1%</td>
             <td data-label="Regular order/day"></td>
@@ -204,7 +204,7 @@
             <td data-label="1000-1500g" class="highlight">120</td>
             <td data-label="1500-2000g" class="highlight">125</td>
             <td data-label="2000-2500g" class="highlight">135</td>
-            <td data-label="2500+ per kg">20 TK per kg</td>
+            <td data-label="2501-3000 gm">150</td>
             <td data-label="RC">30%</td>
             <td data-label="COD">1%</td>
             <td data-label="Regular order/day"></td>
@@ -219,7 +219,7 @@
             <td data-label="1000-1500g" class="highlight">140</td>
             <td data-label="1500-2000g" class="highlight">150</td>
             <td data-label="2000-2500g" class="highlight">160</td>
-            <td data-label="2500+ per kg">25 TK per kg</td>
+            <td data-label="2501-3000 gm">170</td>
             <td data-label="RC">30%</td>
             <td data-label="COD">1%</td>
             <td data-label="Regular order/day"></td>
@@ -234,7 +234,7 @@
             <td data-label="1000-1500g" class="highlight">125</td>
             <td data-label="1500-2000g" class="highlight">125</td>
             <td data-label="2000-2500g" class="highlight">150</td>
-            <td data-label="2500+ per kg">25 TK per kg</td>
+            <td data-label="2501-3000 gm">160</td>
             <td data-label="RC">30%</td>
             <td data-label="COD">1%</td>
             <td data-label="Regular order/day"></td>
@@ -249,7 +249,7 @@
             <td data-label="1000-1500g" class="highlight">145</td>
             <td data-label="1500-2000g" class="highlight">155</td>
             <td data-label="2000-2500g" class="highlight">165</td>
-            <td data-label="2500+ per kg">25 TK per kg</td>
+            <td data-label="2501-3000 gm">170</td>
             <td data-label="RC">30%</td>
             <td data-label="COD">1%</td>
             <td data-label="Regular order/day"></td>
@@ -479,7 +479,7 @@
             <th class="weight-range">1000-1500g</th>
             <th class="weight-range">1500-2000g</th>
             <th class="weight-range">2000-2500g</th>
-            <th class="weight-range">2500+ per kg</th>
+            <th class="weight-range">2501-3000 gm</th>
             <th>RC</th>
             <th>COD</th>
     
@@ -505,7 +505,7 @@
     '1001-1500' => '80',
     '1501-2000' => '90',
     '2001-2500' => '100',
-    '2500+' => '20 TK per kg'
+    '2501-3000' => '110'
   ];
 
   $same_city_rules = collect($rules)->where('region', 'same_city')->keyBy('weight_range');
@@ -558,7 +558,7 @@
     '1001-1500' => '120',
     '1501-2000' => '125',
     '2001-2500' => '135',
-    '2500+' => '20 TK per kg'
+    '2501-3000' => '110'
   ];
 
   $dhk_sub_rules = collect($rules)->where('region', 'dhk_sub')->keyBy('weight_range');
@@ -608,7 +608,7 @@
     '1001-1500' => '140',
     '1501-2000' => '150',
     '2001-2500' => '160',
-    '2500+' => '25 TK per kg'
+    '2501-3000' => '170'
   ];
 
   $outside_rules = collect($rules)->where('region', 'dhk_outside')->keyBy('weight_range');
@@ -659,7 +659,7 @@
     '1001-1500' => '125',
     '1501-2000' => '125',
     '2001-2500' => '150',
-    '2500+' => '25 TK per kg'
+    '2501-3000' => '170'
   ];
 
   $outside_dhk_rules = collect($rules)->where('region', 'outside_dhk')->keyBy('weight_range');
@@ -708,7 +708,7 @@
     '1001-1500' => '145',
     '1501-2000' => '155',
     '2001-2500' => '165',
-    '2500+' => '25 TK per kg'
+    '2501-3000' => '170'
   ];
 
   $outside_outside_rules = collect($rules)->where('region', 'outside_outside')->keyBy('weight_range');
@@ -762,3 +762,4 @@
 </html>
 
 @endif
+

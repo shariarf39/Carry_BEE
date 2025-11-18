@@ -25,11 +25,11 @@ class LoginController extends Controller
     public function DiscountData()
     {
         $defaultRates = [
-            'same_city' => [ '0-200' => 49, '201-500' => 60, '501-1000' => 70, '1001-1500' => 80, '1501-2000' => 90, '2001-2500' => 100, '2500+' => 20 ],
-            'dhk_sub' => [ '0-200' => 80, '201-500' => 85, '501-1000' => 100, '1001-1500' => 120, '1501-2000' => 125, '2001-2500' => 135, '2500+' => 20 ],
-            'dhk_outside' => [ '0-200' => 99, '201-500' => 105, '501-1000' => 125, '1001-1500' => 140, '1501-2000' => 150, '2001-2500' => 160, '2500+' => 25 ],
-            'outside_dhk' => [ '0-200' => 99, '201-500' => 105, '501-1000' => 110, '1001-1500' => 125, '1501-2000' => 125, '2001-2500' => 150, '2500+' => 25 ],
-            'outside_outside' => [ '0-200' => 125, '201-500' => 125, '501-1000' => 135, '1001-1500' => 145, '1501-2000' => 155, '2001-2500' => 165, '2500+' => 25 ],
+            'same_city' => [ '0-200' => 49, '201-500' => 60, '501-1000' => 70, '1001-1500' => 80, '1501-2000' => 90, '2001-2500' => 100, '2501-3000' => 110 ],
+            'dhk_sub' => [ '0-200' => 80, '201-500' => 85, '501-1000' => 100, '1001-1500' => 120, '1501-2000' => 125, '2001-2500' => 135, '2501-3000' => 150 ],
+            'dhk_outside' => [ '0-200' => 99, '201-500' => 105, '501-1000' => 125, '1001-1500' => 140, '1501-2000' => 150, '2001-2500' => 160, '2501-3000' => 170 ],
+            'outside_dhk' => [ '0-200' => 99, '201-500' => 105, '501-1000' => 110, '1001-1500' => 125, '1501-2000' => 125, '2001-2500' => 150, '2501-3000' => 160 ],
+            'outside_outside' => [ '0-200' => 125, '201-500' => 125, '501-1000' => 135, '1001-1500' => 145, '1501-2000' => 155, '2001-2500' => 165, '2501-3000' => 170 ],
         ];
 
       $merchants = Discount::orderBy('id', 'desc')->get();
@@ -50,11 +50,11 @@ class LoginController extends Controller
 public function AdminDashboard()
 {
    $defaultRates = [
-            'same_city' => [ '0-200' => 49, '201-500' => 60, '501-1000' => 70, '1001-1500' => 80, '1501-2000' => 90, '2001-2500' => 100, '2500+' => 20 ],
-            'dhk_sub' => [ '0-200' => 80, '201-500' => 85, '501-1000' => 100, '1001-1500' => 120, '1501-2000' => 125, '2001-2500' => 135, '2500+' => 20 ],
-            'dhk_outside' => [ '0-200' => 99, '201-500' => 105, '501-1000' => 125, '1001-1500' => 140, '1501-2000' => 150, '2001-2500' => 160, '2500+' => 25 ],
-            'outside_dhk' => [ '0-200' => 99, '201-500' => 105, '501-1000' => 110, '1001-1500' => 125, '1501-2000' => 125, '2001-2500' => 150, '2500+' => 25 ],
-            'outside_outside' => [ '0-200' => 125, '201-500' => 125, '501-1000' => 135, '1001-1500' => 145, '1501-2000' => 155, '2001-2500' => 165, '2500+' => 25 ],
+            'same_city' => [ '0-200' => 49, '201-500' => 60, '501-1000' => 70, '1001-1500' => 80, '1501-2000' => 90, '2001-2500' => 100, '2501-3000' => 110 ],
+            'dhk_sub' => [ '0-200' => 80, '201-500' => 85, '501-1000' => 100, '1001-1500' => 120, '1501-2000' => 125, '2001-2500' => 135, '2501-3000' => 150 ],
+            'dhk_outside' => [ '0-200' => 99, '201-500' => 105, '501-1000' => 125, '1001-1500' => 140, '1501-2000' => 150, '2001-2500' => 160, '2501-3000' => 170 ],
+            'outside_dhk' => [ '0-200' => 99, '201-500' => 105, '501-1000' => 110, '1001-1500' => 125, '1501-2000' => 125, '2001-2500' => 150, '2501-3000' => 160 ],
+            'outside_outside' => [ '0-200' => 125, '201-500' => 125, '501-1000' => 135, '1001-1500' => 145, '1501-2000' => 155, '2001-2500' => 165, '2501-3000' => 170 ],
         ];
 
         $merchants = Discount::all();
@@ -126,7 +126,7 @@ public function AllRules()
     $merchant->is_active = 1;
     $merchant->save();
 
-    return redirect()->route('DiscountData')->with('success', 'Merchant approved successfully');
+    return redirect()->back()->with('success', 'Merchant approved successfully');
 
    
 }
@@ -137,7 +137,7 @@ public function reject($id) {
     $merchant->is_active = 0;
     $merchant->save();
 
-   return redirect()->route('DiscountData')->with('success', 'Merchant approved successfully');
+   return redirect()->back()->with('success', 'Merchant status updated to Upon Discussion');
 }
 
 public function ban($id) {
@@ -146,7 +146,7 @@ public function ban($id) {
     $merchant->is_active = 3;
     $merchant->save();
 
-   return redirect()->route('DiscountData')->with('success', 'Merchant approved successfully');
+   return redirect()->back()->with('success', 'Merchant rejected successfully');
 }
 
 
@@ -191,6 +191,66 @@ public function ban($id) {
     {
         $user->delete();
         return redirect()->route('User')->with('success', 'User deleted successfully.');
+    }
+
+    // Manage KAM, Hub, Categories
+    public function ManageData()
+    {
+        $kams = \App\Models\KmaList::orderBy('created_at', 'desc')->get();
+        $hubs = \App\Models\Hub::orderBy('created_at', 'desc')->get();
+        $categories = \App\Models\Catagories::orderBy('created_at', 'desc')->get();
+        return view('admin.ManageData', compact('kams', 'hubs', 'categories'));
+    }
+
+    // KAM Management
+    public function storeKam(Request $request)
+    {
+        $request->validate(['name' => 'required|string|max:255']);
+        \App\Models\KmaList::create(['name' => $request->name]);
+        return redirect()->route('ManageData')->with('success', 'KAM added successfully!');
+    }
+
+    public function destroyKam($id)
+    {
+        $kam = \App\Models\KmaList::findOrFail($id);
+        $kam->delete();
+        return redirect()->route('ManageData')->with('success', 'KAM deleted successfully!');
+    }
+
+    // Hub Management
+    public function storeHub(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255'
+        ]);
+        \App\Models\Hub::create([
+            'name' => $request->name,
+            'location' => $request->location
+        ]);
+        return redirect()->route('ManageData')->with('success', 'Hub added successfully!');
+    }
+
+    public function destroyHub($id)
+    {
+        $hub = \App\Models\Hub::findOrFail($id);
+        $hub->delete();
+        return redirect()->route('ManageData')->with('success', 'Hub deleted successfully!');
+    }
+
+    // Category Management
+    public function storeCategory(Request $request)
+    {
+        $request->validate(['name' => 'required|string|max:255']);
+        \App\Models\Catagories::create(['name' => $request->name]);
+        return redirect()->route('ManageData')->with('success', 'Category added successfully!');
+    }
+
+    public function destroyCategory($id)
+    {
+        $category = \App\Models\Catagories::findOrFail($id);
+        $category->delete();
+        return redirect()->route('ManageData')->with('success', 'Category deleted successfully!');
     }
 
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class DiscountRule extends Model
 {
     protected $fillable = [
-        'discount_id', 'region', 'weight_range', 'discounted_rate', 'return_charge', 'cod'
+        'discount_id', 'region', 'weight_range', 'discounted_rate', 'return_charge', 'cod', 'additional_charge'
     ];
 
     public function discount()

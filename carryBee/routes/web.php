@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', 'dashboard')->name('dashboard');
     Route::post('/storeDiscount', 'storeDiscount')->name('storeDiscount');
     Route::get('/discounts', 'DiscountShow')->name('discounts');
+    Route::get('/discounts/export', 'export')->name('discounts.export');
     Route::get('/discounts/{id}',  'DiscountRuleShow')->name('DiscountRuleShow');
     Route::get('/rules/{id}',  'DeRuleShow')->name('DeRuleShow');
    
@@ -44,8 +45,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/discounts/{discount}/edit',  'edit')->name('discount.edit');
     Route::put('/discounts/{discount}', 'update')->name('discount.update');
-
-    Route::get('/discounts/export', 'export')->name('discounts.export');
 });
 
 });
@@ -78,6 +77,15 @@ Route::prefix('admin')->controller(LoginController::class)->group(function () {
         Route::post('/merchant/{id}/approve', 'approve')->name('merchant.approve');
         Route::post('/merchant/{id}/reject', 'reject')->name('merchant.reject');
         Route::post('/merchant/{id}/ban', 'ban')->name('merchant.ban');
+        
+        // Manage KAM, Hub, Categories
+        Route::get('/ManageData', 'ManageData')->name('ManageData');
+        Route::post('/storeKam', 'storeKam')->name('storeKam');
+        Route::delete('/kam/{id}', 'destroyKam')->name('destroyKam');
+        Route::post('/storeHub', 'storeHub')->name('storeHub');
+        Route::delete('/hub/{id}', 'destroyHub')->name('destroyHub');
+        Route::post('/storeCategory', 'storeCategory')->name('storeCategory');
+        Route::delete('/category/{id}', 'destroyCategory')->name('destroyCategory');
      
       //  Route::get('/DiscountSlot', 'DefaultRate')->name('DefaultRate');
     });
